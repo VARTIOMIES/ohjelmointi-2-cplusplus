@@ -1,5 +1,5 @@
 *.pro.user
 *.autosave
-*/*/build*
-*/*/build*/
+*/build*
+*/build*/
 
