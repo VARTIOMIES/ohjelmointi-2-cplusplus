@@ -32,6 +32,8 @@ int main()
     cin >> arvottavat_pallot;
     if (not positiiviset(pallot, arvottavat_pallot)){
         cout << "The number of balls must be a positive number." << endl;
+    } else if(pallot < arvottavat_pallot){
+        cout << "The maximum number of drawn balls is the total amount of balls." << endl;
     } else {
         cout << "The probability of guessing all " << arvottavat_pallot << " balls correctly is 1/" << lottorivien_maara(pallot, arvottavat_pallot) << endl;
     }
