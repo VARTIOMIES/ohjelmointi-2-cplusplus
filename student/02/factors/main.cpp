@@ -23,7 +23,7 @@ int main()
                 }
             }
         }
-        cout << tekija1 << tekija2 << endl;
+        cout << number << " = " << tekija1 << " * " << tekija2 << endl;
     }
     return 0;
 }
