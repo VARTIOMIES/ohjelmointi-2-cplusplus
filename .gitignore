@@ -2,4 +2,7 @@
 *.autosave
 */build*
 */build*/
+templates/*
+examples/*
+build*
 
