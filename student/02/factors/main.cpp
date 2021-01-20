@@ -23,6 +23,11 @@ int main()
                 }
             }
         }
+        if (tekija1 > tekija2){
+            int tekijan_tallennus = tekija1;
+            tekija1 = tekija2;
+            tekija2=tekijan_tallennus;
+        }
         cout << number << " = " << tekija1 << " * " << tekija2 << endl;
     }
     return 0;
