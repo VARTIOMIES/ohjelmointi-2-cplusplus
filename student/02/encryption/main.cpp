@@ -85,11 +85,7 @@ int main()
 
     // Aloitetaan salaaminen
     string encypted_text = encrypt(text, encryption_key);
-    cout << encypted_text;
-
-
-
-
+    cout << "Encrypted text: " << encypted_text << endl;
 
     return 0;
 }
