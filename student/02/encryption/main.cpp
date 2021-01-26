@@ -45,6 +45,17 @@ bool all_az_ASCII(string string) {
     return true;
 
 }
+string encrypt(string text, string key) {
+    int tekstin_pituus = text.length();
+    // Käydään teksti läpi
+    for(int i=0;i<tekstin_pituus;++i){
+        char kirjain = text[i];
+        int kirjaimen_ASCII = static_cast<int>(kirjain);
+        int kohta_keyssa = kirjaimen_ASCII-97;
+        text[i] = key[kohta_keyssa];
+    }
+    return text;
+}
 
 int main()
 {
@@ -54,12 +65,30 @@ int main()
 
     if (encryption_key.length() != 26){
         cout << "Error! The encryption key must contain 26 characters." << endl;
-        return 0;
+        return 1;
     } else if (not only_az_ASCII(encryption_key)){
         cout << "Error! The encryption key must contain only lower case characters." << endl;
+        return 1;
     } else if (not all_az_ASCII(encryption_key)){
         cout << "Error! The encryption key must contain all alphabets a-z" << endl;
+        return 1;
     }
+    // Salausavain on siis halutunlainen. Kysytään nyt salattavaa tekstiä
+    cout << "Enter the text to be encrypted: ";
+    string text = "";
+    getline(cin,text);
+
+    if (not only_az_ASCII(text)){
+        cout << "Error! The encryption key must contain only lower case characters." << endl;
+        return 1;
+    }
+
+    // Aloitetaan salaaminen
+    string encypted_text = encrypt(text, encryption_key);
+    cout << encypted_text;
+
+
+
 
 
     return 0;
