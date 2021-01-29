@@ -10,8 +10,11 @@ public:
     Account(const std::string& owner, bool has_credit = false);
 
     void print() const;
-    //void set_credit_limit();
-    //void save_money();
+    void set_credit_limit(int limit);
+    void save_money(int amount);
+    void take_money(int amount);
+    void transfer_to(Account,int amount);
+
 
     // More methods
 
@@ -28,7 +31,8 @@ private:
     static int running_number_;
     std::string owner_;
     std::string iban_;
-    int balance_;
+    int balance_ = 0;
+    int credit_limit_ = 0;
     // More attributes/methods
 };
 

@@ -29,6 +29,23 @@ void Account::generate_iban()
 }
 void Account::print() const
 {
-    std::cout << owner_ << std::endl;
+    std::cout << owner_ << iban_ << balance_ << std::endl;
 
+}
+void Account::set_credit_limit(int limit)
+{
+    credit_limit_ = limit;
+}
+void Account::save_money(int amount)
+{
+    balance_ += amount;
+}
+void Account::take_money(int amount)
+{
+    balance_ -= amount;
+}
+void Account::transfer_to(Account, int amount)
+{
+    Account::take_money(amount);
+    save_money(amount);
 }
