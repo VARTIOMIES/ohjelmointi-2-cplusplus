@@ -2,7 +2,7 @@
 #include <iostream>
 
 Account::Account(const std::string& owner, bool has_credit):
-    owner_(owner)
+    owner_(owner),credit_card_(has_credit)
 {
     generate_iban();
 }
@@ -29,23 +29,68 @@ void Account::generate_iban()
 }
 void Account::print() const
 {
-    std::cout << owner_ << iban_ << balance_ << std::endl;
+    std::cout << owner_<< " : " << iban_ << " : " << balance_ << " euros" << std::endl;
 
 }
-void Account::set_credit_limit(int limit)
+bool Account::set_credit_limit(int limit)
 {
-    credit_limit_ = limit;
+    if (credit_card_)
+    {
+        credit_limit_ = limit;
+        return true;
+    }
+    else
+    {
+        std::cout << "Cannot set credit limit: the account has no credit card" << std::endl;
+        return false;
+    }
 }
 void Account::save_money(int amount)
 {
-    balance_ += amount;
+    Account::balance_ += amount;
 }
-void Account::take_money(int amount)
+bool Account::take_money(int amount)
 {
-    balance_ -= amount;
+    if (balance_ >= amount)
+    {
+        balance_ -= amount;
+        std::cout << amount << " euros taken: new balance of " << iban_ << " is " << balance_ << " euros" << std::endl;
+        return true;
+    }
+    else if (credit_card_){
+        if (balance_ >= 0 and balance_+credit_limit_ >= amount){
+            balance_ -=amount;
+            std::cout << amount << " euros taken: new balance of " << iban_ << " is " << balance_ << " euros" << std::endl;
+            return true;
+        }
+        else if (abs(balance_ - amount) <= credit_limit_){
+            balance_ -= amount;
+            std::cout << amount << " euros taken: new balance of " << iban_ << " is " << balance_ << " euros" << std::endl;
+            return true;
+        }
+        else {
+            std::cout << "Cannot take money: credit limit overflow" << std::endl;
+            return false;
+        }
+    }
+    else
+    {
+        std::cout << "Cannot take money: balance underflow" << std::endl;
+        return false;
+    }
+
 }
-void Account::transfer_to(Account, int amount)
+void Account::transfer_to(Account& x, int amount)
 {
-    Account::take_money(amount);
-    save_money(amount);
+    if (take_money(amount))
+    {
+        x.save_money(amount);
+    }
+    else
+    {
+        std::cout << "Transfer from " << iban_ << " failed"<< std::endl;
+
+    }
+
 }
+
