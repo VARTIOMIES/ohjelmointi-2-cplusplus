@@ -2,6 +2,7 @@
 #include <iostream>
 
 Account::Account(const std::string& owner, bool has_credit):
+    owner_(owner)
 {
     generate_iban();
 }
@@ -25,4 +26,9 @@ void Account::generate_iban()
 
     iban_ = "FI00 1234 ";
     iban_.append(suffix);
+}
+void Account::print() const
+{
+    std::cout << owner_ << std::endl;
+
 }
