@@ -15,7 +15,7 @@ void read_integers(std::vector< int >& ints, int count)
 }
 
 bool same_values(std::vector<int>& ints){
-    std::vector<int>::size_type koko = ints.size();
+    int koko = ints.size();
     for (int i = 1; i < koko; i++){
         if (ints.at(i) != ints.at(i-1)){
             return false;
@@ -25,7 +25,7 @@ bool same_values(std::vector<int>& ints){
 }
 
 bool is_ordered_non_strict_ascending(std::vector<int>& ints){
-    std::vector<int>::size_type koko = ints.size();
+    int koko = ints.size();
     for (int i = 1; i < koko; i++){
         if (ints.at(i) < ints.at(i-1)){
             return false;
@@ -34,7 +34,7 @@ bool is_ordered_non_strict_ascending(std::vector<int>& ints){
     return true;
 }
 bool is_arithmetic_series(std::vector<int>& ints){
-    std::vector<int>::size_type koko = ints.size();
+    int koko = ints.size();
     int vakio_erotus = ints.at(1)-ints.at(0);
     for (int i = 2; i < koko; i++){
         int erotus = ints.at(i) - ints.at(i-1);
@@ -45,7 +45,7 @@ bool is_arithmetic_series(std::vector<int>& ints){
     return true;
 }
 bool is_geometric_series(std::vector<int>& ints){
-    std::vector<int>::size_type koko = ints.size();
+    int koko = ints.size();
     int suhdeluku = ints.at(1)/ints.at(0);
     for (int i = 2; i < koko; i++){
         int suhde = ints.at(i)/ints.at(i-1);
