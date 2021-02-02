@@ -43,6 +43,10 @@ std::vector<std::string> split(const std::string& line, const char& separator, b
             index_of_first_char = index + 1;
         }
     }
+    if (line.at(size-1)==separator and !skip_empty){
+        result.push_back("");
+    }
+
 
     return result;
 
