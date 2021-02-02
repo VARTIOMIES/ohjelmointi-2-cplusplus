@@ -46,6 +46,9 @@ bool is_arithmetic_series(std::vector<int>& ints){
 }
 bool is_geometric_series(std::vector<int>& ints){
     int koko = ints.size();
+    if (ints.at(0)== 0 and same_values(ints)){
+        return false;
+    }
     int suhdeluku = ints.at(1)/ints.at(0);
     for (int i = 2; i < koko; i++){
         int suhde = ints.at(i)/ints.at(i-1);
