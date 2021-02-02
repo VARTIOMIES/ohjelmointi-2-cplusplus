@@ -11,7 +11,8 @@ std::vector<std::string> split(const std::string& line, const char& separator, b
     std::string::size_type size = line.size();
     std::vector<std::string> result;
 
-    for (std::string::size_type index = 1; index < size; index++){
+
+    for (std::string::size_type index = 0; index < size; index++){
         char character = line.at(index);
         if (character == separator){
             std::string osa_teksti;
@@ -29,38 +30,22 @@ std::vector<std::string> split(const std::string& line, const char& separator, b
                 result.push_back(osa_teksti);
             }
             index_of_first_char = index + 1;
-        }
-    }
-    if (line.at(size-1) == separator and !skip_empty){
-        result.push_back("");
-    }
-    return result;
 
-
-
-    /*
-    if (line.at(0)==separator){
-        result.push_back("");
-    }
-    for (std::string::size_type index = 1; index < size; index++){
-        char character = line.at(index);
-        if (character == separator){
-            std::string osa_teksti = "";
-            for (std::string::size_type i = index_of_separator; i < index-1; i++){
-                osa_teksti.push_back(line.at(i+1));
+        } else if(index+1 == size){
+            std::string osa_teksti;
+            for (std::string::size_type i = index_of_first_char; i <= index; i++){
+                osa_teksti.push_back(line.at(i));
             }
-            if (!(skip_empty and osa_teksti == "")){
+            if (!(osa_teksti == "" and skip_empty)){
                 result.push_back(osa_teksti);
             }
-            index_of_separator = index;
-            if (index + 1 == size and !skip_empty){
-                result.push_back("");
-            }
-        }
 
+            index_of_first_char = index + 1;
+        }
     }
+
     return result;
-    */
+
 }
 int main()
 {
