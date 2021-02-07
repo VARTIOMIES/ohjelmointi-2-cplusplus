@@ -242,8 +242,33 @@ void ask_product_and_calculate_factors(unsigned int& smaller_factor, unsigned in
     }
     bigger_factor = product / smaller_factor;
 }
-void ask_info_for_players();
-    int player_amount = 0;
+
+// Kysyy ja lukee pelaajien määrän ja nimet ja luo pelaajat
+std::vector<Player> ask_player_info_and_create_players()
+{
+    unsigned int player_amount = 0;
+    // Kysytään pelaajamäärää niin pitkään, että annetaan sallittu määrä
+    while(not (player_amount > 0))
+    {
+        std::cout << INPUT_AMOUNT_OF_PLAYERS;
+        string player_amount_str = "";
+        std::getline(std::cin, player_amount_str);
+        player_amount = stoi_with_check(player_amount_str);
+    }
+    // Kysytään pelaajien nimet ja tallennetaan ne vektoriin.
+    std::cout << "List " << player_amount << " players: ";
+    std::vector<Player> players_in_vector;
+
+    for(unsigned int i = 0; i < player_amount;i++)
+    {
+        string player_name = "";
+        std::cin >> player_name;
+        players_in_vector.push_back(Player(player_name));
+    }
+    return players_in_vector;
+}
+
+
 // Lisää funktioita
 // More functions
 
@@ -263,10 +288,16 @@ int main()
     int seed = stoi_with_check(seed_str);
     init_with_cards(game_board, seed);
 
-    // Testitulostus
-    print(game_board);
+    // Kysytään pelaajien tiedot, tallennetaan pelaajat vektoriin.
+    std::vector<Player> players = ask_player_info_and_create_players();
 
-    // Kysytään pelaajien määrä
+    /*
+    // Testitulostus pelaajille
+    std::cout << players.at(1).get_name() << std::endl;
+    players.at(2).print();
+    // Testitulostus pelikentälle
+    print(game_board);
+    */
 
     // Lisää koodia
     // More code
