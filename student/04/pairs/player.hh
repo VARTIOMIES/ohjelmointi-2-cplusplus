@@ -51,6 +51,8 @@ public:
     void print() const;
 
 private:
+    std::string name_;
+    unsigned int pairs_;
     // Lisää tarvittavat attribuutit tähän
     // Add necessary attributes here
 };
