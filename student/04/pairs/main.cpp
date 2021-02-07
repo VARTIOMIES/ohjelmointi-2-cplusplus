@@ -1,3 +1,20 @@
+/* Muistipeli
+ *
+ * Kuvaus:
+ * Ohjelma toteuttaa muistipelin. Pelissä on vaihteleva määrä kortteja ja pelaajia.
+ * Pelin alussa käyttäjältä kysytään myös siemenluku, koska kortit arvotaan sarunnaisesti pelilaudalle.....
+ *
+ * Ohjelman kirjoittaja
+ * Nimi: Onni Merilä
+ * Opiskelijanumero: H299725
+ * Käyttäjätunnus: bvonme
+ * E-Mail: onni.merila@tuni.fi
+ *
+ * Huomioita ohjelmasta ja sen toteutuksesta:
+ *
+ * */
+
+
 #include <player.hh>
 #include <card.hh>
 #include <iostream>
@@ -225,7 +242,8 @@ void ask_product_and_calculate_factors(unsigned int& smaller_factor, unsigned in
     }
     bigger_factor = product / smaller_factor;
 }
-
+void ask_info_for_players();
+    int player_amount = 0;
 // Lisää funktioita
 // More functions
 
@@ -244,6 +262,11 @@ int main()
     std::getline(std::cin, seed_str);
     int seed = stoi_with_check(seed_str);
     init_with_cards(game_board, seed);
+
+    // Testitulostus
+    print(game_board);
+
+    // Kysytään pelaajien määrä
 
     // Lisää koodia
     // More code
