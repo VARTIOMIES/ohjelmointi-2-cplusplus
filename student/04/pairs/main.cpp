@@ -267,6 +267,8 @@ std::vector<Player> ask_player_info_and_create_players()
     }
     return players_in_vector;
 }
+
+// Kysytään käyttäjältä koordinaatteja
 std::vector<string> ask_for_input(Player& player_in_turn)
 {
     std::cout << player_in_turn.get_name() << ": " << INPUT_CARDS << ": ";
@@ -284,6 +286,7 @@ std::vector<string> ask_for_input(Player& player_in_turn)
     }
     return input_vector;
 }
+
 // Tarkistaa annetun vektorin alkiot, että ne voidaan ilmaista numeerisesti
 bool is_numeric_coordinates(std::vector<string> coordinates)
 {
@@ -296,19 +299,21 @@ bool is_numeric_coordinates(std::vector<string> coordinates)
     }
     return true;
 }
+
 // Palauttaa numeerisen vektorin annetusta string vektorista
 std::vector<int> string_vector_to_integer_vector(std::vector<string> string_vector)
 {
     std::vector<int> integer_vector;
     for (string coord : string_vector)
     {
-        integer_vector.push_back(stoi_with_check(coord));
+        integer_vector.push_back(stoi_with_check(coord)-1);
     }
     return integer_vector;
 }
 // tarkistetaan, onko annetut koordinaatit sopivat
 bool are_coordinates_good(std::vector<int>& coordinates, Game_board_type& g_board)
 {
+    // Koordinaatteja tulee olla 4 kappaletta
     if (coordinates.size() != 4)
     {
         return false;
@@ -322,16 +327,20 @@ bool are_coordinates_good(std::vector<int>& coordinates, Game_board_type& g_boar
             return false;
         }
         // Korttia ei ole poistettu?
-        else if(g_board.at(i).at(i+1).get_visibility() == EMPTY){
+        if(g_board.at(i).at(i+1).get_visibility() == EMPTY)
+        {
             return false;
         }
     }
+    // Ei yritetä kääntää samaa korttia
     if (coordinates.at(0)==coordinates.at(2) and coordinates.at(1) == coordinates.at(3))
     {
         return false;
     }
     return true;
 }
+
+
 
 // Lisää funktioita
 // More functions
@@ -388,7 +397,7 @@ int main()
                 std::cout << INVALID_CARD << std::endl;
                 continue;
             }
-
+            // Tarkistetaan muut ehdot
             if (are_coordinates_good(coordinates,game_board))
             {
                 break;
@@ -404,8 +413,33 @@ int main()
             std::cout << GIVING_UP << std::endl;
             break;
         }
-        std::cout << coordinates.at(1) <<" "<< turn;
+        //Käännetään kortit
+        Card& card1 = game_board.at(coordinates.at(1)).at(coordinates.at(0));
+        Card& card2 = game_board.at(coordinates.at(3)).at(coordinates.at(2));
+        card1.set_visibility(OPEN);
+        card2.set_visibility(OPEN);
+        print(game_board);
+        if (card1.get_letter() == card2.get_letter())
+        {
+            std::cout << FOUND << std::endl;
+            player_in_turn.add_card(card1);
+            player_in_turn.add_card(card2);
+            card1.set_visibility(EMPTY);
+            card2.set_visibility(EMPTY);
 
+        }
+        else
+        {
+            std::cout << NOT_FOUND << std::endl;
+            card1.set_visibility(HIDDEN);
+            card2.set_visibility(HIDDEN);
+        }
+        for (unsigned int i = 0 ; i < players.size() ; i++)
+        {
+            players.at(i).print();
+        }
+        // Lopetetaan peli, jos pöytä on tyhjä
+        //if (is_game_board_empty())
         // Mennään seuraavaan vuoroon
         turn++;
     }
