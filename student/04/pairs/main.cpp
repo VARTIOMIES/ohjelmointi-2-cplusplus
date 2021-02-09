@@ -339,7 +339,22 @@ bool are_coordinates_good(std::vector<int>& coordinates, Game_board_type& g_boar
     }
     return true;
 }
+// Tarkistetaan, onko pelikenttä tyhjä
+bool is_game_board_empty(Game_board_type g_board)
+{
+    for (unsigned int i = 0 ; i < g_board.size();i++)
+    {
+        for (unsigned int j = 0 ; j < g_board.at(i).size() ; j++)
+        {
 
+            if (g_board.at(i).at(j).get_visibility()!=EMPTY)
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
 
 
 // Lisää funktioita
@@ -439,7 +454,11 @@ int main()
             players.at(i).print();
         }
         // Lopetetaan peli, jos pöytä on tyhjä
-        //if (is_game_board_empty())
+        if (is_game_board_empty(game_board))
+        {
+            game_is_on = false;
+            std::cout << GAME_OVER << std::endl;
+        }
         // Mennään seuraavaan vuoroon
         turn++;
     }
