@@ -267,7 +267,71 @@ std::vector<Player> ask_player_info_and_create_players()
     }
     return players_in_vector;
 }
+std::vector<string> ask_for_input(Player& player_in_turn)
+{
+    std::cout << player_in_turn.get_name() << ": " << INPUT_CARDS << ": ";
+    std::vector<string> input_vector;
+    for (int i = 0; i < 4; i++)
+    {
 
+        std::string input_str;
+        std::cin >> input_str;
+        input_vector.push_back(input_str);
+        if (input_str == "q")
+        {
+            return input_vector;
+        }
+    }
+    return input_vector;
+}
+// Tarkistaa annetun vektorin alkiot, että ne voidaan ilmaista numeerisesti
+bool is_numeric_coordinates(std::vector<string> coordinates)
+{
+    for (int i = 0; i < 4;i++)
+    {
+        if(not stoi_with_check(coordinates.at(i)))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+// Palauttaa numeerisen vektorin annetusta string vektorista
+std::vector<int> string_vector_to_integer_vector(std::vector<string> string_vector)
+{
+    std::vector<int> integer_vector;
+    for (string coord : string_vector)
+    {
+        integer_vector.push_back(stoi_with_check(coord));
+    }
+    return integer_vector;
+}
+// tarkistetaan, onko annetut koordinaatit sopivat
+bool are_coordinates_good(std::vector<int>& coordinates, Game_board_type& g_board)
+{
+    if (coordinates.size() != 4)
+    {
+        return false;
+    }
+    int board_rows = g_board.size();
+    int board_columns = g_board.at(0).size();
+    for (int i = 0; i < 4; i += 2){
+        // Koordinaatti sijaitsee pelilaudalla?
+        if ( coordinates.at(i) > board_rows or coordinates.at(i+1) > board_columns)
+        {
+            return false;
+        }
+        // Korttia ei ole poistettu?
+        else if(g_board.at(i).at(i+1).get_visibility() == EMPTY){
+            return false;
+        }
+    }
+    if (coordinates.at(0)==coordinates.at(2) and coordinates.at(1) == coordinates.at(3))
+    {
+        return false;
+    }
+    return true;
+}
 
 // Lisää funktioita
 // More functions
@@ -291,6 +355,60 @@ int main()
     // Kysytään pelaajien tiedot, tallennetaan pelaajat vektoriin.
     std::vector<Player> players = ask_player_info_and_create_players();
 
+    // Peli alkaa.
+    int turn = 0;
+    bool game_is_on = true;
+    int player_amount = players.size();
+    while (game_is_on)
+    {
+        print(game_board);
+        // Määritellään vuorossa oleva pelaaja, 0, 1 ,...->
+        int player_index = turn % player_amount;
+        Player& player_in_turn = players.at(player_index);
+
+        // Koordinaattien kysyminen
+        bool quit = false;
+        bool bad_coordinates = true;
+        std::vector<int> coordinates;
+        while(bad_coordinates){
+            vector<string> input_vector = ask_for_input(player_in_turn);
+            if (input_vector.at(0)=="q")
+            {
+                quit = true;
+                game_is_on = false;
+                break;
+            }
+            // Tarkistetaan koordinaattien numeerisuus
+            if (is_numeric_coordinates(input_vector))
+            {
+                coordinates = string_vector_to_integer_vector(input_vector);
+            }
+            else
+            {
+                std::cout << INVALID_CARD << std::endl;
+                continue;
+            }
+
+            if (are_coordinates_good(coordinates,game_board))
+            {
+                break;
+            }
+            else
+            {
+                std::cout << INVALID_CARD << std::endl;
+            }
+
+        }
+        if (quit)
+        {
+            std::cout << GIVING_UP << std::endl;
+            break;
+        }
+        std::cout << coordinates.at(1) <<" "<< turn;
+
+        // Mennään seuraavaan vuoroon
+        turn++;
+    }
     /*
     // Testitulostus pelaajille
     std::cout << players.at(1).get_name() << std::endl;
