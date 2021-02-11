@@ -310,37 +310,34 @@ std::vector<int> string_vector_to_integer_vector(std::vector<string>& string_vec
     }
     return integer_vector;
 }
+
 // Funktio tarkistaa, onko annetut koordinaatit sopivat
 bool are_coordinates_good(const std::vector<int>& coordinates, Game_board_type& g_board)
 {
-    // Koordinaatteja tulee olla 4 kappaletta
+    // Koordinaatteja tulee olla 4 kappaletta.
     if (coordinates.size() != 4)
     {
-        std::cout << "Ei neljää" << std::endl;
         return false;
     }
     int board_rows = g_board.size();
     int board_columns = g_board.at(0).size()-1;
     for (int i = 0; i < 4; i += 2){
-        // Koordinaatti sijaitsee pelilaudalla?
+
+        // Koordinaattien tulee sijaita pelilaudalla.
         if ( coordinates.at(i+1) > board_rows or coordinates.at(i) > board_columns)
         {
-            std::cout<< "Ei kentällä" << std::endl;
             return false;
         }
-        std::cout << "Kentällä" << std::endl;
-        // Korttia ei ole poistettu?
 
+        // Koordinaateissa pitää olla kortti
         if(g_board.at(coordinates.at(i+1)).at(coordinates.at(i)).get_visibility() == EMPTY)
         {
-            std::cout << "Korttia ei ole" << std::endl;
             return false;
         }
     }
-    // Ei yritetä kääntää samaa korttia
+    // Samaa korttia ei voida kääntää samalla vuorolla.
     if (coordinates.at(0)==coordinates.at(2) and coordinates.at(1) == coordinates.at(3))
     {
-        std::cout << "Sama kortti" << std::endl;
         return false;
     }
     return true;
@@ -399,13 +396,12 @@ int main()
 
         // Koordinaattien kysyminen
         bool quit = false;
-        std::vector<int> coordinates;
+        std::vector<int> coordinates;    
         while(true){
             vector<string> input_vector = ask_for_input(player_in_turn);
             if (input_vector.at(0)=="q")
             {
                 quit = true;
-                game_is_on = false;
                 break;
             }
             // Tarkistetaan koordinaattien numeerisuus
@@ -427,19 +423,21 @@ int main()
             {
                 std::cout << INVALID_CARD << std::endl;
             }
-
         }
+        // Jos pelaaja on antanut käskyn "q", niin poistutaan pelistä
         if (quit)
         {
             std::cout << GIVING_UP << std::endl;
             break;
         }
+
         //Käännetään kortit
         Card& card1 = game_board.at(coordinates.at(1)).at(coordinates.at(0));
         Card& card2 = game_board.at(coordinates.at(3)).at(coordinates.at(2));
         card1.turn();
         card2.turn();
         print(game_board);
+
         // Tarkistetaan, ovatko käännetyt kortit parit
         if (card1.get_letter() == card2.get_letter())
         {
@@ -454,27 +452,63 @@ int main()
             card1.turn();
             card2.turn();
         }
+
         // Tulostetaan pistetilanne
         for (unsigned int i = 0 ; i < players.size() ; i++)
         {
             players.at(i).print();
         }
+
         // Lopetetaan peli, jos pöytä on tyhjä
         if (is_game_board_empty(game_board))
         {
             game_is_on = false;
             std::cout << GAME_OVER << std::endl;
+
+            // Voittajan selvittäminen
+            unsigned int most_pairs = 0;
+            std::string winner_name = "";
+            bool tie = false;
+            int winner_amount = 1;
+
+            for (Player& player : players)
+            {
+                if (player.number_of_pairs() > most_pairs and !tie)
+                {
+                    most_pairs = player.number_of_pairs();
+                    winner_name = player.get_name();
+                }
+                else if (player.number_of_pairs() > most_pairs and tie)
+                {
+                    tie = false;
+                    winner_amount = 1;
+                    most_pairs = player.number_of_pairs();
+                    winner_name = player.get_name();
+                }
+                else if (player.number_of_pairs() == most_pairs)
+                {
+
+                    tie = true;
+                    winner_amount++;
+                }
+            }
+
+            // Voittajan/voittajien tulostus
+            if (tie)
+            {
+                std::cout << "Tie of " << winner_amount << " players with "
+                          << most_pairs << " pairs." << std::endl;
+            }
+            else
+            {
+                std::cout << winner_name << " has won with " << most_pairs
+                          << " pairs." << std::endl;
+            }
         }
+
         // Mennään seuraavaan vuoroon
         turn++;
     }
-    /*
-    // Testitulostus pelaajille
-    std::cout << players.at(1).get_name() << std::endl;
-    players.at(2).print();
-    // Testitulostus pelikentälle
-    print(game_board);
-    */
 
     // Lisää koodia
     // More code
