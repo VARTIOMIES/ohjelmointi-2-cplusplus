@@ -247,7 +247,7 @@ std::vector<Player> ask_player_info_and_create_players()
 // Kysyy käyttäjältä koordinaatteja tai komentoa q
 std::vector<string> ask_for_input(Player& player_in_turn)
 {
-    std::cout << player_in_turn.get_name() << ": " << INPUT_CARDS << ": ";
+    std::cout << player_in_turn.get_name() << ": " << INPUT_CARDS;
     std::vector<string> input_vector;
     for (int i = 0; i < 4; i++)
     {
@@ -296,7 +296,7 @@ bool are_coordinates_good( const std::vector<int>& coordinates,
     {
         return false;
     }
-    int board_rows = g_board.size();
+    int board_rows = g_board.size()-1;
     int board_columns = g_board.at(0).size()-1;
     for (int i = 0; i < 4; i += 2){
 
@@ -483,6 +483,7 @@ int main()
         {
             std::cout << GAME_OVER << std::endl;
 
+            print(game_board);
             print_winner(players);
 
             // Poistutaan peli-loopista ja lopetetaan ohjelma
