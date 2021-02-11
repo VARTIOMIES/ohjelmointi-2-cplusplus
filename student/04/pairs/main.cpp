@@ -266,9 +266,9 @@ std::vector<string> ask_for_input(Player& player_in_turn)
 // Tarkistaa annetun vektorin alkiot, että ne voidaan ilmaista numeerisesti
 bool is_numeric_coordinates(std::vector<string>& coordinates)
 {
-    for (int i = 0; i < 4;i++)
+    for (std::string coordinate : coordinates)
     {
-        if(not stoi_with_check(coordinates.at(i)))
+        if(not stoi_with_check(coordinate))
         {
             return false;
         }
