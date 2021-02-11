@@ -28,6 +28,7 @@
  * E-Mail: onni.merila@tuni.fi
  *
  * Huomioita ohjelmasta ja sen toteutuksesta:
+ * -
  *
  * */
 
@@ -364,12 +365,10 @@ void print_winner(std::vector<Player>& players)
         }
         else if (player.number_of_pairs() == most_pairs)
         {
-
             tie = true;
             winner_amount++;
         }
     }
-
     // Voittajan/voittajien tulostus
     if (tie)
     {
@@ -458,13 +457,15 @@ int main()
         // Tarkistetaan, ovatko käännetyt kortit parit
         if (card1.get_letter() == card2.get_letter())
         {
+            // On parit
             std::cout << FOUND << std::endl;
             player_in_turn.add_card(card1);
-            card2.remove_from_game_board();
+            player_in_turn.add_card(card2);
 
         }
         else
         {
+            // Ei ole pareja
             std::cout << NOT_FOUND << std::endl;
             card1.turn();
             card2.turn();
@@ -488,11 +489,8 @@ int main()
             break;
         }
 
-        // Mennään seuraavaan vuoroon
+        // Jatketaan seuraavaan vuoroon
     }
-
-    // Lisää koodia
-    // More code
 
     return EXIT_SUCCESS;
 }

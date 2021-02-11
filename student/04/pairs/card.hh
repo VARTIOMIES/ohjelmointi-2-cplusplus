@@ -4,13 +4,6 @@
  *
  * COMP.CS.110 K2021
  * */
-//
-/* Class: Card
- * -----------
- * Represents a single card in pairs (memory) game.
- *
- * COMP.CS.110 K2021
- * */
 
 #ifndef CARD_HH
 #define CARD_HH
