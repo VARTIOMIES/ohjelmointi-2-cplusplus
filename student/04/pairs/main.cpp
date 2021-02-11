@@ -268,7 +268,7 @@ std::vector<Player> ask_player_info_and_create_players()
     return players_in_vector;
 }
 
-// Kysytään käyttäjältä koordinaatteja
+// Kysyy käyttäjältä koordinaatteja
 std::vector<string> ask_for_input(Player& player_in_turn)
 {
     std::cout << player_in_turn.get_name() << ": " << INPUT_CARDS << ": ";
@@ -301,7 +301,7 @@ bool is_numeric_coordinates(std::vector<string> coordinates)
 }
 
 // Palauttaa numeerisen vektorin annetusta string vektorista
-std::vector<int> string_vector_to_integer_vector(std::vector<string> string_vector)
+std::vector<int> string_vector_to_integer_vector(std::vector<string>& string_vector)
 {
     std::vector<int> integer_vector;
     for (string coord : string_vector)
@@ -310,36 +310,43 @@ std::vector<int> string_vector_to_integer_vector(std::vector<string> string_vect
     }
     return integer_vector;
 }
-// tarkistetaan, onko annetut koordinaatit sopivat
-bool are_coordinates_good(std::vector<int>& coordinates, Game_board_type& g_board)
+// Funktio tarkistaa, onko annetut koordinaatit sopivat
+bool are_coordinates_good(const std::vector<int>& coordinates, Game_board_type& g_board)
 {
     // Koordinaatteja tulee olla 4 kappaletta
     if (coordinates.size() != 4)
     {
+        std::cout << "Ei neljää" << std::endl;
         return false;
     }
     int board_rows = g_board.size();
-    int board_columns = g_board.at(0).size();
+    int board_columns = g_board.at(0).size()-1;
     for (int i = 0; i < 4; i += 2){
         // Koordinaatti sijaitsee pelilaudalla?
-        if ( coordinates.at(i) > board_rows or coordinates.at(i+1) > board_columns)
+        if ( coordinates.at(i+1) > board_rows or coordinates.at(i) > board_columns)
         {
+            std::cout<< "Ei kentällä" << std::endl;
             return false;
         }
+        std::cout << "Kentällä" << std::endl;
         // Korttia ei ole poistettu?
-        if(g_board.at(i).at(i+1).get_visibility() == EMPTY)
+
+        if(g_board.at(coordinates.at(i+1)).at(coordinates.at(i)).get_visibility() == EMPTY)
         {
+            std::cout << "Korttia ei ole" << std::endl;
             return false;
         }
     }
     // Ei yritetä kääntää samaa korttia
     if (coordinates.at(0)==coordinates.at(2) and coordinates.at(1) == coordinates.at(3))
     {
+        std::cout << "Sama kortti" << std::endl;
         return false;
     }
     return true;
 }
-// Tarkistetaan, onko pelikenttä tyhjä
+
+// Funktio tarkistaa, onko pelikenttä tyhjä vai ei.
 bool is_game_board_empty(Game_board_type g_board)
 {
     for (unsigned int i = 0 ; i < g_board.size();i++)
@@ -392,9 +399,8 @@ int main()
 
         // Koordinaattien kysyminen
         bool quit = false;
-        bool bad_coordinates = true;
         std::vector<int> coordinates;
-        while(bad_coordinates){
+        while(true){
             vector<string> input_vector = ask_for_input(player_in_turn);
             if (input_vector.at(0)=="q")
             {
@@ -431,24 +437,24 @@ int main()
         //Käännetään kortit
         Card& card1 = game_board.at(coordinates.at(1)).at(coordinates.at(0));
         Card& card2 = game_board.at(coordinates.at(3)).at(coordinates.at(2));
-        card1.set_visibility(OPEN);
-        card2.set_visibility(OPEN);
+        card1.turn();
+        card2.turn();
         print(game_board);
+        // Tarkistetaan, ovatko käännetyt kortit parit
         if (card1.get_letter() == card2.get_letter())
         {
             std::cout << FOUND << std::endl;
             player_in_turn.add_card(card1);
-            player_in_turn.add_card(card2);
-            card1.set_visibility(EMPTY);
-            card2.set_visibility(EMPTY);
+            card2.remove_from_game_board();
 
         }
         else
         {
             std::cout << NOT_FOUND << std::endl;
-            card1.set_visibility(HIDDEN);
-            card2.set_visibility(HIDDEN);
+            card1.turn();
+            card2.turn();
         }
+        // Tulostetaan pistetilanne
         for (unsigned int i = 0 ; i < players.size() ; i++)
         {
             players.at(i).print();
