@@ -481,9 +481,8 @@ int main()
         // Lopetetaan peli, jos pöytä on tyhjä
         if (is_game_board_empty(game_board))
         {
-            std::cout << GAME_OVER << std::endl;
-
             print(game_board);
+            std::cout << GAME_OVER << std::endl;
             print_winner(players);
 
             // Poistutaan peli-loopista ja lopetetaan ohjelma
