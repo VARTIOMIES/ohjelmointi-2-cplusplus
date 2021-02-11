@@ -451,6 +451,7 @@ int main()
             std::cout << NOT_FOUND << std::endl;
             card1.turn();
             card2.turn();
+            turn++;
         }
 
         // Tulostetaan pistetilanne
@@ -507,7 +508,6 @@ int main()
         }
 
         // Mennään seuraavaan vuoroon
-        turn++;
     }
 
     // Lisää koodia
