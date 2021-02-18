@@ -1,9 +1,38 @@
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
 int main()
 {
-    cout << "Hello World!" << endl;
-    return 0;
+    //Kysytään tiedostojen nimet, joita käsitellään
+    cout<<"Input file: " << endl;
+    string input_filename = "";
+    getline(cin,input_filename);
+    cout << "Output file: " << endl;
+    string output_filename = "";
+    getline(cin,output_filename);
+
+    // Yritetään avata tiedostot
+    ifstream input_file(input_filename);
+    if (not input_file)
+    {
+        cout<< "Error! The file " <<input_filename<< " cannot be opened."<<endl;
+        return EXIT_SUCCESS;
+    }
+    ofstream output_file(output_filename);
+
+    // Luetaan tiedostot ja kirjoitetaan
+    string line = "";
+    int i = 1;
+    while(getline(input_file,line))
+    {
+        output_file << i << " "<< line << endl;
+        i++;
+    }
+    // Suljetaan tiedostot
+    input_file.close();
+    output_file.close();
+
+    return EXIT_SUCCESS;
 }
