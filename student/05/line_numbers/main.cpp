@@ -6,10 +6,10 @@ using namespace std;
 int main()
 {
     //Kysytään tiedostojen nimet, joita käsitellään
-    cout<<"Input file: " << endl;
+    cout<<"Input file: ";
     string input_filename = "";
     getline(cin,input_filename);
-    cout << "Output file: " << endl;
+    cout << "Output file: ";
     string output_filename = "";
     getline(cin,output_filename);
 
@@ -18,7 +18,7 @@ int main()
     if (not input_file)
     {
         cout<< "Error! The file " <<input_filename<< " cannot be opened."<<endl;
-        return EXIT_SUCCESS;
+        return EXIT_FAILURE;
     }
     ofstream output_file(output_filename);
 
