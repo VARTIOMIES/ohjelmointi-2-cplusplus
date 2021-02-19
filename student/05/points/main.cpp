@@ -44,6 +44,7 @@ int main()
         }
     }
     // Pelaajien kokonaispisteet on nyt tietorakenteessa. Tulostetaan
+    cout << "Final scores:" << endl;
     for (auto pelaaja:pelaajien_pisteet)
     {
         cout << pelaaja.first << ": " << pelaaja.second << endl;
