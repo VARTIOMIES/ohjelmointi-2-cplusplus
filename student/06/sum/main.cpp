@@ -29,7 +29,13 @@ int sum_recursive(std::vector<int> v){
     RECURSIVE_FUNC
     // Do not remove RECURSIVE_FUNC declaration, it's necessary for automatic testing to work
     // ------------
-
+    if (v.size() > 2)
+    {
+        std::vector<int> temp = v;
+        temp.erase(temp.begin());
+        return v.at(0)+ sum_recursive(temp);
+    }
+    return v.at(0)+v.at(1);
 
     // Add your implementation here
 }
