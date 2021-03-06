@@ -35,6 +35,10 @@ int sum_recursive(std::vector<int> v){
         temp.erase(temp.begin());
         return v.at(0)+ sum_recursive(temp);
     }
+    else if (v.size()==1)
+    {
+        return v.at(0);
+    }
     return v.at(0)+v.at(1);
 
     // Add your implementation here
