@@ -2,6 +2,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <map>
+#include <set>
 
 const std::string HELP_TEXT = "S = store id1 i2\nP = print id\n"
                               "C = count id\nD = depth id\n";
@@ -27,12 +29,33 @@ std::vector<std::string> split(const std::string& s, const char delimiter, bool 
     return result;
 }
 
+void print_web(const std::string& id,
+               const std::map<std::string,std::vector<std::string>>& data,
+               int depth)
+{
+    for (std::string connection : data.at(id))
+    {
+        std::string dots;
+        for (int i=0;i<depth;i++)
+        {
+            dots += "..";
+        }
+        std::cout<<dots;
+        std::cout << connection << std::endl;
+
+        if (data.find(connection)!=data.end())
+        {
+
+            print_web(connection,data,depth+1);
+        }
+    }
+}
 
 
 int main()
 {
     // TODO: Implement the datastructure here
-
+    std::map<std::string,std::vector<std::string>> data;
 
     while(true){
         std::string line;
@@ -50,6 +73,18 @@ int main()
             std::string id1 = parts.at(1);
             std::string id2 = parts.at(2);
 
+            // Lisätään tieto rakenteeseen
+            if (data.find(id1) == data.end())
+            {
+                data.insert({id1,{id2}});
+            }
+            else
+            {
+                data.at(id1).push_back(id2);
+            }
+            std::cout << data.at(id1).at(0) << std::endl;
+
+
             // TODO: Implement the command here!
 
         } else if(command == "P" or command == "p"){
@@ -58,7 +93,9 @@ int main()
                 continue;
             }
             std::string id = parts.at(1);
-
+            std::cout<<id<<std::endl;
+            int depth = 1;
+            print_web(id,data,depth);
             // TODO: Implement the command here!
 
         } else if(command == "C" or command == "c"){
