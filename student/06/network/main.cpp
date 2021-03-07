@@ -51,6 +51,26 @@ void print_web(const std::string& id,
     }
 }
 
+int count_web(const std::string& id,
+              const std::map<std::string,std::vector<std::string>>& data)
+{
+    int amount=0;
+    if (data.find(id)==data.end())
+    {
+        return 0;
+    }
+    for (std::string connection : data.at(id))
+    {
+        if (data.find(connection)!=data.end())
+        {
+            amount += count_web(connection,data);
+        }
+        amount++;
+        //amount+=data.at(id).size();
+
+    }
+    return amount;
+}
 
 int main()
 {
@@ -104,7 +124,7 @@ int main()
                 continue;
             }
             std::string id = parts.at(1);
-
+            std::cout<<count_web(id,data)<<std::endl;
             // TODO: Implement the command here!
 
         } else if(command == "D" or command == "d"){
