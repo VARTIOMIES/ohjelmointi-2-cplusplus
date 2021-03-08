@@ -72,6 +72,30 @@ int count_web(const std::string& id,
     return amount;
 }
 
+int max_depth(const std::string& id,
+              const std::map<std::string,std::vector<std::string>>& data,
+              int depth,
+              int max_of_all)
+{
+    int new_max;
+    if (data.find(id)!=data.end())
+    {
+        for (std::string connection : data.at(id))
+        {
+            if (data.find(connection)!=data.end())
+            {
+               new_max = max_depth(connection,data,depth+1,depth+1);
+            }
+            if (new_max >= max_of_all)
+            {
+                max_of_all = new_max;
+            }
+        }
+
+    }
+    return max_of_all;
+
+}
 int main()
 {
     // TODO: Implement the datastructure here
@@ -102,8 +126,6 @@ int main()
             {
                 data.at(id1).push_back(id2);
             }
-            std::cout << data.at(id1).at(0) << std::endl;
-
 
             // TODO: Implement the command here!
 
@@ -133,6 +155,7 @@ int main()
                 continue;
             }
             std::string id = parts.at(1);
+            std::cout << max_depth(id,data,1,0)+1<<std::endl;
 
             // TODO: Implement the command here!
 
