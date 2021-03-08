@@ -33,20 +33,23 @@ void print_web(const std::string& id,
                const std::map<std::string,std::vector<std::string>>& data,
                int depth)
 {
-    for (std::string connection : data.at(id))
+    if (data.find(id)!=data.end())
     {
-        std::string dots;
-        for (int i=0;i<depth;i++)
+        for (std::string connection : data.at(id))
         {
-            dots += "..";
-        }
-        std::cout<<dots;
-        std::cout << connection << std::endl;
+            std::string dots;
+            for (int i=0;i<depth;i++)
+            {
+                dots += "..";
+            }
+            std::cout<<dots;
+            std::cout << connection << std::endl;
 
-        if (data.find(connection)!=data.end())
-        {
+            if (data.find(connection)!=data.end())
+            {
 
-            print_web(connection,data,depth+1);
+                print_web(connection,data,depth+1);
+            }
         }
     }
 }
@@ -77,7 +80,7 @@ int max_depth(const std::string& id,
               int depth,
               int max_of_all)
 {
-    int new_max;
+    int new_max=0; //Määrittele
     if (data.find(id)!=data.end())
     {
         for (std::string connection : data.at(id))
