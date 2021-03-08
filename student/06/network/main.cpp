@@ -80,7 +80,7 @@ int max_depth(const std::string& id,
               int depth,
               int max_of_all)
 {
-    int new_max=0; //Määrittele
+    int new_max=1; //Määrittele
     if (data.find(id)!=data.end())
     {
         for (std::string connection : data.at(id))
