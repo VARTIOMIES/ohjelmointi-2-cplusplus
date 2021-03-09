@@ -4,4 +4,11 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        main.cpp
+        main.cpp \
+        ratikka_linja.cpp
+
+HEADERS += \
+    ratikka_linja.hh
+
+DISTFILES += \
+    data.txt
