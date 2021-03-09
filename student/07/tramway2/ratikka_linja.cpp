@@ -55,6 +55,7 @@ bool ratikka_linja::on_pysakki_samalla_etaisyydella(double pysakin_etaisyys)
         }
         else if (pysakki.second==pysakin_etaisyys)
         {
+
             return true;
         }
     }
