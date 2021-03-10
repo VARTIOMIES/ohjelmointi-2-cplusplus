@@ -3,9 +3,14 @@
 #include <fstream>
 #include <vector>
 #include <map>
+#include <algorithm>
 
 
 const std::string TULOSTUS_INPUT_FILENAME = "Give a name for input file: ";
+const std::string TULOSTUS_LINJAT = "All tramlines in alphabetical order:";
+
+const std::string QUIT_COMMAND = "QUIT";
+const std::string LINES_COMMAND = "LINES";
 
 const std::string ERR_MSG_FILE_NOT_READ = "Error: File could not be read.";
 const std::string ERR_MSG_BAD_FILE_FORMAT = "Error: Invalid format in file.";
@@ -73,7 +78,6 @@ bool linjan_lisays(std::string linjan_nimi,
     }
     else
     {
-        std::cout<<ERR_MSG_ALREADY_EXIST<<std::endl;
         return false;
     }
 }
@@ -90,10 +94,7 @@ bool pysakin_lisays(std::string linjan_nimi,
         std::cout<<ERR_MSG_ALREADY_EXIST<<std::endl;
         return false;
     }
-    else
-    {
-        return true;
-    }
+    return true;
 }
 
 bool rivin_kasittely(const std::string& rivi,
@@ -113,10 +114,7 @@ bool rivin_kasittely(const std::string& rivi,
     std::string pysakin_nimi = rivi_vektori.at(1);
     double pysakin_etaisyys = stod(rivi_vektori.at(2));
     // Jos linjaa ei ole vielä tietorakenteessa, lisätään se sinne.
-    if (not linjan_lisays(linjan_nimi,ratikkalinjat))
-    {
-        return false;
-    }
+    linjan_lisays(linjan_nimi,ratikkalinjat);
     // Lisätään pysäkki. Jos se ei onnistu, tulostetaan virheilmoitus
     if (not pysakin_lisays(linjan_nimi,pysakin_nimi,pysakin_etaisyys,
                            ratikkalinjat))
@@ -152,6 +150,24 @@ bool tiedoston_luku(std::map<std::string,ratikka_linja>& ratikkalinjat)
     return true;
 }
 
+void linja_tulostus(const std::map<std::string,ratikka_linja>& ratikkalinjat)
+{
+    std::vector<std::string> tulostus_vektori = {};
+
+    // Täytetään tulostusvektori linjan tiedoilla
+    for (auto linja : ratikkalinjat)
+    {
+        tulostus_vektori.push_back(linja.first);
+    }
+    //Jarjestetään linjojen nimet aakkosjärjestykseen
+    sort(tulostus_vektori.begin(),tulostus_vektori.end());
+
+    // Tulostetaan vektori
+    for (std::string linja : tulostus_vektori)
+    {
+        std::cout<< linja << std::endl;
+    }
+}
 
 
 // Short and sweet main.
@@ -168,7 +184,22 @@ int main()
     //Tiedoston tallennus tietorakenteeseen
     
     // Komentojen kysyminen
-
+    while(true)
+    {
+        std::string syote = "";
+        std::cout<<"tramway>";
+        getline(std::cin,syote);
+        std::vector<std::string> komennot = split(syote,' ');
+        std::string komento = komennot.at(0);
+        if (komento==QUIT_COMMAND)
+        {
+            return EXIT_SUCCESS;
+        }
+        else if (komento==LINES_COMMAND)
+        {
+            linja_tulostus(ratikka_linjat);
+        }
+    }
 
     
     
