@@ -4,16 +4,19 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <set>
 
 
 const std::string TULOSTUS_INPUT_FILENAME = "Give a name for input file: ";
 const std::string TULOSTUS_LINJAT = "All tramlines in alphabetical order:";
 const std::string TULOSTUS_LINJAN_PYSAKIT = " goes through these stops in the"
                                             " order they are listed:";
+const std::string TULOSTUS_KAIKKI_PYSAKIT = "All stops in alphabetical order:";
 
 const std::string QUIT_COMMAND = "QUIT";
 const std::string LINES_COMMAND = "LINES";
 const std::string LINE_COMMAND = "LINE";
+const std::string STOPS_COMMAND = "STOPS";
 
 const std::string ERR_MSG_FILE_NOT_READ = "Error: File could not be read.";
 const std::string ERR_MSG_BAD_FILE_FORMAT = "Error: Invalid format in file.";
@@ -163,10 +166,9 @@ void linja_tulostus(const std::map<std::string,ratikka_linja>& ratikkalinjat)
     {
         tulostus_vektori.push_back(linja.first);
     }
-    //Jarjestetään linjojen nimet aakkosjärjestykseen
-    sort(tulostus_vektori.begin(),tulostus_vektori.end());
 
-    // Tulostetaan vektori
+    // Tulostetaan vektori. Map -tietorakenteen ansiosta alkiot ovat valmiiksi
+    // aakkosjärjestyksessä.
     for (std::string linja : tulostus_vektori)
     {
         std::cout<< linja << std::endl;
@@ -186,6 +188,27 @@ void tulosta_linjan_pysakit(std::string linjan_nimi,
 
 }
 
+void tulosta_kaikki_pysakit(std::map<std::string,ratikka_linja>& ratikka_linjat)
+{
+    std::set<std::string> tulostus_set = {};
+    for (auto ratikka_linja : ratikka_linjat)
+    {
+        std::vector<std::string> linjan_pysakit =
+                ratikka_linja.second.get_pysakit();
+        for (auto pysakin_nimi : linjan_pysakit)
+        {
+            tulostus_set.insert(pysakin_nimi);
+        }
+    }
+    // Tulostetaan linjojen pysäkit
+    std::cout << TULOSTUS_KAIKKI_PYSAKIT<<std::endl;
+    for (auto pysakin_nimi : tulostus_set)
+    {
+        std::cout<<pysakin_nimi<<std::endl;
+    }
+
+}
+
 
 // Short and sweet main.
 int main()
@@ -202,7 +225,7 @@ int main()
     while(true)
     {
         std::string syote = "";
-        std::cout<<"tramway>";
+        std::cout<<"tramway> ";
         getline(std::cin,syote);
         std::vector<std::string> komennot = split(syote,' ');
         std::string komento = komennot.at(0);
@@ -217,6 +240,10 @@ int main()
         else if (komento==LINE_COMMAND and komennot.size()>= 2)
         {
             tulosta_linjan_pysakit(komennot.at(1),ratikka_linjat);
+        }
+        else if (komento==STOPS_COMMAND)
+        {
+            tulosta_kaikki_pysakit(ratikka_linjat);
         }
     }
 

@@ -14,6 +14,7 @@ public:
     bool on_linjalla(std::string pysakin_nimi);
     bool on_pysakki_samalla_etaisyydella(double pysakin_etaisyys);
     void pysakkien_tulostus();
+    std::vector<std::string> get_pysakit();
 private:
     std::vector<std::pair<std::string,double>> pysakit;
     

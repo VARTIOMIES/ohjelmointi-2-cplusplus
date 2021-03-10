@@ -66,3 +66,13 @@ void ratikka_linja::pysakkien_tulostus()
         std::cout<<" - "<<pysakki.first<<" : "<< pysakki.second<<std::endl;
     }
 }
+
+std::vector<std::string> ratikka_linja::get_pysakit()
+{
+    std::vector<std::string> pysakkien_nimet = {};
+    for (auto pysakki : pysakit)
+    {
+        pysakkien_nimet.push_back(pysakki.first);
+    }
+    return pysakkien_nimet;
+}
