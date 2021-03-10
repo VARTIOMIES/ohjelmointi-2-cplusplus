@@ -3,7 +3,7 @@
 
 ratikka_linja::ratikka_linja()
 {
-    ratikka_linja::pysakit = {{}};
+    ratikka_linja::pysakit = {};
 
 }
 
@@ -50,16 +50,19 @@ bool ratikka_linja::on_pysakki_samalla_etaisyydella(double pysakin_etaisyys)
 {
     for (std::pair<std::string,double> pysakki : pysakit)
     {
-        // Jotta ensimmäisen pysäkin lisäys onnistuu
-        if (pysakin_etaisyys == 0.0)
-        {
-            return false;
-        }
-        else if (pysakki.second==pysakin_etaisyys)
+        if (pysakki.second==pysakin_etaisyys)
         {
 
             return true;
         }
     }
     return false;
+}
+
+void ratikka_linja::pysakkien_tulostus()
+{
+    for (auto pysakki : ratikka_linja::pysakit)
+    {
+        std::cout<<" - "<<pysakki.first<<" : "<< pysakki.second<<std::endl;
+    }
 }

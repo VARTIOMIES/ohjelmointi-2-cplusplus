@@ -8,13 +8,17 @@
 
 const std::string TULOSTUS_INPUT_FILENAME = "Give a name for input file: ";
 const std::string TULOSTUS_LINJAT = "All tramlines in alphabetical order:";
+const std::string TULOSTUS_LINJAN_PYSAKIT = " goes through these stops in the"
+                                            " order they are listed:";
 
 const std::string QUIT_COMMAND = "QUIT";
 const std::string LINES_COMMAND = "LINES";
+const std::string LINE_COMMAND = "LINE";
 
 const std::string ERR_MSG_FILE_NOT_READ = "Error: File could not be read.";
 const std::string ERR_MSG_BAD_FILE_FORMAT = "Error: Invalid format in file.";
 const std::string ERR_MSG_ALREADY_EXIST = "Error: Stop/line already exists.";
+const std::string ERR_MSG_LINE_NOT_FOUND = "Error: Line could not be found.";
 
 // The most magnificent function in this whole program.
 // Prints a RASSE
@@ -169,6 +173,19 @@ void linja_tulostus(const std::map<std::string,ratikka_linja>& ratikkalinjat)
     }
 }
 
+void tulosta_linjan_pysakit(std::string linjan_nimi,
+                            std::map<std::string,ratikka_linja>& ratikka_linjat)
+{
+    if (ratikka_linjat.find(linjan_nimi)==ratikka_linjat.end())
+    {
+        std::cout << ERR_MSG_LINE_NOT_FOUND<<std::endl;
+        return;
+    }
+    std::cout<<"Line "<<linjan_nimi<<TULOSTUS_LINJAN_PYSAKIT<<std::endl;
+    ratikka_linjat.at(linjan_nimi).pysakkien_tulostus();
+
+}
+
 
 // Short and sweet main.
 int main()
@@ -176,13 +193,11 @@ int main()
     // Tietorakenteena vektori, jossa ratikka_linja olioita
     std::map<std::string,ratikka_linja> ratikka_linjat = {};
     print_rasse();
-    // Ensin tiedoston luku
+    // Ensin tiedoston luku ja tallennus tietorakenteeseen
     if (not tiedoston_luku(ratikka_linjat))
     {
         return EXIT_FAILURE;
     }
-    //Tiedoston tallennus tietorakenteeseen
-    
     // Komentojen kysyminen
     while(true)
     {
@@ -198,6 +213,10 @@ int main()
         else if (komento==LINES_COMMAND)
         {
             linja_tulostus(ratikka_linjat);
+        }
+        else if (komento==LINE_COMMAND and komennot.size()>= 2)
+        {
+            tulosta_linjan_pysakit(komennot.at(1),ratikka_linjat);
         }
     }
 
