@@ -112,9 +112,11 @@ bool tiedoston_luku(std::map<std::string,ratikka_linja>& ratikkalinjat)
     {
         if (not rivin_kasittely(rivi,ratikkalinjat))
         {
+            syote_tiedosto.close();
             return false;
         }
     }
+    syote_tiedosto.close();
     return true;
 }
 
