@@ -9,25 +9,27 @@ ratikka_linja::ratikka_linja()
 
 bool ratikka_linja::lisaa_pysakki(std::string nimi, double etaisyys)
 {
+    // Tarkistetaan, onko samanniminen pysäkki jo linjalla tai onko samalla
+    //etäisyydellä jo toinen pysäkki.
     if (on_linjalla(nimi) or on_pysakki_samalla_etaisyydella(etaisyys))
     {
         return false;
     }
 
-    // etsitään iteraatttorin kohta, johon pysäkki sijoitetaan
-    std::vector<std::pair<std::string,double>>::iterator it = pysakit.begin();
+    // etsitään iteraattorin kohta, johon pysäkki sijoitetaan
+    std::vector<std::pair<std::string,double>>::iterator paikka = pysakit.begin();
     for (std::pair<std::string,double> pysakki : pysakit)
     {
         if (pysakki.second > etaisyys)
         {
             break;
         }
-        it++;
+        paikka++;
     }
     // Sijoitetaan pysäkki selvitettyyn kohtaan it
     std::pair<std::string,double> uusi_pysakki = {nimi,etaisyys};
 
-    pysakit.insert(it,uusi_pysakki);
+    pysakit.insert(paikka,uusi_pysakki);
 
     return true;
 }

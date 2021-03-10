@@ -62,6 +62,40 @@ std::vector<std::string> tiedoston_rivi_vektorina(const std::string& rivi)
     return rivi_vektori;
 }
 
+// Funktio lisää uuden linjan, jos samalla nimellä ei ole jo aikaisempaa linjaa.
+bool linjan_lisays(std::string linjan_nimi,
+                   std::map<std::string,ratikka_linja>& ratikkalinjat)
+{
+    if (ratikkalinjat.find(linjan_nimi)==ratikkalinjat.end())
+    {
+        ratikkalinjat.insert({linjan_nimi,ratikka_linja()});
+        return true;
+    }
+    else
+    {
+        std::cout<<ERR_MSG_ALREADY_EXIST<<std::endl;
+        return false;
+    }
+}
+
+// Funktio lisää pysäkin halutulle linjalle, jos mahdollista.
+bool pysakin_lisays(std::string linjan_nimi,
+                    std::string pysakin_nimi,
+                    double pysakin_etaisyys,
+                    std::map<std::string,ratikka_linja>& ratikkalinjat)
+{
+    if (not ratikkalinjat.at(linjan_nimi).lisaa_pysakki(pysakin_nimi,
+                                                        pysakin_etaisyys))
+    {
+        std::cout<<ERR_MSG_ALREADY_EXIST<<std::endl;
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
 bool rivin_kasittely(const std::string& rivi,
                      std::map<std::string,ratikka_linja>& ratikkalinjat)
 {
@@ -78,17 +112,15 @@ bool rivin_kasittely(const std::string& rivi,
     std::string linjan_nimi = rivi_vektori.at(0);
     std::string pysakin_nimi = rivi_vektori.at(1);
     double pysakin_etaisyys = stod(rivi_vektori.at(2));
-    // Jos linjaa ei ole vielä tietorakenteessa, lisätään se sinne
-    if (ratikkalinjat.find(linjan_nimi)==ratikkalinjat.end())
+    // Jos linjaa ei ole vielä tietorakenteessa, lisätään se sinne.
+    if (not linjan_lisays(linjan_nimi,ratikkalinjat))
     {
-        ratikkalinjat.insert({linjan_nimi,ratikka_linja()});
+        return false;
     }
     // Lisätään pysäkki. Jos se ei onnistu, tulostetaan virheilmoitus
-    ratikkalinjat.at(linjan_nimi);
-    if (not ratikkalinjat.at(linjan_nimi).lisaa_pysakki(pysakin_nimi,
-                                                        pysakin_etaisyys))
+    if (not pysakin_lisays(linjan_nimi,pysakin_nimi,pysakin_etaisyys,
+                           ratikkalinjat))
     {
-        std::cout<<ERR_MSG_ALREADY_EXIST<<std::endl;
         return false;
     }
     return true;
@@ -136,6 +168,8 @@ int main()
     //Tiedoston tallennus tietorakenteeseen
     
     // Komentojen kysyminen
+
+
     
     
     return EXIT_SUCCESS;
