@@ -27,6 +27,7 @@ const std::string ERR_MSG_FILE_NOT_READ = "Error: File could not be read.";
 const std::string ERR_MSG_BAD_FILE_FORMAT = "Error: Invalid format in file.";
 const std::string ERR_MSG_ALREADY_EXIST = "Error: Stop/line already exists.";
 const std::string ERR_MSG_LINE_NOT_FOUND = "Error: Line could not be found.";
+const std::string ERR_MSG_STOP_NOT_FOUND = "Error: Stop could not be found.";
 
 // The most magnificent function in this whole program.
 // Prints a RASSE
@@ -225,6 +226,12 @@ void tulosta_pysakin_linjat(std::string pysakin_nimi,
             tulostus_set.insert(linja.first);
         }
     }
+    // Jos pysäkkiä ei löydy linjoilta, tulostus_set suuruun on 0
+    if (tulostus_set.size()==0)
+    {
+        std::cout<<ERR_MSG_STOP_NOT_FOUND<<std::endl;
+        return;
+    }
 
     // Tulostetaan linjat, joilta pysäkki löytyy.
     std::cout << "Stop "<<pysakin_nimi<<TULOSTUS_PYSAKIN_LINJAT<<std::endl;
@@ -238,7 +245,17 @@ void tulosta_pysakkien_etaisyys(std::string linjan_nimi, std::string pysakki1,
                                 ratikka_linja>& ratikkalinjat)
 {
     // Lasketaan pysäkkien etäisyys
+    if (ratikkalinjat.find(linjan_nimi)==ratikkalinjat.end())
+    {
+        std::cout << ERR_MSG_LINE_NOT_FOUND << std::endl;
+        return;
+    }
     ratikka_linja linja = ratikkalinjat.at(linjan_nimi);
+    if (not (linja.on_linjalla(pysakki1) or linja.on_linjalla(pysakki2)))
+    {
+        std::cout << ERR_MSG_STOP_NOT_FOUND<< std::endl;
+        return;
+    }
     double etaisyys1 = linja.get_pysakin_etaisyys(pysakki1);
     double etaisyys2 = linja.get_pysakin_etaisyys(pysakki2);
     double pysakkien_valinen_etaisyys = std::fabs(etaisyys1-etaisyys2);
@@ -290,7 +307,7 @@ int main()
         {
             tulosta_pysakin_linjat(komennot.at(1),ratikka_linjat);
         }
-        else if (komento==DISTANCE_COMMAND)
+        else if (komento==DISTANCE_COMMAND and komennot.size()>=3)
         {
             std::string linjan_nimi = komennot.at(1);
             std::string pysakki1 = komennot.at(2);
