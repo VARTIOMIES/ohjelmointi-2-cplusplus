@@ -16,6 +16,7 @@ public:
     void pysakkien_tulostus();
     std::vector<std::string> get_pysakit();
     double get_pysakin_etaisyys(std::string pysakin_nimi);
+    bool poista_pysakki(std::string pysakin_nimi);
 private:
     std::vector<std::pair<std::string,double>> pysakit;
     

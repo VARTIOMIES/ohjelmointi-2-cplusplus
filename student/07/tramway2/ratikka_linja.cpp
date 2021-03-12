@@ -88,3 +88,27 @@ double ratikka_linja::get_pysakin_etaisyys(std::string pysakin_nimi)
     }
     return 0.0;
 }
+
+bool ratikka_linja::poista_pysakki(std::string pysakin_nimi)
+{
+    if (on_linjalla(pysakin_nimi))
+    {
+        // etsitään iteraattorin kohta, josta pysäkkki poistetaan
+        std::vector<std::pair<std::string,double>>::iterator paikka = pysakit.begin();
+        for (std::pair<std::string,double> pysakki : pysakit)
+        {
+            if (pysakki.first == pysakin_nimi)
+            {
+                break;
+            }
+            paikka++;
+        }
+        // Poistetaan pysäkki
+        pysakit.erase(paikka);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}

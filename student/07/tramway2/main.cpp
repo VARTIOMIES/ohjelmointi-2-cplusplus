@@ -16,6 +16,8 @@ const std::string TULOSTUS_KAIKKI_PYSAKIT = "All stops in alphabetical order:";
 const std::string TULOSTUS_PYSAKIN_LINJAT = " can be found on the following"
                                             " lines:";
 const std::string TULOSTUS_LINJAN_LISAYS = "Line was added.";
+const std::string TULOSTUS_PYSAKIN_LISAYS = "Stop was added.";
+const std::string TULOSTUS_PYSAKKI_POISTETTU="Stop was removed from all lines.";
 
 const std::string QUIT_COMMAND = "QUIT";
 const std::string LINES_COMMAND = "LINES";
@@ -24,12 +26,15 @@ const std::string STOPS_COMMAND = "STOPS";
 const std::string STOP_COMMAND = "STOP";
 const std::string DISTANCE_COMMAND = "DISTANCE";
 const std::string ADDLINE_COMMAND = "ADDLINE";
+const std::string ADDSTOP_COMMAND = "ADDSTOP";
+const std::string REMOVE_COMMAND = "REMOVE";
 
 const std::string ERR_MSG_FILE_NOT_READ = "Error: File could not be read.";
 const std::string ERR_MSG_BAD_FILE_FORMAT = "Error: Invalid format in file.";
 const std::string ERR_MSG_ALREADY_EXIST = "Error: Stop/line already exists.";
 const std::string ERR_MSG_LINE_NOT_FOUND = "Error: Line could not be found.";
 const std::string ERR_MSG_STOP_NOT_FOUND = "Error: Stop could not be found.";
+const std::string ERR_MSG_BAD_INPUT = "Error: Invalid input.";
 
 // The most magnificent function in this whole program.
 // Prints a RASSE
@@ -177,6 +182,7 @@ void linja_tulostus(const std::map<std::string,ratikka_linja>& ratikkalinjat)
 
     // Tulostetaan vektori. Map -tietorakenteen ansiosta alkiot ovat valmiiksi
     // aakkosjärjestyksessä.
+    std::cout << TULOSTUS_LINJAT << std::endl;
     for (std::string linja : tulostus_vektori)
     {
         std::cout<< linja << std::endl;
@@ -266,6 +272,27 @@ void tulosta_pysakkien_etaisyys(std::string linjan_nimi, std::string pysakki1,
 
 }
 
+void pysakin_poisto(std::string pysakin_nimi,
+                    std::map<std::string,ratikka_linja>& ratikkalinjat)
+{
+   bool pysakki_poistettu = false;
+   for (auto linja:ratikkalinjat)
+   {
+       if (linja.second.poista_pysakki(pysakin_nimi))
+       {
+           pysakki_poistettu = true;
+       }
+   }
+   if (pysakki_poistettu)
+   {
+       std::cout << TULOSTUS_PYSAKKI_POISTETTU << std::endl;
+   }
+   else
+   {
+       std::cout << ERR_MSG_STOP_NOT_FOUND << std::endl;
+   }
+}
+
 // Short and sweet main.
 int main()
 {
@@ -328,6 +355,22 @@ int main()
             {
                 std::cout << ERR_MSG_ALREADY_EXIST << std::endl;
             }
+        }
+        else if (komento==ADDSTOP_COMMAND and komennot.size()>=3)
+        {
+            if (pysakin_lisays(komennot.at(1),komennot.at(2),
+                               stod(komennot.at(3)),ratikka_linjat))
+            {
+                std::cout << TULOSTUS_PYSAKIN_LISAYS << std::endl;
+            }
+        }
+        else if (komento==REMOVE_COMMAND and komennot.size()>=2)
+        {
+            pysakin_poisto(komennot.at(1),ratikka_linjat);
+        }
+        else
+        {
+            std::cout << ERR_MSG_BAD_INPUT << std::endl;
         }
 
     }
