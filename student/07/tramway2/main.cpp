@@ -272,11 +272,12 @@ void tulosta_pysakkien_etaisyys(std::string linjan_nimi, std::string pysakki1,
 
 }
 
+// Funktio poistaa pysäkin kaikilta linjoilta. Hoitaa myös tulostamisen.
 void pysakin_poisto(std::string pysakin_nimi,
                     std::map<std::string,ratikka_linja>& ratikkalinjat)
 {
    bool pysakki_poistettu = false;
-   for (auto linja:ratikkalinjat)
+   for (auto& linja : ratikkalinjat)
    {
        if (linja.second.poista_pysakki(pysakin_nimi))
        {
@@ -291,6 +292,48 @@ void pysakin_poisto(std::string pysakin_nimi,
    {
        std::cout << ERR_MSG_STOP_NOT_FOUND << std::endl;
    }
+}
+// Lukee syötteen ja käsittelee annetun merkkijonon komento vektoriksi
+// Tämä funktio sisältää monimutkaisen algoritmin, joka käsittelee tiedon
+// oikeaan muotoon
+std::vector<std::string> syotteen_kysyminen()
+{
+    std::string syote = "";
+    std::cout<<"tramway> ";
+    getline(std::cin,syote);
+    std::vector<std::string> testi1 = split(syote,'"',false);
+
+    std::vector<std::string> alku_osa = split(testi1.at(0),' ',true);
+    std::vector<std::string> loppu_osa= {};
+    if (testi1.size()>1)
+    {
+        loppu_osa = split(testi1.at(testi1.size()-1),' ');
+    }
+
+    std::vector<std::string> komennot = {};
+    for (auto alkio:alku_osa)
+    {
+        komennot.push_back(alkio);
+    }
+    if (testi1.size()==3 or testi1.size()==4)
+    {
+       komennot.push_back(testi1.at(1));
+    }
+    else if (testi1.size()==5)
+    {
+        komennot.push_back(testi1.at(1));
+        komennot.push_back(testi1.at(3));
+    }
+    for (auto loppu_alkio:loppu_osa)
+    {
+        if (loppu_alkio == "")
+        {
+            continue;
+        }
+        komennot.push_back(loppu_alkio);
+    }
+
+    return komennot;
 }
 
 // Short and sweet main.
@@ -308,10 +351,7 @@ int main()
     // Komentojen kysyminen
     while(true)
     {
-        std::string syote = "";
-        std::cout<<"tramway> ";
-        getline(std::cin,syote);
-        std::vector<std::string> komennot = split(syote,' ');
+        std::vector<std::string> komennot = syotteen_kysyminen();
         std::string komento = komennot.at(0);
         for (char& character : komento)
         {
@@ -333,7 +373,7 @@ int main()
         {
             tulosta_kaikki_pysakit(ratikka_linjat);
         }
-        else if (komento==STOP_COMMAND)
+        else if (komento==STOP_COMMAND and komennot.size()>=2)
         {
             tulosta_pysakin_linjat(komennot.at(1),ratikka_linjat);
         }
