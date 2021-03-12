@@ -12,11 +12,14 @@ const std::string TULOSTUS_LINJAT = "All tramlines in alphabetical order:";
 const std::string TULOSTUS_LINJAN_PYSAKIT = " goes through these stops in the"
                                             " order they are listed:";
 const std::string TULOSTUS_KAIKKI_PYSAKIT = "All stops in alphabetical order:";
+const std::string TULOSTUS_PYSAKIN_LINJAT = " can be found on the following"
+                                            "lines:";
 
 const std::string QUIT_COMMAND = "QUIT";
 const std::string LINES_COMMAND = "LINES";
 const std::string LINE_COMMAND = "LINE";
 const std::string STOPS_COMMAND = "STOPS";
+const std::string STOP_COMMAND = "STOP";
 
 const std::string ERR_MSG_FILE_NOT_READ = "Error: File could not be read.";
 const std::string ERR_MSG_BAD_FILE_FORMAT = "Error: Invalid format in file.";
@@ -208,6 +211,26 @@ void tulosta_kaikki_pysakit(std::map<std::string,ratikka_linja>& ratikka_linjat)
     }
 
 }
+void tulosta_pysakin_linjat(std::string pysakin_nimi,
+                            std::map<std::string,ratikka_linja>& ratikkalinjat)
+{
+    std::set<std::string> tulostus_set = {};
+    // Tutkitaan, onko pysäkin nimeä linjalla.
+    for (auto linja : ratikkalinjat)
+    {
+        if (linja.second.on_linjalla(pysakin_nimi))
+        {
+            tulostus_set.insert(linja.first);
+        }
+    }
+
+    // Tulostetaan linjat, joilta pysäkki löytyy.
+    std::cout << "Stop "<<pysakin_nimi<<TULOSTUS_PYSAKIN_LINJAT<<std::endl;
+    for (auto linjan_nimi : tulostus_set)
+    {
+        std::cout<<" - "<<linjan_nimi<<std::endl;
+    }
+}
 
 
 // Short and sweet main.
@@ -229,6 +252,10 @@ int main()
         getline(std::cin,syote);
         std::vector<std::string> komennot = split(syote,' ');
         std::string komento = komennot.at(0);
+        for (char& character : komento)
+        {
+            character = toupper(character);
+        }
         if (komento==QUIT_COMMAND)
         {
             return EXIT_SUCCESS;
@@ -244,6 +271,10 @@ int main()
         else if (komento==STOPS_COMMAND)
         {
             tulosta_kaikki_pysakit(ratikka_linjat);
+        }
+        else if (komento==STOP_COMMAND)
+        {
+            tulosta_pysakin_linjat(komennot.at(1),ratikka_linjat);
         }
     }
 
