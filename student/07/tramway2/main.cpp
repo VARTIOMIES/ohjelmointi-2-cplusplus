@@ -396,7 +396,7 @@ int main()
                 std::cout << ERR_MSG_ALREADY_EXIST << std::endl;
             }
         }
-        else if (komento==ADDSTOP_COMMAND and komennot.size()>=3)
+        else if (komento==ADDSTOP_COMMAND and komennot.size()>=4)
         {
             if (pysakin_lisays(komennot.at(1),komennot.at(2),
                                stod(komennot.at(3)),ratikka_linjat))
