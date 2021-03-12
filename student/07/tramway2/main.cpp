@@ -15,6 +15,7 @@ const std::string TULOSTUS_LINJAN_PYSAKIT = " goes through these stops in the"
 const std::string TULOSTUS_KAIKKI_PYSAKIT = "All stops in alphabetical order:";
 const std::string TULOSTUS_PYSAKIN_LINJAT = " can be found on the following"
                                             " lines:";
+const std::string TULOSTUS_LINJAN_LISAYS = "Line was added.";
 
 const std::string QUIT_COMMAND = "QUIT";
 const std::string LINES_COMMAND = "LINES";
@@ -22,6 +23,7 @@ const std::string LINE_COMMAND = "LINE";
 const std::string STOPS_COMMAND = "STOPS";
 const std::string STOP_COMMAND = "STOP";
 const std::string DISTANCE_COMMAND = "DISTANCE";
+const std::string ADDLINE_COMMAND = "ADDLINE";
 
 const std::string ERR_MSG_FILE_NOT_READ = "Error: File could not be read.";
 const std::string ERR_MSG_BAD_FILE_FORMAT = "Error: Invalid format in file.";
@@ -267,7 +269,8 @@ void tulosta_pysakkien_etaisyys(std::string linjan_nimi, std::string pysakki1,
 // Short and sweet main.
 int main()
 {
-    // Tietorakenteena vektori, jossa ratikka_linja olioita
+    // Tietorakenteena map, jossa avainsanana linjan nimi ja tietona on
+    //ratikka_linja olioita
     std::map<std::string,ratikka_linja> ratikka_linjat = {};
     print_rasse();
     // Ensin tiedoston luku ja tallennus tietorakenteeseen
@@ -315,6 +318,18 @@ int main()
             tulosta_pysakkien_etaisyys(linjan_nimi,pysakki1,pysakki2,
                                        ratikka_linjat);
         }
+        else if (komento==ADDLINE_COMMAND and komennot.size()>=2)
+        {
+            if (linjan_lisays(komennot.at(1),ratikka_linjat))
+            {
+                std::cout << TULOSTUS_LINJAN_LISAYS << std::endl;
+            }
+            else
+            {
+                std::cout << ERR_MSG_ALREADY_EXIST << std::endl;
+            }
+        }
+
     }
 
     
