@@ -5,6 +5,7 @@
 #include <map>
 #include <algorithm>
 #include <set>
+#include <cmath>
 
 
 const std::string TULOSTUS_INPUT_FILENAME = "Give a name for input file: ";
@@ -13,13 +14,14 @@ const std::string TULOSTUS_LINJAN_PYSAKIT = " goes through these stops in the"
                                             " order they are listed:";
 const std::string TULOSTUS_KAIKKI_PYSAKIT = "All stops in alphabetical order:";
 const std::string TULOSTUS_PYSAKIN_LINJAT = " can be found on the following"
-                                            "lines:";
+                                            " lines:";
 
 const std::string QUIT_COMMAND = "QUIT";
 const std::string LINES_COMMAND = "LINES";
 const std::string LINE_COMMAND = "LINE";
 const std::string STOPS_COMMAND = "STOPS";
 const std::string STOP_COMMAND = "STOP";
+const std::string DISTANCE_COMMAND = "DISTANCE";
 
 const std::string ERR_MSG_FILE_NOT_READ = "Error: File could not be read.";
 const std::string ERR_MSG_BAD_FILE_FORMAT = "Error: Invalid format in file.";
@@ -231,7 +233,19 @@ void tulosta_pysakin_linjat(std::string pysakin_nimi,
         std::cout<<" - "<<linjan_nimi<<std::endl;
     }
 }
+void tulosta_pysakkien_etaisyys(std::string linjan_nimi, std::string pysakki1,
+                                std::string pysakki2,std::map<std::string,
+                                ratikka_linja>& ratikkalinjat)
+{
+    // Lasketaan pysäkkien etäisyys
+    ratikka_linja linja = ratikkalinjat.at(linjan_nimi);
+    double etaisyys1 = linja.get_pysakin_etaisyys(pysakki1);
+    double etaisyys2 = linja.get_pysakin_etaisyys(pysakki2);
+    double pysakkien_valinen_etaisyys = std::fabs(etaisyys1-etaisyys2);
+    std::cout << "Distance between " <<pysakki1<<" and "<<pysakki2<< " is "<<
+                 pysakkien_valinen_etaisyys << std::endl;
 
+}
 
 // Short and sweet main.
 int main()
@@ -275,6 +289,14 @@ int main()
         else if (komento==STOP_COMMAND)
         {
             tulosta_pysakin_linjat(komennot.at(1),ratikka_linjat);
+        }
+        else if (komento==DISTANCE_COMMAND)
+        {
+            std::string linjan_nimi = komennot.at(1);
+            std::string pysakki1 = komennot.at(2);
+            std::string pysakki2 = komennot.at(3);
+            tulosta_pysakkien_etaisyys(linjan_nimi,pysakki1,pysakki2,
+                                       ratikka_linjat);
         }
     }
 

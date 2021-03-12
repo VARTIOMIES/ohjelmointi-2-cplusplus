@@ -76,3 +76,15 @@ std::vector<std::string> ratikka_linja::get_pysakit()
     }
     return pysakkien_nimet;
 }
+
+double ratikka_linja::get_pysakin_etaisyys(std::string pysakin_nimi)
+{
+    for (auto pysakki : pysakit)
+    {
+        if (pysakki.first == pysakin_nimi)
+        {
+            return pysakki.second;
+        }
+    }
+    return 0.0;
+}
