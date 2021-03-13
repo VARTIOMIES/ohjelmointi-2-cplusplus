@@ -1,14 +1,54 @@
+/* Ratikkalinjat
+ *
+ * Kuvaus:
+ *  Ohjelma toteuttaa ratikkalinojen ja niiden pysäkkien tietojen hallinnointiin,
+ * lisäämiseen ja tarkasteluun tarkoitetun järjestelmän. Ohjelman alussa
+ * kysytään tiedoston nimeä, johon on tallennettu linjojen pysäkkejä ja niiden
+ * etäisyyksiä linjan lähtöpysäkistä.
+ *  Käyttäjä voi antaa ohjelmalle komentoja, joiden mukaan ohjelma tulostaa
+ * tietoja linjoista ja niden pysäkeistä. Käyttäjä voi myös lisätä uusia linjoja
+ * ja pysäkeitä tai poistaa olemassa olevia pysäkeitä. Käyttäjä voi myös poistua
+ * ohjelmasta antamalla poistumiskomennon.
+ * Komennot:
+ * - Quit : Poistutaan ohjelmasta.
+ * - Lines : Tulostaa kaikki järjestelmään kirjattujen ratikkalinjojen
+ * nimet aakkosjärjestyksessä.
+ * - Line <linjan_nimi> : Tulostaa <linjan_nimi> -linjan tiedot, eli pysäkit
+ * ja niiden etäisyydet lähtöpysäkistä.
+ * - Stops : Tulostaa kaikkien järjestelmässä olevien linjojen pysäkkien nimet
+ * aakkosjärjestyksessä.
+ * - Stop <pysäkin_nimi> : Tulostaa niiden linjojen nimet, joilta <pysäkin_nimi>
+ * pysäkki löytyy.
+ * - Distance <linjan_nimi> <pysäkin_1_nimi> <pysakin_2_nimi>: Tulostaa kahden
+ * samalla linjalla <linjan_nimi> olevan pysäkin välisen etäisyyden toisistaan.
+ * - Addline <linjan_nimi> : Lisää järjestelmään uuden linjan, jolla ei ole
+ * pysäkeitä.
+ * - Addstop <linjan_nimi> <pysäkin_nimi> <pysäkin_etäisyys> : Lisää linjalle
+ * uuden pysäkin
+ * - Remove <pysäkin_nimi> :
+ *
+ * Ohjelman kirjoittaja
+ * Nimi: Onni Merilä
+ * Opiskelijanumero: H299725
+ * Käyttäjätunnus: bvonme
+ * E-Mail: onni.merila@tuni.fi
+ *
+ * Huomioita ohjelmasta ja sen toteutuksesta:
+ * - Tietorakenteena käytetään STL:n map säiliötä, jossa avainsana on string ja
+ *   ja sisältönä on ratikka_linja olio, jonka toteutus on tiedostossa
+ *   'ratikka_linja.cpp'.
+ *
+ * */
 #include "ratikka_linja.hh"
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <map>
-#include <algorithm>
 #include <set>
 #include <cmath>
 
 
-const std::string TULOSTUS_INPUT_FILENAME = "Give a name for input file: ";
+const std::string TULOSTUS_TIEDOSTON_NIMI = "Give a name for input file: ";
 const std::string TULOSTUS_LINJAT = "All tramlines in alphabetical order:";
 const std::string TULOSTUS_LINJAN_PYSAKIT = " goes through these stops in the"
                                             " order they are listed:";
@@ -71,6 +111,7 @@ std::vector<std::string> split(const std::string& s, const char delimiter, bool 
     }
     return result;
 }
+
 // Muuttaa rivin rivivektoriksi, eli jakaa merkkijonon useampaan merkkijonoon.
 std::vector<std::string> tiedoston_rivi_vektorina(const std::string& rivi)
 {
@@ -102,8 +143,9 @@ bool linjan_lisays(std::string linjan_nimi,
     }
 }
 
-// Funktio lisää pysäkin halutulle linjalle, jos mahdollista.
-bool pysakin_lisays(std::string linjan_nimi,
+// Funktio lisää pysäkin halutulle linjalle, jos mahdollista. Tulostaa virheil-
+// moituksen. jos pysäkin lisäys ei onnistu.
+bool lisaa_pysakki(std::string linjan_nimi,
                     std::string pysakin_nimi,
                     double pysakin_etaisyys,
                     std::map<std::string,ratikka_linja>& ratikkalinjat)
@@ -117,11 +159,16 @@ bool pysakin_lisays(std::string linjan_nimi,
     return true;
 }
 
-bool rivin_kasittely(const std::string& rivi,
+// Funktio käsittelee annetun merkkijonon, joka on tiedoston rivi, ja lisää sen
+// sisältämän tiedon tietorakenteeseen ratikkalinjat. Jos rivin tieto on vir-
+// heellinen, tulostetaan virheilmoitus ja poistutaan funktiosta totuusarvolla
+// false. Rivin käsittelyn onnistuttua poistutaan totuusarvolla true.
+bool kasittele_rivi(const std::string& rivi,
                      std::map<std::string,ratikka_linja>& ratikkalinjat)
 {
     std::vector<std::string> rivi_vektori = tiedoston_rivi_vektorina(rivi);
-    // Tarkistetaan, että tiedot ovat halutussa formaatissa.
+    // Tarkistetaan, että tiedot ovat halutussa formaatissa. Tulostetaan virhe-
+    // ilmoitus ja poistutaan funktiosta, jos tietoa ei ymmärretä.
     if (rivi_vektori.size()!=3
             or rivi_vektori.at(0)==""
             or rivi_vektori.at(1)=="")
@@ -135,20 +182,24 @@ bool rivin_kasittely(const std::string& rivi,
     double pysakin_etaisyys = stod(rivi_vektori.at(2));
     // Jos linjaa ei ole vielä tietorakenteessa, lisätään se sinne.
     linjan_lisays(linjan_nimi,ratikkalinjat);
-    // Lisätään pysäkki. Jos se ei onnistu, tulostetaan virheilmoitus
-    if (not pysakin_lisays(linjan_nimi,pysakin_nimi,pysakin_etaisyys,
+    // Lisätään pysäkki. Jos se ei onnistu, poistutaan funktiosta
+    if (not lisaa_pysakki(linjan_nimi,pysakin_nimi,pysakin_etaisyys,
                            ratikkalinjat))
     {
         return false;
     }
+    // Rivin käsittely onnistunut. Poistutaan funktiosta.
     return true;
 }
 
-
-bool tiedoston_luku(std::map<std::string,ratikka_linja>& ratikkalinjat)
+// Funktio kysyy tiedoston nimeä, jonka se avaa, lukee tiedot ja tallettaa ne
+// tietorakenteeseen. Jos tiedoston lukeminen ei onnistu, tulostetaan virhe-
+// ilmoitus ja poistutaan funktiosta totuusarvolla false. Jos koko tiedosto
+// luetaan onnistuneesti, poistutaan funktiosta totuusarvolla true.
+bool lue_tiedosto(std::map<std::string,ratikka_linja>& ratikkalinjat)
 {
     std::string tiedoston_nimi = "";
-    std::cout << TULOSTUS_INPUT_FILENAME;
+    std::cout << TULOSTUS_TIEDOSTON_NIMI;
     getline(std::cin,tiedoston_nimi);
     std::ifstream syote_tiedosto(tiedoston_nimi);
     if (not syote_tiedosto)
@@ -160,7 +211,9 @@ bool tiedoston_luku(std::map<std::string,ratikka_linja>& ratikkalinjat)
     // Käydään tiedoston jokainen rivi läpi vuorotellen.
     while( getline(syote_tiedosto,rivi))
     {
-        if (not rivin_kasittely(rivi,ratikkalinjat))
+        // Jos rivin_kasittely ei onnistu, suljetaan tiedosto ja lopetetaan
+        // tiedoston lukeminen.
+        if (not kasittele_rivi(rivi,ratikkalinjat))
         {
             syote_tiedosto.close();
             return false;
@@ -170,11 +223,12 @@ bool tiedoston_luku(std::map<std::string,ratikka_linja>& ratikkalinjat)
     return true;
 }
 
-void linja_tulostus(const std::map<std::string,ratikka_linja>& ratikkalinjat)
+// Funktio tulostaa kaikki tietorakenteessa olevien linjojen nimet.
+void tulosta_linja(const std::map<std::string,ratikka_linja>& ratikkalinjat)
 {
     std::vector<std::string> tulostus_vektori = {};
 
-    // Täytetään tulostusvektori linjan tiedoilla
+    // Täytetään tulostusvektori linjojen nimillä.
     for (auto linja : ratikkalinjat)
     {
         tulostus_vektori.push_back(linja.first);
@@ -189,6 +243,8 @@ void linja_tulostus(const std::map<std::string,ratikka_linja>& ratikkalinjat)
     }
 }
 
+// Funktio tulostaa halutun linjan pysäkkien tiedot. Jos annetulla nimellä
+// ei tietorakenteesta löydy linjaa, tulostetaan virheilmoitus ja poistutaan.
 void tulosta_linjan_pysakit(std::string linjan_nimi,
                             std::map<std::string,ratikka_linja>& ratikka_linjat)
 {
@@ -198,10 +254,11 @@ void tulosta_linjan_pysakit(std::string linjan_nimi,
         return;
     }
     std::cout<<"Line "<<linjan_nimi<<TULOSTUS_LINJAN_PYSAKIT<<std::endl;
-    ratikka_linjat.at(linjan_nimi).pysakkien_tulostus();
+    ratikka_linjat.at(linjan_nimi).tulosta_pysakit();
 
 }
 
+// Funktio tulostaa kaikki tietorakenteessa olevat pysäkit aakkosjärjestyksessä.
 void tulosta_kaikki_pysakit(std::map<std::string,ratikka_linja>& ratikka_linjat)
 {
     std::set<std::string> tulostus_set = {};
@@ -222,6 +279,10 @@ void tulosta_kaikki_pysakit(std::map<std::string,ratikka_linja>& ratikka_linjat)
     }
 
 }
+
+// Tulostaa kaikkien niiden linjojen nimet aakkosjärjetyksessä, joilta annettu
+// pysäkki löytyy. Jos pysäkkiä ei löydy linjoilta, tulostuu virheilmoitus
+// ja poistutaan funktiosta.
 void tulosta_pysakin_linjat(std::string pysakin_nimi,
                             std::map<std::string,ratikka_linja>& ratikkalinjat)
 {
@@ -229,12 +290,12 @@ void tulosta_pysakin_linjat(std::string pysakin_nimi,
     // Tutkitaan, onko pysäkin nimeä linjalla.
     for (auto linja : ratikkalinjat)
     {
-        if (linja.second.on_linjalla(pysakin_nimi))
+        if (linja.second.onko_linjalla(pysakin_nimi))
         {
             tulostus_set.insert(linja.first);
         }
     }
-    // Jos pysäkkiä ei löydy linjoilta, tulostus_set suuruun on 0
+    // Jos pysäkkiä ei löydy linjoilta, tulostus_set suuruus on 0
     if (tulostus_set.size()==0)
     {
         std::cout<<ERR_MSG_STOP_NOT_FOUND<<std::endl;
@@ -248,32 +309,41 @@ void tulosta_pysakin_linjat(std::string pysakin_nimi,
         std::cout<<" - "<<linjan_nimi<<std::endl;
     }
 }
+
+// Laskee ja tulostaa kahden pysäkin välisen etäisyyden tietyllä linjalla.
+// Jos annettua linjaa tai pysäkkejä ei löydy, tulostuu virheilmoitus ja
+// poistutaan funktiosta.
 void tulosta_pysakkien_etaisyys(std::string linjan_nimi, std::string pysakki1,
                                 std::string pysakki2,std::map<std::string,
                                 ratikka_linja>& ratikkalinjat)
 {
-    // Lasketaan pysäkkien etäisyys
+    // Tutkitaan, löytyyko annetuua linjaa tietorakenteesta
     if (ratikkalinjat.find(linjan_nimi)==ratikkalinjat.end())
     {
         std::cout << ERR_MSG_LINE_NOT_FOUND << std::endl;
         return;
     }
     ratikka_linja linja = ratikkalinjat.at(linjan_nimi);
-    if (not (linja.on_linjalla(pysakki1) or linja.on_linjalla(pysakki2)))
+
+    // Tutkitaan löytyykö annetulta linjalta molemmat annetut pysäkit.
+    if (not (linja.onko_linjalla(pysakki1) or linja.onko_linjalla(pysakki2)))
     {
         std::cout << ERR_MSG_STOP_NOT_FOUND<< std::endl;
         return;
     }
+    // Lasketaan pysäkkien etäisyys
     double etaisyys1 = linja.get_pysakin_etaisyys(pysakki1);
     double etaisyys2 = linja.get_pysakin_etaisyys(pysakki2);
     double pysakkien_valinen_etaisyys = std::fabs(etaisyys1-etaisyys2);
+    // Tulostus
     std::cout << "Distance between " <<pysakki1<<" and "<<pysakki2<< " is "<<
                  pysakkien_valinen_etaisyys << std::endl;
 
 }
 
-// Funktio poistaa pysäkin kaikilta linjoilta. Hoitaa myös tulostamisen.
-void pysakin_poisto(std::string pysakin_nimi,
+// Funktio poistaa pysäkin kaikilta linjoilta ja tulostaa onnistumisen viestin.
+// Jos pysäkkiä ei löydy, tulostetaan virheilmoitus.
+void poista_pysakki(std::string pysakin_nimi,
                     std::map<std::string,ratikka_linja>& ratikkalinjat)
 {
    bool pysakki_poistettu = false;
@@ -293,21 +363,25 @@ void pysakin_poisto(std::string pysakin_nimi,
        std::cout << ERR_MSG_STOP_NOT_FOUND << std::endl;
    }
 }
-// Lukee syötteen ja käsittelee annetun merkkijonon komento vektoriksi
+
+// Funktio lukee syötteen ja käsittelee annetun merkkijonon komento vektoriksi
 // Tämä funktio sisältää monimutkaisen algoritmin, joka käsittelee tiedon
 // oikeaan muotoon
-std::vector<std::string> syotteen_kysyminen()
+std::vector<std::string> kysy_syote()
 {
     std::string syote = "";
     std::cout<<"tramway> ";
     getline(std::cin,syote);
-    std::vector<std::string> testi1 = split(syote,'"',false);
 
-    std::vector<std::string> alku_osa = split(testi1.at(0),' ',true);
+    // Jaetaan merkkijono ensin "-merkkien suhteen, jolloin saadaan eriteltyä
+    // komennoista välilyöntejä sisältävät komentojen osat.
+    std::vector<std::string> erittely = split(syote,'"',false);
+
+    std::vector<std::string> alku_osa = split(erittely.at(0),' ',true);
     std::vector<std::string> loppu_osa= {};
-    if (testi1.size()>1)
+    if (erittely.size()>1)
     {
-        loppu_osa = split(testi1.at(testi1.size()-1),' ');
+        loppu_osa = split(erittely.at(erittely.size()-1),' ');
     }
 
     std::vector<std::string> komennot = {};
@@ -315,14 +389,14 @@ std::vector<std::string> syotteen_kysyminen()
     {
         komennot.push_back(alkio);
     }
-    if (testi1.size()==3 or testi1.size()==4)
+    if (erittely.size()==3 or erittely.size()==4)
     {
-       komennot.push_back(testi1.at(1));
+       komennot.push_back(erittely.at(1));
     }
-    else if (testi1.size()==5)
+    else if (erittely.size()==5)
     {
-        komennot.push_back(testi1.at(1));
-        komennot.push_back(testi1.at(3));
+        komennot.push_back(erittely.at(1));
+        komennot.push_back(erittely.at(3));
     }
     for (auto loppu_alkio:loppu_osa)
     {
@@ -336,7 +410,7 @@ std::vector<std::string> syotteen_kysyminen()
     return komennot;
 }
 
-// Short and sweet main.
+
 int main()
 {
     // Tietorakenteena map, jossa avainsanana linjan nimi ja tietona on
@@ -344,14 +418,14 @@ int main()
     std::map<std::string,ratikka_linja> ratikka_linjat = {};
     print_rasse();
     // Ensin tiedoston luku ja tallennus tietorakenteeseen
-    if (not tiedoston_luku(ratikka_linjat))
+    if (not lue_tiedosto(ratikka_linjat))
     {
         return EXIT_FAILURE;
     }
     // Komentojen kysyminen
     while(true)
     {
-        std::vector<std::string> komennot = syotteen_kysyminen();
+        std::vector<std::string> komennot = kysy_syote();
         std::string komento = komennot.at(0);
         for (char& character : komento)
         {
@@ -363,7 +437,7 @@ int main()
         }
         else if (komento==LINES_COMMAND)
         {
-            linja_tulostus(ratikka_linjat);
+            tulosta_linja(ratikka_linjat);
         }
         else if (komento==LINE_COMMAND and komennot.size()>= 2)
         {
@@ -398,7 +472,7 @@ int main()
         }
         else if (komento==ADDSTOP_COMMAND and komennot.size()>=4)
         {
-            if (pysakin_lisays(komennot.at(1),komennot.at(2),
+            if (lisaa_pysakki(komennot.at(1),komennot.at(2),
                                stod(komennot.at(3)),ratikka_linjat))
             {
                 std::cout << TULOSTUS_PYSAKIN_LISAYS << std::endl;
@@ -406,7 +480,7 @@ int main()
         }
         else if (komento==REMOVE_COMMAND and komennot.size()>=2)
         {
-            pysakin_poisto(komennot.at(1),ratikka_linjat);
+            poista_pysakki(komennot.at(1),ratikka_linjat);
         }
         else
         {
@@ -414,8 +488,5 @@ int main()
         }
 
     }
-
-    
-    
     return EXIT_SUCCESS;
 }

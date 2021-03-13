@@ -3,7 +3,7 @@
 
 ratikka_linja::ratikka_linja()
 {
-    ratikka_linja::pysakit = {};
+    ratikka_linja::pysakit_ = {};
 
 }
 
@@ -11,14 +11,14 @@ bool ratikka_linja::lisaa_pysakki(std::string nimi, double etaisyys)
 {
     // Tarkistetaan, onko samanniminen pysäkki jo linjalla tai onko samalla
     //etäisyydellä jo toinen pysäkki.
-    if (on_linjalla(nimi) or on_pysakki_samalla_etaisyydella(etaisyys))
+    if (onko_linjalla(nimi) or onko_pysakki_samalla_etaisyydella(etaisyys))
     {
         return false;
     }
 
     // etsitään iteraattorin kohta, johon pysäkki sijoitetaan
-    std::vector<std::pair<std::string,double>>::iterator paikka = pysakit.begin();
-    for (std::pair<std::string,double> pysakki : pysakit)
+    std::vector<std::pair<std::string,double>>::iterator paikka = pysakit_.begin();
+    for (std::pair<std::string,double> pysakki : pysakit_)
     {
         if (pysakki.second > etaisyys)
         {
@@ -29,14 +29,14 @@ bool ratikka_linja::lisaa_pysakki(std::string nimi, double etaisyys)
     // Sijoitetaan pysäkki selvitettyyn kohtaan it
     std::pair<std::string,double> uusi_pysakki = {nimi,etaisyys};
 
-    pysakit.insert(paikka,uusi_pysakki);
+    pysakit_.insert(paikka,uusi_pysakki);
 
     return true;
 }
 
-bool ratikka_linja::on_linjalla(std::string pysakin_nimi)
+bool ratikka_linja::onko_linjalla(std::string pysakin_nimi)
 {
-    for (std::pair<std::string,double> pysakki : pysakit)
+    for (std::pair<std::string,double> pysakki : pysakit_)
     {
         if (pysakki.first==pysakin_nimi)
         {
@@ -46,9 +46,9 @@ bool ratikka_linja::on_linjalla(std::string pysakin_nimi)
     return false;
 }
 
-bool ratikka_linja::on_pysakki_samalla_etaisyydella(double pysakin_etaisyys)
+bool ratikka_linja::onko_pysakki_samalla_etaisyydella(double pysakin_etaisyys)
 {
-    for (std::pair<std::string,double> pysakki : pysakit)
+    for (std::pair<std::string,double> pysakki : pysakit_)
     {
         if (pysakki.second==pysakin_etaisyys)
         {
@@ -59,9 +59,9 @@ bool ratikka_linja::on_pysakki_samalla_etaisyydella(double pysakin_etaisyys)
     return false;
 }
 
-void ratikka_linja::pysakkien_tulostus()
+void ratikka_linja::tulosta_pysakit()
 {
-    for (auto pysakki : ratikka_linja::pysakit)
+    for (auto pysakki : ratikka_linja::pysakit_)
     {
         std::cout<<" - "<<pysakki.first<<" : "<< pysakki.second<<std::endl;
     }
@@ -70,7 +70,7 @@ void ratikka_linja::pysakkien_tulostus()
 std::vector<std::string> ratikka_linja::get_pysakit()
 {
     std::vector<std::string> pysakkien_nimet = {};
-    for (auto pysakki : pysakit)
+    for (auto pysakki : pysakit_)
     {
         pysakkien_nimet.push_back(pysakki.first);
     }
@@ -79,7 +79,7 @@ std::vector<std::string> ratikka_linja::get_pysakit()
 
 double ratikka_linja::get_pysakin_etaisyys(std::string pysakin_nimi)
 {
-    for (auto pysakki : pysakit)
+    for (auto pysakki : pysakit_)
     {
         if (pysakki.first == pysakin_nimi)
         {
@@ -91,11 +91,11 @@ double ratikka_linja::get_pysakin_etaisyys(std::string pysakin_nimi)
 
 bool ratikka_linja::poista_pysakki(std::string pysakin_nimi)
 {
-    if (on_linjalla(pysakin_nimi))
+    if (onko_linjalla(pysakin_nimi))
     {
         // etsitään iteraattorin kohta, josta pysäkkki poistetaan
-        std::vector<std::pair<std::string,double>>::iterator paikka = pysakit.begin();
-        for (std::pair<std::string,double> pysakki : pysakit)
+        std::vector<std::pair<std::string,double>>::iterator paikka = pysakit_.begin();
+        for (std::pair<std::string,double> pysakki : pysakit_)
         {
             if (pysakki.first == pysakin_nimi)
             {
@@ -104,7 +104,7 @@ bool ratikka_linja::poista_pysakki(std::string pysakin_nimi)
             paikka++;
         }
         // Poistetaan pysäkki
-        pysakit.erase(paikka);
+        pysakit_.erase(paikka);
         return true;
     }
     else
