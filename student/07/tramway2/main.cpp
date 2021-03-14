@@ -233,7 +233,7 @@ bool lue_tiedosto(std::map<std::string,ratikka_linja>& ratikkalinjat)
 }
 
 // Funktio tulostaa kaikki tietorakenteessa olevien linjojen nimet.
-void tulosta_linja(const std::map<std::string,ratikka_linja>& ratikkalinjat)
+void tulosta_linjat(const std::map<std::string,ratikka_linja>& ratikkalinjat)
 {
     std::vector<std::string> tulostus_vektori = {};
 
@@ -372,57 +372,64 @@ void poista_pysakki(std::string pysakin_nimi,
        std::cout << ERR_MSG_STOP_NOT_FOUND << std::endl;
    }
 }
-// Lisää vektori1:n alkiot vektori2:teen. Ei lisää tyhjiä alkioita.
+// Lisää vektori1:n alkiot vektori2:teen. Ei lisää tyhjiä alkioita tai edellä
+// tai jäljessä olevia välilyöntejä.
 void lisaa_vektori_vektoriin(std::vector<std::string>& vektori1,
                              std::vector<std::string>& vektori2)
 {
     for (auto alkio:vektori1)
     {
-        if (alkio!="")
+        // Ei lisätä tyhjiä tai välilyönnin sisältävää alkiota
+        if (alkio!="" and alkio!=" ")
         {
+            // Jos alkion alussa on välilyönti, poistetaan se.
+            if (*alkio.begin()==' ')
+            {
+                alkio.erase(alkio.begin());
+            }
+            // Jos alkion lopussa on välilyönti, poistetaan se.
+            if (*(--alkio.end())==' ')
+            {
+                alkio.erase(--alkio.end());
+            }
             vektori2.push_back(alkio);
         }
     }
 }
 // Käsittelee syötteen komentovektoriksi
+
 std::vector<std::string> kasittele_syote(const std::string& syote)
 {
     // Jaetaan merkkijono ensin "-merkkien suhteen, jolloin saadaan eriteltyä
-    // komennoista välilyöntejä sisältävät komentojen osat.    
-    std::vector<std::string> erittely = split(syote,'"',false);
-    
+    // komennoista välilyöntejä sisältävät komentojen osat.
+    std::vector<std::string> erittely = split(syote,'"',true);
+
     // Talletetaan ennen ensimmäistä "-merkkiä olevat komennot välilyönnillä
-    // eriteltyinä vektoriin.
+    // eriteltyinä vektoriin. Poistetaan nämä erittely-vektorista.
     std::vector<std::string> alku_osa = split(erittely.at(0),' ',true);
-    
+    erittely.erase(erittely.begin());
+
     // Talletetaan viimeisen "-merkin jälkeen tulevat komento-osat välilyönnillä
-    // eroteltuina vektoriin.
+    // eroteltuina vektoriin, jos lopussa on jäljelle jääviä osia. Poistetaan
+    // loppuosa erittely-vektorista.
     std::vector<std::string> loppu_osa = {};
     if (erittely.size()>1)
     {
         loppu_osa = split(erittely.at(erittely.size()-1),' ');
+        erittely.erase(erittely.end()--);
     }
     // Aletaan täyttämään palautettavaa syöte vektoria.
     std::vector<std::string> syote_vektori = {};
     lisaa_vektori_vektoriin(alku_osa,syote_vektori);
 
-    // Riippuen ""-merkeillä rajattujen sanojen määrästä täytetään välilyönnin
-    // sisältävät sanat syöte vektoriin
-    if (erittely.size()==3 or erittely.size()==4)
-    {
-       syote_vektori.push_back(erittely.at(1));
-    }
-    else if (erittely.size()==5)
-    {
-        syote_vektori.push_back(erittely.at(1));
-        syote_vektori.push_back(erittely.at(3));
-    }
+    // Lisätään erittely vektoriin jäljelle jääneet komennon osat.
+    lisaa_vektori_vektoriin(erittely,syote_vektori);
+
     // Lisätään vielä loput komennot vektoriin. Ei lisätä sinne tyhjiä kohtia.
     lisaa_vektori_vektoriin(loppu_osa,syote_vektori);
 
     return syote_vektori;
 }
-
 // Funktio lukee syötteen ja käsittelee annetun merkkijonon komento vektoriksi
 std::vector<std::string> kysy_syote()
 {
@@ -466,7 +473,7 @@ int main()
         }
         else if (komento==LINES_COMMAND)
         {
-            tulosta_linja(ratikka_linjat);
+            tulosta_linjat(ratikka_linjat);
         }
         else if (komento==LINE_COMMAND and komennot.size()>= 2)
         {

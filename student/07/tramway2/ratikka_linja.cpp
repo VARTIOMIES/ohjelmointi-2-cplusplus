@@ -1,4 +1,6 @@
-/* Ohjelman kirjoittaja
+/* Tiedosto sisältää ratikka_linja olion metodien toteutuksen.
+ *
+ * Ohjelman kirjoittaja
  * Nimi: Onni Merilä
  * Opiskelijanumero: H299725
  * Käyttäjätunnus: bvonme
