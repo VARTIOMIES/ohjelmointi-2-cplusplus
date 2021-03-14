@@ -1,4 +1,5 @@
-/* Tiedosto sisältää ratikka_linja olion rajapinnan ja metodien selitteet.
+/* Luokka: ratikka_linja
+ * Tiedosto sisältää ratikka_linja olion rajapinnan ja metodien selitteet.
  *
  * Ohjelman kirjoittaja
  * Nimi: Onni Merilä

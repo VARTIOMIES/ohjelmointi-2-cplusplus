@@ -1,4 +1,4 @@
-/* Tiedosto sisältää ratikka_linja olion metodien toteutuksen.
+/* Tiedosto sisältää ratikka_linja luokan metodien toteutuksen.
  *
  * Ohjelman kirjoittaja
  * Nimi: Onni Merilä
