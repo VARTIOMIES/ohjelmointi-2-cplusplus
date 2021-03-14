@@ -364,50 +364,62 @@ void poista_pysakki(std::string pysakin_nimi,
    }
 }
 
-// Funktio lukee syötteen ja käsittelee annetun merkkijonon komento vektoriksi
-// Tämä funktio sisältää monimutkaisen algoritmin, joka käsittelee tiedon
-// oikeaan muotoon
-std::vector<std::string> kysy_syote()
+// Käsittelee syötteen komentovektoriksi
+std::vector<std::string> kasittele_syote(std::string syote)
 {
-    std::string syote = "";
-    std::cout<<"tramway> ";
-    getline(std::cin,syote);
-
     // Jaetaan merkkijono ensin "-merkkien suhteen, jolloin saadaan eriteltyä
-    // komennoista välilyöntejä sisältävät komentojen osat.
+    // komennoista välilyöntejä sisältävät komentojen osat.    
     std::vector<std::string> erittely = split(syote,'"',false);
-
+    
+    // Talletetaan ennen ensimmäistä "-merkkiä olevat komennot välilyönnillä
+    // eriteltyinä vektoriin.
     std::vector<std::string> alku_osa = split(erittely.at(0),' ',true);
+    
+    // Talletetaan viimeisen "-merkin jälkeen tulevat komento-osat välilyönnillä
+    // eroteltuina vektoriin.
     std::vector<std::string> loppu_osa= {};
     if (erittely.size()>1)
     {
         loppu_osa = split(erittely.at(erittely.size()-1),' ');
     }
-
-    std::vector<std::string> komennot = {};
+    // Aletaan täyttämään palautettavaa syöte vektoria.
+    std::vector<std::string> syote_vektori = {};
     for (auto alkio:alku_osa)
     {
-        komennot.push_back(alkio);
+        syote_vektori.push_back(alkio);
     }
+    // Riippuen ""-merkeillä rajattujen sanojen määrästä täytetään välilyönnin
+    // sisältävät sanat syöte vektoriin
     if (erittely.size()==3 or erittely.size()==4)
     {
-       komennot.push_back(erittely.at(1));
+       syote_vektori.push_back(erittely.at(1));
     }
     else if (erittely.size()==5)
     {
-        komennot.push_back(erittely.at(1));
-        komennot.push_back(erittely.at(3));
+        syote_vektori.push_back(erittely.at(1));
+        syote_vektori.push_back(erittely.at(3));
     }
+    // Lisätään vielä loput komennot vektoriin. Ei lisätä sinne tyhjiä kohtia.
     for (auto loppu_alkio:loppu_osa)
     {
         if (loppu_alkio == "")
         {
             continue;
         }
-        komennot.push_back(loppu_alkio);
+        syote_vektori.push_back(loppu_alkio);
     }
 
-    return komennot;
+    return syote_vektori;
+}
+
+// Funktio lukee syötteen ja käsittelee annetun merkkijonon komento vektoriksi
+std::vector<std::string> kysy_syote()
+{
+    std::string syote = "";
+    std::cout<<"tramway> ";
+    getline(std::cin,syote);
+    return kasittele_syote(syote);
+    
 }
 
 

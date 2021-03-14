@@ -107,8 +107,5 @@ bool ratikka_linja::poista_pysakki(std::string pysakin_nimi)
         pysakit_.erase(paikka);
         return true;
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
