@@ -15,7 +15,7 @@ ratikka_linja::ratikka_linja():
 
 }
 
-bool ratikka_linja::lisaa_pysakki(std::string nimi, double etaisyys)
+bool ratikka_linja::lisaa_pysakki(const std::string nimi, const double etaisyys)
 {
     // Tarkistetaan, onko samanniminen pysäkki jo linjalla tai onko samalla
     //etäisyydellä jo toinen pysäkki.
@@ -42,7 +42,7 @@ bool ratikka_linja::lisaa_pysakki(std::string nimi, double etaisyys)
     return true;
 }
 
-bool ratikka_linja::onko_linjalla(std::string pysakin_nimi)
+bool ratikka_linja::onko_linjalla(const std::string pysakin_nimi) const
 {
     for (std::pair<std::string,double> pysakki : pysakit_)
     {
@@ -54,7 +54,8 @@ bool ratikka_linja::onko_linjalla(std::string pysakin_nimi)
     return false;
 }
 
-bool ratikka_linja::onko_pysakki_samalla_etaisyydella(double pysakin_etaisyys)
+bool ratikka_linja::onko_pysakki_samalla_etaisyydella(const double
+                                                      pysakin_etaisyys)const
 {
     for (std::pair<std::string,double> pysakki : pysakit_)
     {
@@ -67,7 +68,7 @@ bool ratikka_linja::onko_pysakki_samalla_etaisyydella(double pysakin_etaisyys)
     return false;
 }
 
-void ratikka_linja::tulosta_pysakit()
+void ratikka_linja::tulosta_pysakit() const
 {
     for (auto pysakki : ratikka_linja::pysakit_)
     {
@@ -75,7 +76,7 @@ void ratikka_linja::tulosta_pysakit()
     }
 }
 
-std::vector<std::string> ratikka_linja::get_pysakit()
+std::vector<std::string> ratikka_linja::get_pysakit() const
 {
     std::vector<std::string> pysakkien_nimet = {};
     for (auto pysakki : pysakit_)
@@ -85,7 +86,7 @@ std::vector<std::string> ratikka_linja::get_pysakit()
     return pysakkien_nimet;
 }
 
-double ratikka_linja::get_pysakin_etaisyys(std::string pysakin_nimi)
+double ratikka_linja::get_pysakin_etaisyys(const std::string pysakin_nimi) const
 {
     for (auto pysakki : pysakit_)
     {
@@ -97,7 +98,7 @@ double ratikka_linja::get_pysakin_etaisyys(std::string pysakin_nimi)
     return 0.0;
 }
 
-bool ratikka_linja::poista_pysakki(std::string pysakin_nimi)
+bool ratikka_linja::poista_pysakki(const std::string pysakin_nimi)
 {
     if (onko_linjalla(pysakin_nimi))
     {
