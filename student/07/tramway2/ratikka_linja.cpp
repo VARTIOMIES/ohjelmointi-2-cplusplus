@@ -9,9 +9,9 @@
 #include "ratikka_linja.hh"
 #include <iostream>
 
-ratikka_linja::ratikka_linja()
+ratikka_linja::ratikka_linja():
+    pysakit_({})
 {
-    ratikka_linja::pysakit_ = {};
 
 }
 
