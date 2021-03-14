@@ -1,3 +1,9 @@
+/* Ohjelman kirjoittaja
+ * Nimi: Onni Merilä
+ * Opiskelijanumero: H299725
+ * Käyttäjätunnus: bvonme
+ * E-Mail: onni.merila@tuni.fi
+ * */
 #ifndef RATIKKA_LINJA_HH
 #define RATIKKA_LINJA_HH
 

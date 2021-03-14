@@ -1,15 +1,18 @@
 /* Ratikkalinjat
  *
  * Kuvaus:
- *  Ohjelma toteuttaa ratikkalinojen ja niiden pysäkkien tietojen hallinnointiin,
- * lisäämiseen ja tarkasteluun tarkoitetun järjestelmän. Ohjelman alussa
+ *  Ohjelma toteuttaa ratikkalinjojen ja niiden pysäkkien tietojen hallinnoin-
+ * tiin, lisäämiseen ja tarkasteluun tarkoitetun järjestelmän. Ohjelman alussa
  * kysytään tiedoston nimeä, johon on tallennettu linjojen pysäkkejä ja niiden
  * etäisyyksiä linjan lähtöpysäkistä.
+ *
  *  Käyttäjä voi antaa ohjelmalle komentoja, joiden mukaan ohjelma tulostaa
- * tietoja linjoista ja niden pysäkeistä. Käyttäjä voi myös lisätä uusia linjoja
+ * tietoja linjoista ja niiden pysäkeistä. Käyttäjä voi lisätä uusia linjoja
  * ja pysäkeitä tai poistaa olemassa olevia pysäkeitä. Käyttäjä voi myös poistua
- * ohjelmasta antamalla poistumiskomennon.
- * Komennot:
+ * ohjelmasta antamalla poistumiskomennon. Jotkut komennot tarvitsevat lisäpara-
+ * metreja, joita ilman komentoa ei voi suorittaa.
+ *
+ * Komennot listattuna. Tarvittavat lisäparametrit komentojen perässä "<___>":
  * - Quit : Poistutaan ohjelmasta.
  * - Lines : Tulostaa kaikki järjestelmään kirjattujen ratikkalinjojen
  * nimet aakkosjärjestyksessä.
@@ -24,8 +27,13 @@
  * - Addline <linjan_nimi> : Lisää järjestelmään uuden linjan, jolla ei ole
  * pysäkeitä.
  * - Addstop <linjan_nimi> <pysäkin_nimi> <pysäkin_etäisyys> : Lisää linjalle
- * uuden pysäkin
- * - Remove <pysäkin_nimi> :
+ * uuden pysäkin annetulle etäisyydelle, mikäli mahdollista.
+ * - Remove <pysäkin_nimi> : Poistaa pysäkin kaikilta linjoilta.
+ *
+ *  Mikäli käyttäjä antaa komennon sellaisessa muodossa, jota ohjelma ei ymmärrä
+ * tulostuu virheilmoitus ja komenota kysytään uudelleen. Ohjelman suoritus, eli
+ * komentojen kysyminen jatkuu niin pitkään, kunnes käyttäjä antaa ohjelman
+ * lopetus komennon.
  *
  * Ohjelman kirjoittaja
  * Nimi: Onni Merilä
@@ -92,7 +100,8 @@ void print_rasse()
                  "-------------------------------" << std::endl;
 }
 // Edellisissä tehtävissä käytetty split funktio
-std::vector<std::string> split(const std::string& s, const char delimiter, bool ignore_empty = false){
+std::vector<std::string> split(const std::string& s, const char delimiter,
+                               bool ignore_empty = false){
     std::vector<std::string> result;
     std::string tmp = s;
 
@@ -363,9 +372,20 @@ void poista_pysakki(std::string pysakin_nimi,
        std::cout << ERR_MSG_STOP_NOT_FOUND << std::endl;
    }
 }
-
+// Lisää vektori1:n alkiot vektori2:teen. Ei lisää tyhjiä alkioita.
+void lisaa_vektori_vektoriin(std::vector<std::string>& vektori1,
+                             std::vector<std::string>& vektori2)
+{
+    for (auto alkio:vektori1)
+    {
+        if (alkio!="")
+        {
+            vektori2.push_back(alkio);
+        }
+    }
+}
 // Käsittelee syötteen komentovektoriksi
-std::vector<std::string> kasittele_syote(std::string syote)
+std::vector<std::string> kasittele_syote(const std::string& syote)
 {
     // Jaetaan merkkijono ensin "-merkkien suhteen, jolloin saadaan eriteltyä
     // komennoista välilyöntejä sisältävät komentojen osat.    
@@ -377,17 +397,15 @@ std::vector<std::string> kasittele_syote(std::string syote)
     
     // Talletetaan viimeisen "-merkin jälkeen tulevat komento-osat välilyönnillä
     // eroteltuina vektoriin.
-    std::vector<std::string> loppu_osa= {};
+    std::vector<std::string> loppu_osa = {};
     if (erittely.size()>1)
     {
         loppu_osa = split(erittely.at(erittely.size()-1),' ');
     }
     // Aletaan täyttämään palautettavaa syöte vektoria.
     std::vector<std::string> syote_vektori = {};
-    for (auto alkio:alku_osa)
-    {
-        syote_vektori.push_back(alkio);
-    }
+    lisaa_vektori_vektoriin(alku_osa,syote_vektori);
+
     // Riippuen ""-merkeillä rajattujen sanojen määrästä täytetään välilyönnin
     // sisältävät sanat syöte vektoriin
     if (erittely.size()==3 or erittely.size()==4)
@@ -400,14 +418,7 @@ std::vector<std::string> kasittele_syote(std::string syote)
         syote_vektori.push_back(erittely.at(3));
     }
     // Lisätään vielä loput komennot vektoriin. Ei lisätä sinne tyhjiä kohtia.
-    for (auto loppu_alkio:loppu_osa)
-    {
-        if (loppu_alkio == "")
-        {
-            continue;
-        }
-        syote_vektori.push_back(loppu_alkio);
-    }
+    lisaa_vektori_vektoriin(loppu_osa,syote_vektori);
 
     return syote_vektori;
 }
@@ -418,8 +429,16 @@ std::vector<std::string> kysy_syote()
     std::string syote = "";
     std::cout<<"tramway> ";
     getline(std::cin,syote);
-    return kasittele_syote(syote);
-    
+    // Muutetaan syöte vektoriksi.
+    std::vector<std::string> komennot = kasittele_syote(syote);
+
+    // Muutetaan pääkomento isoiksi kirjaimiksi.
+    for (char& character : komennot.at(0))
+    {
+        character = toupper(character);
+    }
+
+    return komennot;
 }
 
 
@@ -439,10 +458,8 @@ int main()
     {
         std::vector<std::string> komennot = kysy_syote();
         std::string komento = komennot.at(0);
-        for (char& character : komento)
-        {
-            character = toupper(character);
-        }
+        // Suoritetaan komento. Jos ohjelma ei tunnista komentoa tai sen  para-
+        // metreja, tulostetaan virheilmoitus ja kysytään komentoa uudelleen.
         if (komento==QUIT_COMMAND)
         {
             return EXIT_SUCCESS;
