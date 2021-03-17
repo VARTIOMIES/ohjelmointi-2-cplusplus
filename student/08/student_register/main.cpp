@@ -87,8 +87,9 @@ void change_number(Student* s){
     getline(std::cin,input);
     if (is_valid_phone_number(input)) {
         s->phone_number = input;
+        std::cout<<std::endl;
     }
-    std::cout<<std::endl;
+
 }
 void write_file(std::map<std::string,Student*> s,std::string file_name){
 
