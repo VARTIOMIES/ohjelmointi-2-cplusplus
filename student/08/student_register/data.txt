@@ -1,3 +1,3 @@
-246810;archie;050 987654;archie@tuni.fi;
-987654;mike;040 555555;mike@tuni.fi;-Mike-M-
-123456;ted;040 123546;ted@tuni.fi;tom_92_
+246810;archie;Archie Architect;050 987654;archie@tuni.fi;
+987654;mike;Mike Mechanic;050 123546;mike@tuni.fi;-Mike-M-
+123456;ted;Ted Techie;040 123546;ted@tuni.fi;tom_92_
