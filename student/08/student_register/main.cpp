@@ -88,6 +88,7 @@ void change_number(Student* s){
     if (is_valid_phone_number(input)) {
         s->phone_number = input;
     }
+    std::cout<<std::endl;
 }
 void write_file(std::map<std::string,Student*> s,std::string file_name){
 
@@ -98,7 +99,7 @@ void write_file(std::map<std::string,Student*> s,std::string file_name){
     for (auto pair:s){
         Student* student = pair.second;
         file_object << student->student_number<<";"<<student->user_id<<
-                       ";"<<student->phone_number<<";"<<student->name<<";"<<
+                       ";"<<student->name<<";"<<student->phone_number<<";"<<
                        student->email<<";"<<student->skype<<"\n";
     }
     file_object.close();
