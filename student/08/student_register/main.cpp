@@ -85,9 +85,9 @@ void change_number(Student* s){
     std::cout << "Enter a new phone number: ";
     std::string input = "";
     getline(std::cin,input);
+    std::cout<<std::endl;
     if (is_valid_phone_number(input)) {
         s->phone_number = input;
-        std::cout<<std::endl;
     }
 
 }
