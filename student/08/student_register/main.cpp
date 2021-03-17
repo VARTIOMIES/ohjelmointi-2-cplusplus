@@ -71,6 +71,7 @@ void print_data(const Student s) {
               << s.skype << std::endl << std::endl;
 }
 
+
 bool is_valid_phone_number(const std::string number) {
     for(unsigned int i = 0; i < number.length(); ++i) {
         if(!(('0' <= number[i] && number[i] <= '9') || number[i] == ' ' || number[i] == '-')) {
@@ -79,6 +80,28 @@ bool is_valid_phone_number(const std::string number) {
         }
     }
     return true;
+}
+void change_number(Student* s){
+    std::cout << "Enter a new phone number: ";
+    std::string input = "";
+    getline(std::cin,input);
+    if (is_valid_phone_number(input)) {
+        s->phone_number = input;
+    }
+}
+void write_file(std::map<std::string,Student*> s,std::string file_name){
+
+    std::ofstream file_object(file_name);
+    if (!file_object) {
+        return;
+    }
+    for (auto pair:s){
+        Student* student = pair.second;
+        file_object << student->student_number<<";"<<student->user_id<<
+                       ";"<<student->phone_number<<";"<<student->name<<";"<<
+                       student->email<<";"<<student->skype<<"\n";
+    }
+    file_object.close();
 }
 
 
@@ -134,12 +157,18 @@ int main() {
             if(parts.size() != 2){
                 std::cout << "Erroneous parameters!" << std::endl << HELP_TEXT;
                 continue;
+            } else {
+                Student* student = student_numbers.at((parts.at(1)));
+                change_number(student);
+
+
             }
             // TODO: Add functionality here
 
 
         } else if(command == "Q" or command == "q") {
             // Deleting the data structure: deallocating memory and nullifying pointers
+            write_file((user_ids),file_name);
             for(auto pair: student_numbers) {
                 pair.second = nullptr;
             }
