@@ -25,11 +25,17 @@ int main()
     getline(cin,expression);
     string good_expr = delete_empty(expression);
 
+
     vector<int> pino = {};
 
     for (char character : good_expr)
     {
-
+        if (pino.size() == 0 and (character =='+' or character=='-' or
+                                character=='*' or character=='/'))
+        {
+            cout << "Error: Expression must start with a number" << endl;
+            return EXIT_FAILURE;
+        }
         if (character=='+' and pino.size()>=2)
         {
             int alkio1 = *(--pino.end());
