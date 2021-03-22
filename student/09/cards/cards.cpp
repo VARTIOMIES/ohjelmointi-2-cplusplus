@@ -137,6 +137,6 @@ int Cards::recursive_print(Cards::Card_data* top, std::ostream &s)
     // Tulostetaan. Ensimmäisellä kerralla kun ollaan täällä, ollaan viimeisessä
     // kortissa. Tulostetaan, ja palautetaan yhtä suurempi järjestysnumero, joka
     // on seuraavan kortin tulostuksen järjestysnumero, eli 1,2,3.....
-    s <<order<<" : "<< top->data<<std::endl;
+    s <<order<<": "<< top->data<<std::endl;
    return order+1;
 }
