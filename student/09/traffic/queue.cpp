@@ -88,11 +88,9 @@ void Queue::switch_light()
                     dequeue();
                 }
                 std::cout << "can go on"<<std::endl;
-                if (cycle_==0)
-                {
-                    is_green_ = false;
-                    cycle_ = max_cycle_;
-                }
+
+                is_green_ = false;
+                cycle_ = max_cycle_;
             }
         }
     }
