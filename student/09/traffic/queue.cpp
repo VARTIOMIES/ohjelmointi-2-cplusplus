@@ -101,6 +101,7 @@ void Queue::switch_light()
 void Queue::reset_cycle(unsigned int cycle)
 {
     max_cycle_ = cycle;
+    cycle_ = cycle;
 }
 
 void Queue::print()
