@@ -51,7 +51,14 @@ private:
     // the same green period
     unsigned int cycle_;
 
+    unsigned int max_cycle_;
+
+    void print_cars(int amount);
+
+
     // You can define more private features here
+    void dequeue();
+
 
 };
 
