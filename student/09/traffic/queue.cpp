@@ -50,6 +50,7 @@ void Queue::switch_light()
 {
     if (is_green_)
     {
+        cycle_ = max_cycle_;
         is_green_ = false;
         if (first_ == nullptr)
         {
