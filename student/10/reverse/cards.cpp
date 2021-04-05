@@ -37,23 +37,25 @@ bool Cards::remove(int& id)
 
 void Cards::reverse()
 {
-    std::shared_ptr<Card_data> current = top_;
-    std::shared_ptr<Card_data> actual_next = current->next;
-    std::shared_ptr<Card_data> next_of_actual_next = actual_next;
-    top_->next = nullptr;
-    // "Käännetään nuolein suunnat"
-    while (next_of_actual_next != nullptr)
+    if (top_ != nullptr)
     {
-        next_of_actual_next = actual_next->next;
-        // Kääntö
-        actual_next->next = current;
+        std::shared_ptr<Card_data> current = top_;
+        std::shared_ptr<Card_data> actual_next = current->next;
+        std::shared_ptr<Card_data> next_of_actual_next = actual_next;
+        top_->next = nullptr;
+        // "Käännetään nuolein suunnat"
+        while (next_of_actual_next != nullptr)
+        {
+            next_of_actual_next = actual_next->next;
+            // Kääntö
+            actual_next->next = current;
 
-        // Apu osoittimien siirto
-        current = actual_next;
-        actual_next = next_of_actual_next;
+            // Apu osoittimien siirto
+            current = actual_next;
+            actual_next = next_of_actual_next;
+        }
+        top_ = current;
     }
-    top_ = current;
-
 }
 
 // Tip for writing code more efficiently:
