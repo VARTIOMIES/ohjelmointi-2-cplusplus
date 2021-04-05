@@ -19,3 +19,17 @@ double multiplication(double left, double right) {
 double division(double left, double right) {
     return left / right;
 }
+double exponent(double left, double right){
+    if (right > 0)
+    {
+        for (double i=1;i < right;i++)
+        {
+            left*=left;
+        }
+    }
+    else
+    {
+        left = 1;
+    }
+    return left;
+}

@@ -57,7 +57,10 @@ const vector<Command> COMMANDS = {
     {"STOP", 0, true, nullptr},
     {"QUIT", 0, true, nullptr},
     {"EXIT", 0, true, nullptr},
-    {"Q", 0, true, nullptr}
+    {"Q", 0, true, nullptr},
+    {"^", 2,false, exponent},
+    {"EXP",2,false, exponent},
+    {"POWER",2,false,exponent}
 };
 
 
@@ -86,8 +89,48 @@ int main() {
         }
 
         string command_to_be_executed = pieces.at(0);
+        for (char& character : command_to_be_executed)
+        {
+            character = toupper(character);
+        }
 
         // TODO: Implement command execution here!
+
+        // Etsitään komentovektorista, löytyykö annettu syöte komennoista
+
+        Command command_struct;
+        for (Command one_command_struct : COMMANDS)
+        {
+            // Löytyykö?
+            if (command_to_be_executed == one_command_struct.str)
+            {
+                command_struct = one_command_struct;
+                break;
+            }
+        }
+        // tarkistetaan, että syötteeseen on annettu tarpeelliset asiat
+
+        unsigned int amount_of_parameters = command_struct.parameter_number;
+        if (pieces.size()-1 != amount_of_parameters)
+        {
+            std::cout << "Error: wrong number of parameters."<<std::endl;
+            continue;
+        }
+        if (command_struct.exit)
+        {
+            cout << GREETING_AT_END << endl;
+            break;
+        }
+        double left = 0.0;
+        double right = 0.0;
+        if (not string_to_double(pieces.at(1),left)
+                or not string_to_double(pieces.at(2),right))
+        {
+            std::cout << "Error: a non-number operand."<< std::endl;
+            continue;
+        }
+
+        std::cout << command_struct.action(left,right) << std::endl;
 
     }
 }
