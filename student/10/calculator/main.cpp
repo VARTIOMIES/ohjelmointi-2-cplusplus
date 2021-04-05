@@ -113,7 +113,7 @@ int main() {
         if (not found)
         {
             std::cout << "Error: unknown command." << std::endl;
-            break;
+            continue;
         }
         // tarkistetaan, että syötteeseen on annettu tarpeelliset asiat
 
