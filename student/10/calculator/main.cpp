@@ -97,7 +97,7 @@ int main() {
         // TODO: Implement command execution here!
 
         // Etsitään komentovektorista, löytyykö annettu syöte komennoista
-
+        bool found = false;
         Command command_struct;
         for (Command one_command_struct : COMMANDS)
         {
@@ -105,8 +105,15 @@ int main() {
             if (command_to_be_executed == one_command_struct.str)
             {
                 command_struct = one_command_struct;
+                found = true;
                 break;
             }
+
+        }
+        if (not found)
+        {
+            std::cout << "Error: unknown command." << std::endl;
+            break;
         }
         // tarkistetaan, että syötteeseen on annettu tarpeelliset asiat
 

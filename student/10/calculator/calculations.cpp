@@ -20,16 +20,17 @@ double division(double left, double right) {
     return left / right;
 }
 double exponent(double left, double right){
+    double result = left;
     if (right > 0)
     {
         for (double i=1;i < right;i++)
         {
-            left*=left;
+            result*=left;
         }
     }
     else
     {
-        left = 1;
+        result = 1;
     }
-    return left;
+    return result;
 }
