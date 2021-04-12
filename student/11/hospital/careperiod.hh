@@ -23,9 +23,9 @@ public:
     CarePeriod(const Date& start, Person* patient);
 
     // Destructor.
-    ~CarePeriod();
-
+    ~CarePeriod();  
     // More public methods
+    void set_end_date(const Date& end);
 
 private:
     Person* patient_;

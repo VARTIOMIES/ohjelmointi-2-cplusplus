@@ -43,11 +43,12 @@ void Hospital::enter(Params params)
         return;
     }
     // If given patient is a new patient, create a new patient object
-    // and add it to the map current_patients_
+    // and add it to the map all_patients_
     Person* new_patient = nullptr;
     if (all_patients_.find(patient_id) == all_patients_.end())
     {
         new_patient = new Person(patient_id);
+        all_patients_.insert({patient_id,new_patient});
     }
     // else put the pointer to point on the existing Patient object
     else
@@ -62,13 +63,25 @@ void Hospital::enter(Params params)
     // Lets create a new careperiod for the new patient and add it to hospitals
     // care_period register
     CarePeriod* new_care_period = new CarePeriod(utils::today,new_patient);
-    care_periods_.insert({patient_id,new_care_period});
+    all_care_periods_.insert({patient_id,new_care_period});
+    current_care_periods_.insert({patient_id,new_care_period});
 
 }
 
 void Hospital::leave(Params params)
 {
-
+    std::string patient_id = params.at(0);
+    if (current_patients_.find(patient_id) == current_patients_.end())
+    {
+        std::cout << CANT_FIND << patient_id << std::endl;
+        return;
+    }
+    // Lets take the leaving patient out of current_patients and end his/her
+    // ongoing care period and add the ending date to the careperiod.
+    current_patients_.erase(patient_id);
+    current_care_periods_.at(patient_id)->set_end_date(utils::today);
+    current_care_periods_.erase(patient_id);
+    std::cout << PATIENT_LEFT << std::endl;
 }
 
 void Hospital::assign_staff(Params params)
