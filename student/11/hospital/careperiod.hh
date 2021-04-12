@@ -27,10 +27,13 @@ public:
     // More public methods
     void set_end_date(const Date& end);
 
+    void assign_staff(const std::string& id, Person* staff_member);
+
 private:
     Person* patient_;
     Date start_;
     Date end_;
+    std::map<std::string,Person*> staff_;
 
     // More attributes and methods
 };

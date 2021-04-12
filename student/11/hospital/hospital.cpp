@@ -103,7 +103,26 @@ void Hospital::leave(Params params)
 
 void Hospital::assign_staff(Params params)
 {
+    std::string staff_id = params.at(0);
+    std::string patient_id = params.at(1);
 
+    // Finds out, if any of the given names are unknown
+    if (staff_.find(staff_id) == staff_.end())
+    {
+        std::cout << CANT_FIND << staff_id << std::endl;
+        return;
+    }
+    else if (current_patients_.find(patient_id) == current_patients_.end())
+    {
+        std::cout << CANT_FIND << patient_id << std::endl;
+        return;
+    }
+
+    Person* staff_member = staff_.at(staff_id);
+    // Finds out the care period of the patient and assigns staff member to it
+    all_care_periods_.at(patient_id)->assign_staff(staff_id,staff_member);
+
+    std::cout << STAFF_ASSIGNED << patient_id<< std::endl;
 }
 
 void Hospital::add_medicine(Params params)
