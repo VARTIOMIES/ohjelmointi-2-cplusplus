@@ -18,7 +18,24 @@ Hospital::~Hospital()
         delete iter->second;
     }
 
-    // Remember to deallocate patients also
+    // Deallocating patients
+    for( std::map<std::string, Person*>::iterator
+         iter = all_patients_.begin();
+         iter != all_patients_.end();
+         ++iter )
+    {
+        delete iter->second;
+    }
+
+    // Deallocating care periods
+    for( std::map<std::string, CarePeriod*>::iterator
+         iter = all_care_periods_.begin();
+         iter != all_care_periods_.end();
+         ++iter )
+    {
+        delete iter->second;
+    }
+
 }
 
 void Hospital::recruit(Params params)
