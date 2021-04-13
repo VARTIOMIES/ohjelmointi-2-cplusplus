@@ -167,7 +167,7 @@ void Hospital::print_patient_info(Params params)
 {
     std::string patient_id = params.at(0);
 
-    // Lets find out if given patient has been in this hospital
+    // Find out if given patient has been in this hospital
     if (all_patients_.find(patient_id) == all_patients_.end())
     {
         std::cout << CANT_FIND << patient_id << std::endl;
@@ -175,18 +175,17 @@ void Hospital::print_patient_info(Params params)
     }
     Person* patient = all_patients_.at(patient_id);
 
-    // Lets find all the care periods of the patient and print info
+    // Find all the care periods of the patient and print info
     for (CarePeriod* care_period : all_care_periods_)
     {
         if (care_period->get_patient_id()==patient_id)
         {
-            std::cout << "* Care period: ";
-            care_period->print_info("  - ");
+            care_period->print_date_info("* Care period: ");
+            care_period->print_staff("  - Staff:");
         }
     }
 
-    // Lets print all medicines of patient
-
+    // Print all medicines of the patient
     std::cout << "* Medicines:";
     patient->print_medicines("  - ");
 
@@ -194,7 +193,36 @@ void Hospital::print_patient_info(Params params)
 
 void Hospital::print_care_periods_per_staff(Params params)
 {
-
+    std::string staff_id = params.at(0);
+    if( staff_.find(staff_id) == staff_.end() )
+    {
+        std::cout << CANT_FIND << staff_id << std::endl;
+        return;
+    }
+    // Find all careperiods, the staff member has worked on
+    std::vector<CarePeriod*> worked_care_periods = {};
+    for(CarePeriod* care_period : all_care_periods_)
+    {
+        for (std::string worked_staff : care_period->get_staff_ids())
+        {
+            if (worked_staff==staff_id)
+            {
+                worked_care_periods.push_back(care_period);
+            }
+        }
+    }
+    if (worked_care_periods.empty())
+    {
+        std::cout << "None" << std::endl;
+    }
+    else
+    {
+        for(CarePeriod* care_period : worked_care_periods)
+        {
+            care_period->print_date_info("");
+            care_period->print_patient("* Patient: ");
+        }
+    }
 }
 
 void Hospital::print_all_medicines(Params)

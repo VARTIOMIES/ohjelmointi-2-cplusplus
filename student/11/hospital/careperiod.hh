@@ -30,9 +30,14 @@ public:
 
     void assign_staff(Person* staff_member);
 
-    void print_info(const std::string& pre_text) const;
+    void print_date_info(const std::string& pre_text) const;
 
     std::string get_patient_id() const;
+
+    std::vector<std::string> get_staff_ids() const;
+
+    void print_staff(const std::string& pre_text) const;
+    void print_patient(const std::string& pre_text) const;
 
 private:
     Person* patient_;
@@ -41,7 +46,7 @@ private:
     std::set<Person*> staff_;
 
     // More attributes and methods
-    void print_staff() const;
+
 };
 
 #endif // CAREPERIOD_HH
