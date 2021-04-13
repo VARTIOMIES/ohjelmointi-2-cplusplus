@@ -116,6 +116,7 @@ private:
     std::vector<CarePeriod*> all_care_periods_;
     std::map<std::string,CarePeriod*> current_care_periods_;
 
+    std::map<std::string,std::set<std::string>> get_all_medicines() const;
     // More attributes and methods
 };
 

@@ -227,7 +227,24 @@ void Hospital::print_care_periods_per_staff(Params params)
 
 void Hospital::print_all_medicines(Params)
 {
+    // lets first find all medicines and save them to all_medicines
 
+    std::map<std::string,std::set<std::string>> all_medicines =
+            get_all_medicines();
+    // Printing vvv
+    if (all_medicines.empty())
+    {
+        std::cout << "None" << std::endl;
+        return;
+    }
+    for (std::pair<std::string,std::set<std::string>> medicine : all_medicines)
+    {
+        std::cout << medicine.first << " prescribed for" << std::endl;
+        for (std::string patient : medicine.second)
+        {
+            std::cout << "* " << patient << std::endl;
+        }
+    }
 }
 
 void Hospital::print_all_staff(Params)
@@ -285,4 +302,28 @@ void Hospital::advance_date(Params params)
     std::cout << "New date is ";
     utils::today.print();
     std::cout << std::endl;
+}
+
+std::map<std::string, std::set<std::string> > Hospital::get_all_medicines() const
+{
+    // First string is the name of the medicine, and second set of string is all
+    // patients who have that medicine.
+    std::map<std::string,std::set<std::string>> all_medicines = {};
+    for( std::pair<std::string, Person*> patient : all_patients_)
+    {
+        std::vector<std::string> medicines = patient.second->get_medicines();
+        for (std::string medicine : medicines)
+        {
+            if (all_medicines.find(medicine) == all_medicines.end())
+            {
+                std::string name = patient.second->get_id();
+                all_medicines.insert({medicine,{name}});
+            }
+            else
+            {
+                all_medicines.at(medicine).insert(patient.second->get_id());
+            }
+        }
+    }
+    return all_medicines;
 }
