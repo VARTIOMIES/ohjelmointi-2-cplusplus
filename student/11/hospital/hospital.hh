@@ -113,9 +113,8 @@ private:
     std::map<std::string, Person*> staff_;
 
     std::map<std::string, Person*> all_patients_;
-    std::map<std::string, CarePeriod*> all_care_periods_;
-    std::map<std::string, CarePeriod*> current_care_periods_;
-
+    std::vector<CarePeriod*> all_care_periods_;
+    std::map<std::string,CarePeriod*> current_care_periods_;
 
     // More attributes and methods
 };

@@ -28,12 +28,12 @@ Hospital::~Hospital()
     }
 
     // Deallocating care periods
-    for( std::map<std::string, CarePeriod*>::iterator
+    for( std::vector<CarePeriod*>::iterator
          iter = all_care_periods_.begin();
          iter != all_care_periods_.end();
          ++iter )
     {
-        delete iter->second;
+        delete *iter;
     }
 
 }
@@ -80,7 +80,7 @@ void Hospital::enter(Params params)
     // Lets create a new careperiod for the new patient and add it to hospitals
     // care_period register
     CarePeriod* new_care_period = new CarePeriod(utils::today,new_patient);
-    all_care_periods_.insert({patient_id,new_care_period});
+    all_care_periods_.push_back(new_care_period);
     current_care_periods_.insert({patient_id,new_care_period});
 
 }
@@ -120,7 +120,7 @@ void Hospital::assign_staff(Params params)
 
     Person* staff_member = staff_.at(staff_id);
     // Finds out the care period of the patient and assigns staff member to it
-    all_care_periods_.at(patient_id)->assign_staff(staff_id,staff_member);
+    current_care_periods_.at(patient_id)->assign_staff(staff_member);
 
     std::cout << STAFF_ASSIGNED << patient_id<< std::endl;
 }
@@ -165,6 +165,30 @@ void Hospital::remove_medicine(Params params)
 
 void Hospital::print_patient_info(Params params)
 {
+    std::string patient_id = params.at(0);
+
+    // Lets find out if given patient has been in this hospital
+    if (all_patients_.find(patient_id) == all_patients_.end())
+    {
+        std::cout << CANT_FIND << patient_id << std::endl;
+        return;
+    }
+    Person* patient = all_patients_.at(patient_id);
+
+    // Lets find all the care periods of the patient and print info
+    for (CarePeriod* care_period : all_care_periods_)
+    {
+        if (care_period->get_patient_id()==patient_id)
+        {
+            std::cout << "* Care period: ";
+            care_period->print_info("  - ");
+        }
+    }
+
+    // Lets print all medicines of patient
+
+    std::cout << "* Medicines:";
+    patient->print_medicines("  - ");
 
 }
 
