@@ -189,6 +189,7 @@ void Hospital::print_patient_info(Params params)
     std::cout << "* Medicines:";
     patient->print_medicines("  - ");
 
+
 }
 
 void Hospital::print_care_periods_per_staff(Params params)
@@ -264,31 +265,12 @@ void Hospital::print_all_staff(Params)
 
 void Hospital::print_all_patients(Params)
 {
-    if (all_patients_.empty())
-    {
-        std::cout << "None" << std::endl;
-    }
-
-    for(auto patient : all_patients_)
-    {
-        patient.second->print_id();
-        std::cout << std::endl;
-        for (auto care_period : all_care_periods_)
-        {
-            if (care_period->get_patient_id()==patient.first)
-            {
-                care_period->print_date_info("* Care period: ");
-                care_period->print_staff("  - Staff:");
-            }
-        }
-        std::cout << "* Medicines:";
-        patient.second->print_medicines("  - ");
-    }
+    print_many_patients(all_patients_);
 }
 
 void Hospital::print_current_patients(Params)
 {
-
+    print_many_patients(current_patients_);
 }
 
 void Hospital::set_date(Params params)
@@ -345,4 +327,28 @@ std::map<std::string, std::set<std::string> > Hospital::get_all_medicines() cons
         }
     }
     return all_medicines;
+}
+
+void Hospital::print_many_patients(std::map<std::string, Person *> data_structure) const
+{
+    if (data_structure.empty())
+    {
+        std::cout << "None" << std::endl;
+    }
+
+    for(auto patient : data_structure)
+    {
+        patient.second->print_id();
+        std::cout << std::endl;
+        for (auto care_period : all_care_periods_)
+        {
+            if (care_period->get_patient_id()==patient.first)
+            {
+                care_period->print_date_info("* Care period: ");
+                care_period->print_staff("  - Staff:");
+            }
+        }
+        std::cout << "* Medicines:";
+        patient.second->print_medicines("  - ");
+    }
 }

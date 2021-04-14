@@ -117,6 +117,7 @@ private:
     std::map<std::string,CarePeriod*> current_care_periods_;
 
     std::map<std::string,std::set<std::string>> get_all_medicines() const;
+    void print_many_patients(std::map<std::string,Person*> data_structure) const;
     // More attributes and methods
 };
 
