@@ -264,7 +264,26 @@ void Hospital::print_all_staff(Params)
 
 void Hospital::print_all_patients(Params)
 {
+    if (all_patients_.empty())
+    {
+        std::cout << "None" << std::endl;
+    }
 
+    for(auto patient : all_patients_)
+    {
+        patient.second->print_id();
+        std::cout << std::endl;
+        for (auto care_period : all_care_periods_)
+        {
+            if (care_period->get_patient_id()==patient.first)
+            {
+                care_period->print_date_info("* Care period: ");
+                care_period->print_staff("  - Staff:");
+            }
+        }
+        std::cout << "* Medicines:";
+        patient.second->print_medicines("  - ");
+    }
 }
 
 void Hospital::print_current_patients(Params)
