@@ -359,7 +359,7 @@ bool Hospital::is_name_in_container(const std::string& name,
     if (container.find(name) == container.end())
     {
         std::cout << CANT_FIND << name << std::endl;
-        return false;
+        return true;
     }
-    return true;
+    return false;
 }
