@@ -30,6 +30,7 @@ void CarePeriod::print_date_info(const std::string& pre_text) const
     std::cout << pre_text;
     start_.print();
     std::cout << " - ";
+    // Checking if the care period has ended.
     if (not end_.is_default())
     {
         end_.print();
@@ -55,11 +56,13 @@ std::vector<std::string> CarePeriod::get_staff_ids() const
 void CarePeriod::print_staff(const std::string& pre_text) const
 {
     std::cout<< pre_text;
+    // Checking if there are any staff working on this care period.
     if( staff_.empty() )
     {
         std::cout << " None" << std::endl;
         return;
     }
+    // Print all staff members names.
     for (Person* staff_member : staff_)
     {
         std::cout << " ";

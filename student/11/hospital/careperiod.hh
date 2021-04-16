@@ -26,16 +26,22 @@ public:
     // Destructor.
     ~CarePeriod();  
     // More public methods
+    // Set the end date (Date class) for the care period.
     void set_end_date(const Date& end);
 
+    // Add a staff member for the care period.
     void assign_staff(Person* staff_member);
 
+    // Print start and end dates. Param pre_text gets printed before the dates.
     void print_date_info(const std::string& pre_text) const;
 
+    // Getter function for the careperiods patient.
     std::string get_patient_id() const;
 
+    // Getter function for the staff memebers of the care period.
     std::vector<std::string> get_staff_ids() const;
 
+    // Print functions for information about the care period.
     void print_staff(const std::string& pre_text) const;
     void print_patient(const std::string& pre_text) const;
 
@@ -43,10 +49,8 @@ private:
     Person* patient_;
     Date start_;
     Date end_;
+    // Container for staff members who have been working on this care period.
     std::set<Person*> staff_;
-
-    // More attributes and methods
-
 };
 
 #endif // CAREPERIOD_HH

@@ -54,19 +54,22 @@ void Hospital::recruit(Params params)
 void Hospital::enter(Params params)
 {
     std::string patient_id = params.at(0);
+    // Checking if there is already a patient in hospital with the same name.
     if (current_patients_.find(patient_id) != current_patients_.end())
     {
         std::cout << ALREADY_EXISTS << patient_id << std::endl;
         return;
     }
+
     // If given patient is a new patient, create a new patient object
-    // and add it to the map all_patients_
+    // and add it to the container all_patients_
     Person* new_patient = nullptr;
     if (all_patients_.find(patient_id) == all_patients_.end())
     {
         new_patient = new Person(patient_id);
         all_patients_.insert({patient_id,new_patient});
     }
+
     // else put the pointer to point on the existing Patient object
     else
     {
@@ -88,9 +91,8 @@ void Hospital::enter(Params params)
 void Hospital::leave(Params params)
 {
     std::string patient_id = params.at(0);
-    if (current_patients_.find(patient_id) == current_patients_.end())
+    if (is_name_in_container(patient_id,current_patients_))
     {
-        std::cout << CANT_FIND << patient_id << std::endl;
         return;
     }
     // Lets take the leaving patient out of current_patients and end his/her
@@ -107,18 +109,17 @@ void Hospital::assign_staff(Params params)
     std::string patient_id = params.at(1);
 
     // Finds out, if any of the given names are unknown
-    if (staff_.find(staff_id) == staff_.end())
+    if (is_name_in_container(staff_id,staff_))
     {
-        std::cout << CANT_FIND << staff_id << std::endl;
         return;
     }
-    else if (current_patients_.find(patient_id) == current_patients_.end())
+    else if (is_name_in_container(patient_id,current_patients_))
     {
-        std::cout << CANT_FIND << patient_id << std::endl;
         return;
     }
 
     Person* staff_member = staff_.at(staff_id);
+
     // Finds out the care period of the patient and assigns staff member to it
     current_care_periods_.at(patient_id)->assign_staff(staff_member);
 
@@ -168,9 +169,8 @@ void Hospital::print_patient_info(Params params)
     std::string patient_id = params.at(0);
 
     // Find out if given patient has been in this hospital
-    if (all_patients_.find(patient_id) == all_patients_.end())
+    if (is_name_in_container(patient_id,all_patients_))
     {
-        std::cout << CANT_FIND << patient_id << std::endl;
         return;
     }
     Person* patient = all_patients_.at(patient_id);
@@ -195,9 +195,8 @@ void Hospital::print_patient_info(Params params)
 void Hospital::print_care_periods_per_staff(Params params)
 {
     std::string staff_id = params.at(0);
-    if( staff_.find(staff_id) == staff_.end() )
+    if(is_name_in_container(staff_id,staff_))
     {
-        std::cout << CANT_FIND << staff_id << std::endl;
         return;
     }
     // Find all careperiods, the staff member has worked on
@@ -351,4 +350,16 @@ void Hospital::print_many_patients(std::map<std::string, Person *> data_structur
         std::cout << "* Medicines:";
         patient.second->print_medicines("  - ");
     }
+}
+
+bool Hospital::is_name_in_container(const std::string& name,
+                                    const std::map<std::string, Person *>
+                                    container) const
+{
+    if (container.find(name) == container.end())
+    {
+        std::cout << CANT_FIND << name << std::endl;
+        return false;
+    }
+    return true;
 }

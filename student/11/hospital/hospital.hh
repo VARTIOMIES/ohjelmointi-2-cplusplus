@@ -68,16 +68,9 @@ public:
     // If the patient does not have the medicine, nothing happens.
     void remove_medicine(Params params);
 
-    // Prints the given patient's medicines.
-    //void print_patient_medicines(Params params); // ei käytössä
-
     // Prints the given patient's all care periods and their current medicines,
     // i.e. those that have been added but not removed.
     void print_patient_info(Params params);
-
-    // Prints the patients of the given staff member, i.e. those patients whose
-    // care periods the given staff member has worked in.
-    //void print_patients_per_staff(Params params); // ei käytössä
 
     // Prints the care periods of the given staff member, i.e. those
     // care periods the given staff member has worked in.
@@ -112,13 +105,28 @@ private:
     std::map<std::string, Person*> current_patients_;
     std::map<std::string, Person*> staff_;
 
+    // Container for all patients in alphabetical order.
     std::map<std::string, Person*> all_patients_;
+
+    // Container for all care periods in chronological order.
     std::vector<CarePeriod*> all_care_periods_;
+
+    // Container for care periods that haven't yet ended, in alphabetical order
+    // by patient name/id.
     std::map<std::string,CarePeriod*> current_care_periods_;
 
+    // Private helper method to get all medicine names given to patients in this
+    // hospital in alphabetical order by mecicine name. .first string is medicine
+    // name, .second is a set of patient names who have that medicine.
     std::map<std::string,std::set<std::string>> get_all_medicines() const;
+
+    // Private helper method to print names of many patients in given container.
     void print_many_patients(std::map<std::string,Person*> data_structure) const;
-    // More attributes and methods
+
+    // Private helper method to check if name is in given container. If name
+    // is not found, method prints CANT_FIND
+    bool is_name_in_container(const std::string& name,
+                         const std::map<std::string, Person*> container) const;
 };
 
 #endif // HOSPITAL_HH
