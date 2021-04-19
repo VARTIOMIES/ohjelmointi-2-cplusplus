@@ -7,6 +7,13 @@
  *
  * Note: Students need change this class to implement commands missing
  * in the template code.
+ *
+ * Program author
+ * Name: Onni Merilä
+ * Student number: H299725
+ * UserID: bvonme
+ * E-Mail: onni.merila@tuni.fi
+ *
  * */
 #ifndef HOSPITAL_HH
 #define HOSPITAL_HH
@@ -26,6 +33,11 @@ const std::string PATIENT_LEFT = "Patient left hospital, care period closed.";
 const std::string MEDICINE_ADDED= "Medicine added for: ";
 const std::string MEDICINE_REMOVED= "Medicine removed from: ";
 const std::string STAFF_ASSIGNED= "Staff assigned for: ";
+const std::string NONE= "None";
+const std::string CARE_PERIOD_TITLE= "* Care period: ";
+const std::string MEDICINE_TITLE= "* Medicines:";
+const std::string PATIENT_TITLE= "* Patient: ";
+const std::string STAFF_TITLE= "  - Staff:";
 
 using Params = const std::vector<std::string>&;
 
@@ -121,7 +133,7 @@ private:
     std::map<std::string,std::set<std::string>> get_all_medicines() const;
 
     // Private helper method to print names of many patients in given container.
-    void print_many_patients(std::map<std::string,Person*> data_structure) const;
+    void print_many_patients(std::map<std::string,Person*> container) const;
 
     // Private helper method to check if name is in given container. If name
     // is not found, method prints CANT_FIND

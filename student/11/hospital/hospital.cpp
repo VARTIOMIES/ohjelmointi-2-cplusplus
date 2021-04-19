@@ -1,3 +1,12 @@
+/* Program author
+ * Name: Onni Merilä
+ * Student number: H299725
+ * UserID: bvonme
+ * E-Mail: onni.merila@tuni.fi
+ *
+ * Notes about the program and it's implementation:
+ * */
+
 #include "hospital.hh"
 #include "utils.hh"
 #include <iostream>
@@ -91,7 +100,7 @@ void Hospital::enter(Params params)
 void Hospital::leave(Params params)
 {
     std::string patient_id = params.at(0);
-    if (is_name_in_container(patient_id,current_patients_))
+    if (not is_name_in_container(patient_id,current_patients_))
     {
         return;
     }
@@ -109,11 +118,11 @@ void Hospital::assign_staff(Params params)
     std::string patient_id = params.at(1);
 
     // Finds out, if any of the given names are unknown
-    if (is_name_in_container(staff_id,staff_))
+    if (not is_name_in_container(staff_id,staff_))
     {
         return;
     }
-    else if (is_name_in_container(patient_id,current_patients_))
+    else if (not is_name_in_container(patient_id,current_patients_))
     {
         return;
     }
@@ -169,7 +178,7 @@ void Hospital::print_patient_info(Params params)
     std::string patient_id = params.at(0);
 
     // Find out if given patient has been in this hospital
-    if (is_name_in_container(patient_id,all_patients_))
+    if (not is_name_in_container(patient_id,all_patients_))
     {
         return;
     }
@@ -180,13 +189,13 @@ void Hospital::print_patient_info(Params params)
     {
         if (care_period->get_patient_id()==patient_id)
         {
-            care_period->print_date_info("* Care period: ");
-            care_period->print_staff("  - Staff:");
+            care_period->print_date_info(CARE_PERIOD_TITLE);
+            care_period->print_staff(STAFF_TITLE);
         }
     }
 
     // Print all medicines of the patient
-    std::cout << "* Medicines:";
+    std::cout << MEDICINE_TITLE;
     patient->print_medicines("  - ");
 
 
@@ -195,7 +204,7 @@ void Hospital::print_patient_info(Params params)
 void Hospital::print_care_periods_per_staff(Params params)
 {
     std::string staff_id = params.at(0);
-    if(is_name_in_container(staff_id,staff_))
+    if(not is_name_in_container(staff_id,staff_))
     {
         return;
     }
@@ -213,14 +222,14 @@ void Hospital::print_care_periods_per_staff(Params params)
     }
     if (worked_care_periods.empty())
     {
-        std::cout << "None" << std::endl;
+        std::cout << NONE << std::endl;
     }
     else
     {
         for(CarePeriod* care_period : worked_care_periods)
         {
             care_period->print_date_info("");
-            care_period->print_patient("* Patient: ");
+            care_period->print_patient(PATIENT_TITLE);
         }
     }
 }
@@ -234,7 +243,7 @@ void Hospital::print_all_medicines(Params)
     // Printing vvv
     if (all_medicines.empty())
     {
-        std::cout << "None" << std::endl;
+        std::cout << NONE << std::endl;
         return;
     }
     for (std::pair<std::string,std::set<std::string>> medicine : all_medicines)
@@ -251,7 +260,7 @@ void Hospital::print_all_staff(Params)
 {
     if( staff_.empty() )
     {
-        std::cout << "None" << std::endl;
+        std::cout << NONE << std::endl;
         return;
     }
     for( std::map<std::string, Person*>::const_iterator iter = staff_.begin();
@@ -328,14 +337,14 @@ std::map<std::string, std::set<std::string> > Hospital::get_all_medicines() cons
     return all_medicines;
 }
 
-void Hospital::print_many_patients(std::map<std::string, Person *> data_structure) const
+void Hospital::print_many_patients(std::map<std::string, Person *> container) const
 {
-    if (data_structure.empty())
+    if (container.empty())
     {
-        std::cout << "None" << std::endl;
+        std::cout << NONE << std::endl;
     }
 
-    for(auto patient : data_structure)
+    for(auto patient : container)
     {
         patient.second->print_id();
         std::cout << std::endl;
@@ -343,11 +352,11 @@ void Hospital::print_many_patients(std::map<std::string, Person *> data_structur
         {
             if (care_period->get_patient_id()==patient.first)
             {
-                care_period->print_date_info("* Care period: ");
-                care_period->print_staff("  - Staff:");
+                care_period->print_date_info(CARE_PERIOD_TITLE);
+                care_period->print_staff(STAFF_TITLE);
             }
         }
-        std::cout << "* Medicines:";
+        std::cout << MEDICINE_TITLE;
         patient.second->print_medicines("  - ");
     }
 }
@@ -359,7 +368,7 @@ bool Hospital::is_name_in_container(const std::string& name,
     if (container.find(name) == container.end())
     {
         std::cout << CANT_FIND << name << std::endl;
-        return true;
+        return false;
     }
-    return false;
+    return true;
 }

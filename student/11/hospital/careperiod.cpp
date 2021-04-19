@@ -1,3 +1,11 @@
+/* Program author
+ * Name: Onni Merilä
+ * Student number: H299725
+ * UserID: bvonme
+ * E-Mail: onni.merila@tuni.fi
+ *
+ * Notes about the program and it's implementation:
+ * */
 #include "careperiod.hh"
 #include <iostream>
 
@@ -30,7 +38,7 @@ void CarePeriod::print_date_info(const std::string& pre_text) const
     std::cout << pre_text;
     start_.print();
     std::cout << " - ";
-    // Checking if the care period has ended.
+    // Checking if the care period has ended. If ended, print ending date.
     if (not end_.is_default())
     {
         end_.print();

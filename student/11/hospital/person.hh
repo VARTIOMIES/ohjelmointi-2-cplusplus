@@ -6,6 +6,7 @@
  * in hospital.
  *
  * Note: Students can change this class, but most probably they need not.
+ * - No changes.
  * */
 #ifndef PERSON_HH
 #define PERSON_HH
