@@ -57,8 +57,7 @@ SOURCES       = main.cpp \
 OBJECTS       = main.o \
 		mainwindow.o \
 		moc_mainwindow.o
-DIST          = paska \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/spec_pre.prf \
+DIST          = /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/spec_pre.prf \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/common/unix.conf \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/common/linux.conf \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/common/sanitize.conf \
