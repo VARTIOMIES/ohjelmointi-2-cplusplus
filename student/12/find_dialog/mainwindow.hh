@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <fstream>
-#include <QString>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -28,7 +27,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-    QString filename_ = "<name>";
-    QString what_to_find_ = "<string>";
+    std::string filename_ = "<name>";
+    std::string what_to_find_ = "<string>";
 };
 #endif // MAINWINDOW_HH
