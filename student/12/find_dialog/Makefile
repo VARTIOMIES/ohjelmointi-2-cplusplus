@@ -52,11 +52,11 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = main.cpp \
-		mainwindow.cpp moc_mainwindow.cpp
-OBJECTS       = main.o \
-		mainwindow.o \
-		moc_mainwindow.o
+SOURCES       = MainWindow.cpp \
+		main.cpp moc_MainWindow.cpp
+OBJECTS       = MainWindow.o \
+		main.o \
+		moc_MainWindow.o
 DIST          = /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/spec_pre.prf \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/common/unix.conf \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/common/linux.conf \
@@ -262,8 +262,8 @@ DIST          = /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/spec_pre.p
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/exceptions.prf \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/yacc.prf \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/lex.prf \
-		find_dialog.pro mainwindow.hh main.cpp \
-		mainwindow.cpp
+		find_dialog.pro MainWindow.hh MainWindow.cpp \
+		main.cpp
 QMAKE_TARGET  = find_dialog
 DESTDIR       = 
 TARGET        = find_dialog
@@ -272,7 +272,7 @@ TARGET        = find_dialog
 first: all
 ####### Build rules
 
-find_dialog: ui_mainwindow.h $(OBJECTS)  
+find_dialog: ui_MainWindow.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: find_dialog.pro /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/spec_pre.prf \
@@ -703,9 +703,9 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.hh $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mainwindow.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
+	$(COPY_FILE) --parents MainWindow.hh $(DISTDIR)/
+	$(COPY_FILE) --parents MainWindow.cpp main.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents MainWindow.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -737,10 +737,10 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++11 -Wall -Wextra -dM -E -o moc_predefs.h /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_MainWindow.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp
-moc_mainwindow.cpp: mainwindow.hh \
+	-$(DEL_FILE) moc_MainWindow.cpp
+moc_MainWindow.cpp: MainWindow.hh \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qmainwindow.h \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -850,18 +850,18 @@ moc_mainwindow.cpp: mainwindow.hh \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qicon.h \
 		moc_predefs.h \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/bin/moc
-	/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/bvonme/ohj2/bvonme/student/12/find_dialog/moc_predefs.h -I/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/bvonme/ohj2/bvonme/student/12/find_dialog -I/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include -I/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets -I/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui -I/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore -I/opt/lintula/gcc/include/c++/10.2.0 -I/opt/lintula/gcc/include/c++/10.2.0/x86_64-pc-linux-gnu -I/opt/lintula/gcc/include/c++/10.2.0/backward -I/opt/lintula/gcc/lib/gcc/x86_64-pc-linux-gnu/10.2.0/include -I/usr/local/include -I/opt/lintula/gcc/include -I/opt/lintula/gcc/lib/gcc/x86_64-pc-linux-gnu/10.2.0/include-fixed -I/usr/include mainwindow.hh -o moc_mainwindow.cpp
+	/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/bvonme/ohj2/bvonme/student/12/find_dialog/moc_predefs.h -I/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/bvonme/ohj2/bvonme/student/12/find_dialog -I/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include -I/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets -I/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui -I/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore -I/opt/lintula/gcc/include/c++/10.2.0 -I/opt/lintula/gcc/include/c++/10.2.0/x86_64-pc-linux-gnu -I/opt/lintula/gcc/include/c++/10.2.0/backward -I/opt/lintula/gcc/lib/gcc/x86_64-pc-linux-gnu/10.2.0/include -I/usr/local/include -I/opt/lintula/gcc/include -I/opt/lintula/gcc/lib/gcc/x86_64-pc-linux-gnu/10.2.0/include-fixed -I/usr/include MainWindow.hh -o moc_MainWindow.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h
+compiler_uic_make_all: ui_MainWindow.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h
-ui_mainwindow.h: mainwindow.ui \
+	-$(DEL_FILE) ui_MainWindow.h
+ui_MainWindow.h: MainWindow.ui \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/bin/uic
-	/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/bin/uic mainwindow.ui -o ui_mainwindow.h
+	/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/bin/uic MainWindow.ui -o ui_MainWindow.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -873,124 +873,7 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 ####### Compile
 
-main.o: main.cpp mainwindow.hh \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QMainWindow \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qmainwindow.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qtguiglobal.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qglobal.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qconfig.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qtcore-config.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qsystemdetection.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qprocessordetection.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qcompilerdetection.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qtypeinfo.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qsysinfo.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qlogging.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qflags.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qatomic.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qbasicatomic.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qgenericatomic.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qatomic_cxx11.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qatomic_msvc.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qglobalstatic.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qmutex.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qnumeric.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qversiontagging.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qtgui-config.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qwidget.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qwindowdefs.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qobjectdefs.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qnamespace.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qwindowdefs_win.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qobject.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qstring.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qchar.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qbytearray.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qrefcount.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qarraydata.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qstringliteral.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qstringalgorithms.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qstringview.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qstringbuilder.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qlist.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qalgorithms.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qiterator.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qhashfunctions.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qpair.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qvector.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qcontainertools_impl.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qpoint.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qbytearraylist.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qstringlist.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qregexp.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qstringmatcher.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qcoreevent.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qscopedpointer.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qmetatype.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qvarlengtharray.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qcontainerfwd.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qobject_impl.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qmargins.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qpaintdevice.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qrect.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qsize.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qpalette.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qcolor.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qrgb.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qrgba64.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qbrush.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qmatrix.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qpolygon.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qregion.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qdatastream.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qiodevice.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qline.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qtransform.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qpainterpath.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qimage.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qpixelformat.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qpixmap.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qsharedpointer.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qshareddata.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qhash.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qfont.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qfontmetrics.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qfontinfo.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qsizepolicy.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qcursor.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qkeysequence.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qevent.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qvariant.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qmap.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qdebug.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qtextstream.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qlocale.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qset.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qcontiguouscache.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qurl.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qurlquery.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qfile.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qfiledevice.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qvector2d.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qtouchdevice.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qtabwidget.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qicon.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QApplication \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qapplication.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qcoreapplication.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qeventloop.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qguiapplication.h \
-		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qinputmethod.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
-
-mainwindow.o: mainwindow.cpp mainwindow.hh \
+MainWindow.o: MainWindow.cpp MainWindow.hh \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qmainwindow.h \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -1141,10 +1024,127 @@ mainwindow.o: mainwindow.cpp mainwindow.hh \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qtextdocument.h \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QVBoxLayout \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QWidget
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MainWindow.o MainWindow.cpp
 
-moc_mainwindow.o: moc_mainwindow.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+main.o: main.cpp MainWindow.hh \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QMainWindow \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qmainwindow.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qtguiglobal.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qglobal.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qconfig.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qtcore-config.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qsystemdetection.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qprocessordetection.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qtypeinfo.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qsysinfo.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qlogging.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qflags.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qatomic.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qbasicatomic.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qgenericatomic.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qglobalstatic.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qmutex.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qnumeric.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qversiontagging.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qtgui-config.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qwindowdefs.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qobjectdefs.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qnamespace.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qobject.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qstring.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qchar.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qbytearray.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qrefcount.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qarraydata.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qstringliteral.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qstringview.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qstringbuilder.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qlist.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qalgorithms.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qiterator.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qhashfunctions.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qpair.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qvector.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qpoint.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qbytearraylist.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qstringlist.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qregexp.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qstringmatcher.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qcoreevent.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qscopedpointer.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qmetatype.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qobject_impl.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qmargins.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qpaintdevice.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qrect.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qsize.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qpalette.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qcolor.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qrgb.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qrgba64.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qbrush.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qmatrix.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qpolygon.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qregion.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qdatastream.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qiodevice.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qline.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qtransform.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qpainterpath.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qimage.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qpixelformat.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qpixmap.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qsharedpointer.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qshareddata.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qhash.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qfont.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qfontmetrics.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qfontinfo.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qcursor.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qkeysequence.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qevent.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qvariant.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qmap.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qdebug.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qtextstream.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qlocale.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qset.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qcontiguouscache.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qurl.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qurlquery.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qfile.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qfiledevice.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qvector2d.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qtouchdevice.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qtabwidget.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qicon.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QApplication \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qapplication.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qcoreapplication.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qeventloop.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qguiapplication.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qinputmethod.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
+
+moc_MainWindow.o: moc_MainWindow.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_MainWindow.o moc_MainWindow.cpp
 
 ####### Install
 
