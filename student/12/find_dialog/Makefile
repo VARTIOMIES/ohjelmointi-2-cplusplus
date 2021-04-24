@@ -16,7 +16,7 @@ CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-CXXFLAGS      = -pipe -g -std=gnu++1y -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
+CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I. -I/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include -I/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets -I/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui -I/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -I. -I/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/linux-g++
 QMAKE         = /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/bin/qmake
 DEL_FILE      = rm -f
@@ -242,6 +242,7 @@ DIST          = paska \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/qt_config.prf \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/toolchain.prf \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/default_pre.prf \
@@ -459,6 +460,7 @@ Makefile: find_dialog.pro /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/linux-g++
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/qt_config.prf \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/toolchain.prf \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/default_pre.prf \
@@ -665,6 +667,7 @@ Makefile: find_dialog.pro /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/linux-g++
 /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/qt_config.prf:
 /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf:
 /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/exclusive_builds.prf:
 /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/toolchain.prf:
 /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/default_pre.prf:
@@ -733,7 +736,7 @@ compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
 moc_predefs.h: /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/data/dummy.cpp
-	g++ -pipe -g -std=gnu++1y -Wall -Wextra -dM -E -o moc_predefs.h /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/data/dummy.cpp
+	g++ -pipe -g -std=gnu++11 -Wall -Wextra -dM -E -o moc_predefs.h /opt/lintula/Qt/5.14.2/5.14.2/gcc_64/mkspecs/features/data/dummy.cpp
 
 compiler_moc_header_make_all: moc_mainwindow.cpp
 compiler_moc_header_clean:
@@ -1096,7 +1099,49 @@ mainwindow.o: mainwindow.cpp mainwindow.hh \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qtouchdevice.h \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qtabwidget.h \
 		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qicon.h \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/QVariant \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QApplication \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qapplication.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qcoreapplication.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtCore/qeventloop.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qguiapplication.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qinputmethod.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QCheckBox \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qcheckbox.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qabstractbutton.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QFrame \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qframe.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QGridLayout \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qgridlayout.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qlayout.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qboxlayout.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QLabel \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qlabel.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QLineEdit \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qlineedit.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qtextcursor.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qtextformat.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qpen.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qtextoption.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QMenuBar \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qmenubar.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qmenu.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qaction.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qactiongroup.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QPushButton \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qpushbutton.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QStatusBar \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qstatusbar.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QTextBrowser \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qtextbrowser.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qtextedit.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtGui/qtextdocument.h \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QVBoxLayout \
+		/opt/lintula/Qt/5.14.2/5.14.2/gcc_64/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
