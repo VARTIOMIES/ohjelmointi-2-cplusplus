@@ -4,7 +4,9 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     timer(new QTimer(this)),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    seconds(0),
+    minutes(0)
 {
     ui->setupUi(this);
     timer->setInterval(1000);
