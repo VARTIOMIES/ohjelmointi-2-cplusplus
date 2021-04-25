@@ -31,3 +31,4 @@ private:
     std::string what_to_find_ = "<string>";
 };
 #endif // MAINWINDOW_HH
+
