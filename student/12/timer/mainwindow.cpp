@@ -44,8 +44,10 @@ void MainWindow::on_resetButton_clicked()
     {
         seconds = 0;
         minutes = 0;
-        update_displays();
+        //update_displays();
     }
+    ui->lcdNumberSec->display(0);
+    ui->lcdNumberMin->display(0);
 }
 
 void MainWindow::one_second_passed()
