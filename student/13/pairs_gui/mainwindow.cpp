@@ -11,31 +11,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->setupUi(this);
 
-    int sizeX = 4;
-    int sizeY = 4;
+    int number = 40;
 
-    // Peli gridin luonti
-    std::vector<Card*> buttons = {};
-    std::vector<std::map<Card*,int>> but = {};
+    // Calculate the border lengths of the gameboard
+    std::pair<int,int> size = closestFactors(number);
 
-    ui->gridLayout->setHorizontalSpacing(1);
-    ui->gridLayout->setVerticalSpacing(1);
-    for(int i=0;i<sizeX;i++)
-    {
-        for (int j=0;j<sizeY;j++)
-        {
-            Card* newCard = new Card(i,j,'x');
-            std::map<Card*,int> temp;
-            temp.insert({newCard,1});
-            but.push_back(temp);
-
-            connect(newCard, &Card::clicked, this, &MainWindow::buttonPressed);
-            connect(newCard, &Card::clickSignal, this, &MainWindow::cardPressed);
-            newCard->setFixedSize(200,200);
-            ui->gridLayout->addWidget(newCard,i,j);
-        }
-    }
-
+    // Creating gameboard and putting buttons in a grid
+    std::vector<Card*> cards = createGameBoard(size.first,size.second);
 }
 
 MainWindow::~MainWindow()
@@ -46,6 +28,7 @@ MainWindow::~MainWindow()
 void MainWindow::buttonPressed()
 {
     ui->textBrowser->setText("Toimii");
+    ui->gridLayout->update();
 }
 
 void MainWindow::cardPressed(int x, int y, char merkki)
@@ -55,5 +38,51 @@ void MainWindow::cardPressed(int x, int y, char merkki)
     ui->lcdNumber->display(x);
     ui->lcdNumber_2->display(y);
     ui->label->setText(text);
+}
+
+std::vector<Card*> MainWindow::createGameBoard(int sizeX, int sizeY)
+{
+    std::vector<Card*> cards = {};
+    ui->gridLayout->setHorizontalSpacing(1);
+    ui->gridLayout->setVerticalSpacing(1);
+    for(int i=0;i<sizeX;i++)
+    {
+        for (int j=0;j<sizeY;j++)
+        {
+            Card* newCard = new Card(i,j,'x');
+            cards.push_back(newCard);
+
+
+            connect(newCard, &Card::clicked, this, &MainWindow::buttonPressed);
+            connect(newCard, &Card::clickSignal, this, &MainWindow::cardPressed);
+            newCard->setFixedSize(60,60);
+
+            ui->gridLayout->addWidget(newCard,i,j);
+        }
+    }
+    return cards;
+}
+
+std::pair<int, int> MainWindow::closestFactors(int number)
+{
+    int division = 1;
+    int factor1 = number;
+    int factor2 = 1;
+    for (int i = 1; i <= number; ++i){
+        // Check if the number is dividable with i
+        if (number % i == 0){
+           division = number/i;
+           if (abs(division-i) < abs(factor1-factor2)){
+               factor1 = i;
+               factor2 = division;
+           }
+        }
+    }
+    if (factor1 > factor2){
+        int temp = factor1;
+        factor1 = factor2;
+        factor2=temp;
+    }
+    return {factor1,factor2};
 }
 

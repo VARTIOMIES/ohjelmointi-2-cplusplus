@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_HH
 #define MAINWINDOW_HH
 
+#include "card.hh"
+
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -21,5 +23,10 @@ public slots:
 
 private:
     Ui::MainWindow* ui;
+
+    std::vector<Card*> createGameBoard(int sizeX, int sizeY);
+
+    // Calculates closest factors of the given number
+    std::pair<int,int> closestFactors(int number);
 };
 #endif // MAINWINDOW_HH
