@@ -15,11 +15,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-public slots:
-    void buttonPressed();
-    void cardPressed(int x, int y, char merkki);
-
 private:
-    Ui::MainWindow* ui;
+    Ui::MainWindow *ui;
+
+    const int MARGIN = 20;
+    const int FRUIT_SIZE = 200;
+
+    void draw_fruit();
 };
 #endif // MAINWINDOW_HH
