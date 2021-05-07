@@ -6,7 +6,8 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::MainWindow),
+      cardsOpened_(0)
 {
 
     ui->setupUi(this);
@@ -17,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
     std::pair<int,int> size = closestFactors(number);
 
     // Creating gameboard and putting buttons in a grid
-    std::vector<Card*> cards = createGameBoard(size.first,size.second);
+    cards_ = createGameBoard(size.first,size.second);
 }
 
 MainWindow::~MainWindow()
@@ -28,29 +29,71 @@ MainWindow::~MainWindow()
 void MainWindow::buttonPressed()
 {
     ui->textBrowser->setText("Toimii");
-    ui->gridLayout->update();
+    //ui->gridLayout->update();
 }
 
 void MainWindow::cardPressed(int x, int y, char merkki)
 {
+    // Bugi jos rämppää ja kaks korttia on jo otettu
     QString text = "";
     text.push_back(merkki);
     ui->lcdNumber->display(x);
     ui->lcdNumber_2->display(y);
     ui->label->setText(text);
+
+    // If cards are spammed, this will stop it
+    if (cardsOpened_.size() >= 2)
+    {
+        return;
+    }
+
+    Card* card = cards_.at(x).at(y);
+    if (not card->isOpen() and cardsOpened_.size() < 2)
+    {
+        card->turnCard();
+        cardsOpened_.push_back(card);
+    }
+
+    if (cardsOpened_.size() >= 2)
+    {
+        QTimer::singleShot(2000,this,SLOT(processTwoCards()));
+    }
 }
 
-std::vector<Card*> MainWindow::createGameBoard(int sizeX, int sizeY)
+void MainWindow::processTwoCards()
 {
-    std::vector<Card*> cards = {};
+    if (cardsOpened_.at(0)->getMark() == cardsOpened_.at(1)->getMark())
+    {
+        //Give points to the player in turn
+        for (auto card : cardsOpened_)
+        {
+            card->eraseCard();
+        }
+    }
+    else
+    {
+        for (auto card : cardsOpened_)
+        {
+            card->turnCard();
+        }
+    }
+    cardsOpened_.clear();
+
+
+}
+
+GameBoard MainWindow::createGameBoard(int sizeX, int sizeY)
+{
+    GameBoard cards = {};
     ui->gridLayout->setHorizontalSpacing(1);
     ui->gridLayout->setVerticalSpacing(1);
     for(int i=0;i<sizeX;i++)
     {
+        cards.push_back({});
         for (int j=0;j<sizeY;j++)
         {
             Card* newCard = new Card(i,j,'x');
-            cards.push_back(newCard);
+            cards.at(i).push_back(newCard);
 
 
             connect(newCard, &Card::clicked, this, &MainWindow::buttonPressed);

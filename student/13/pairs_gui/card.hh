@@ -13,7 +13,14 @@ class Card : public QPushButton
 public:
     Card(const int x, const int y, const char merkki);
     ~Card();
+
     void turnCard();
+
+    void eraseCard();
+
+    bool isOpen();
+
+    char getMark();
 
 signals:
     void clickSignal(int x,int y,char merkki);
@@ -23,8 +30,8 @@ public slots:
 
 private:
 
-    std::pair<int,int> sijainti_;
-    char merkki_;
+    std::pair<int,int> location_;
+    char mark_;
     VisibiltyType visibility_;
 };
 
