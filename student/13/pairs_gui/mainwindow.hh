@@ -16,6 +16,7 @@ using GameBoard = std::vector<std::vector<Card*>>;
 struct Player {
     std::string playerName;
     int points;
+    QLabel* nameLabel;
     QLabel* pointLabel;
 };
 
@@ -29,7 +30,7 @@ public:
 
 public slots:
     void buttonPressed();
-    void cardPressed(int x, int y, char merkki);
+    void cardPressed(int x, int y);
     void processTwoCards();
 
 private:
@@ -41,6 +42,8 @@ private:
 
     std::vector<Player*>::iterator playerInTurn_;
 
+    void changePlayer();
+
     GameBoard cards_;
 
     // Creates a GameBoard filled with cards. Makes a grid size of sizeX * sizeY
@@ -48,5 +51,10 @@ private:
 
     // Calculates closest factors of the given number
     std::pair<int,int> closestFactors(int number);
+
+    void askAndCreatePlayersAndLabels(const int playerAmount);
+
+    // Algorithm to randomize the order of cards
+    std::vector<std::vector<char>> randomizeMarks(int sizeX,int sizeY);
 };
 #endif // MAINWINDOW_HH

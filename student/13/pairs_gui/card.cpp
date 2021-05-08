@@ -49,5 +49,5 @@ char Card::getMark()
 void Card::clickThing()
 {
     //turnCard();
-    emit clickSignal(location_.first,location_.second,mark_);
+    emit clickSignal(location_.first,location_.second);
 }

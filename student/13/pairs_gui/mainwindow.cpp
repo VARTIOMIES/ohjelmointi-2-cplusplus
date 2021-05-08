@@ -4,7 +4,8 @@
 
 #include <QPushButton>
 #include <QGraphicsView>
-
+#include <algorithm>
+#include <random>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -15,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->setupUi(this);
 
-    int number = 20;
+    int number = 24;
 
     // Calculate the border lengths of the gameboard
     std::pair<int,int> size = closestFactors(number);
@@ -23,59 +24,14 @@ MainWindow::MainWindow(QWidget *parent)
     // Creating gameboard and putting buttons in a grid
     cards_ = createGameBoard(size.first,size.second);
 
-    int playerAmount = 2;
+    int playerAmount = 4;
+    // Create players and add them to ui
+    askAndCreatePlayersAndLabels(playerAmount);
 
 
-
-    for (int i = 0;i<playerAmount;i++)
-    {
-        // Kysy nimeä
-        QString name = "Pelaajax";
-        Player* newPlayer = new Player();
-        newPlayer->playerName = name.toStdString();
-        newPlayer->points = 0;
-        players_.push_back(newPlayer);
-
-        // Piirrä pelaajaikkunat
-        QLabel* newPlayerNameLabel = new QLabel(this);
-        QLabel* newPlayerPointsLabel = new QLabel(this);
-        newPlayer->pointLabel = newPlayerPointsLabel;
-
-        QString text = "";
-        for (auto character : newPlayer->playerName)
-        {
-            text.append(character);
-        }
-        newPlayerNameLabel->setText(text);
-        newPlayerPointsLabel->setNum(newPlayer->points);
-
-        ui->horizontalLayout->addWidget(newPlayerNameLabel);
-        ui->horizontalLayout->addWidget(newPlayerPointsLabel);
-
-        /*
-        QGraphicsView* view_ = new QGraphicsView(this);
-
-        view_->setGeometry(20,
-                           350,
-                           20 + 10 * (20 + 20),
-                           20 + 30 + 20);
-
-        QGraphicsScene* scene = new QGraphicsScene(this);
-
-
-        // TODO
-        QVerticalLayout* newPlayerFrame = new QFrame();
-        newPlayerFrame->add
-
-        QGraphicsView* newPlayerWindow = new QGraphicsView();
-
-        scene->addText(name);
-        QGraphicsView view(scene);
-        view.show();
-        ui->horizontalLayout->addWidget(newPlayerWindow);
-        */
-    }
     playerInTurn_ = players_.begin();
+    Player* player = *playerInTurn_;
+    player->nameLabel->setStyleSheet("font-weight: bold");
 }
 
 MainWindow::~MainWindow()
@@ -89,7 +45,7 @@ void MainWindow::buttonPressed()
     //ui->gridLayout->update();
 }
 
-void MainWindow::cardPressed(int x, int y, char merkki)
+void MainWindow::cardPressed(int x, int y)
 {
 
     // If cards are spammed, this will stop it
@@ -120,6 +76,7 @@ void MainWindow::processTwoCards()
         player->points++;
         player->pointLabel->setNum(player->points);
 
+        // Erase both cards from the gameboard
         for (auto card : cardsOpened_)
         {
             card->eraseCard();
@@ -131,16 +88,27 @@ void MainWindow::processTwoCards()
         {
             card->turnCard();
         }
+        changePlayer();
     }
+
+
+
+    cardsOpened_.clear();
+
+
+}
+
+void MainWindow::changePlayer()
+{
+    Player* player = *playerInTurn_;
+    player->nameLabel->setStyleSheet("font-weight: normal");
     playerInTurn_++;
     if (playerInTurn_ == players_.end())
     {
         playerInTurn_ = players_.begin();
     }
-
-    cardsOpened_.clear();
-
-
+    Player* nextPlayer = *playerInTurn_;
+    nextPlayer->nameLabel->setStyleSheet("font-weight: bold");
 }
 
 GameBoard MainWindow::createGameBoard(int sizeX, int sizeY)
@@ -148,12 +116,14 @@ GameBoard MainWindow::createGameBoard(int sizeX, int sizeY)
     GameBoard cards = {};
     ui->gridLayout->setHorizontalSpacing(1);
     ui->gridLayout->setVerticalSpacing(1);
+
+    std::vector<std::vector<char>> marks = randomizeMarks(sizeX,sizeY);
     for(int i=0;i<sizeX;i++)
     {
         cards.push_back({});
         for (int j=0;j<sizeY;j++)
         {
-            Card* newCard = new Card(i,j,'x');
+            Card* newCard = new Card(i,j,marks.at(i).at(j));
             cards.at(i).push_back(newCard);
 
 
@@ -189,5 +159,64 @@ std::pair<int, int> MainWindow::closestFactors(int number)
         factor2=temp;
     }
     return {factor1,factor2};
+}
+
+void MainWindow::askAndCreatePlayersAndLabels(const int playerAmount)
+{
+    for (int i = 0;i<playerAmount;i++)
+    {
+        // Kysy nimeä
+        QString name = "Pelaajax";
+        Player* newPlayer = new Player();
+        newPlayer->playerName = name.toStdString();
+        newPlayer->points = 0;
+        players_.push_back(newPlayer);
+
+        // Piirrä pelaajaikkunat
+        QLabel* newPlayerNameLabel = new QLabel(this);
+        QLabel* newPlayerPointsLabel = new QLabel(this);
+        newPlayer->pointLabel = newPlayerPointsLabel;
+        newPlayer->nameLabel = newPlayerNameLabel;
+
+        QString text = "";
+        for (auto character : newPlayer->playerName)
+        {
+            text.append(character);
+        }
+        newPlayerNameLabel->setText(text);
+        newPlayerPointsLabel->setNum(newPlayer->points);
+
+        ui->horizontalLayout->addWidget(newPlayerNameLabel);
+        ui->horizontalLayout->addWidget(newPlayerPointsLabel);
+    }
+}
+
+
+std::vector<std::vector<char> > MainWindow::randomizeMarks(int sizeX, int sizeY)
+{
+    std::vector<char> allChars = {};
+    for(char c = 'a', i = 0; i<sizeX*sizeY/2; ++c, ++i)
+    {
+        allChars.push_back(c);
+        allChars.push_back(c);
+    }
+    // Randomize the order of the marks
+    std::random_device rd;
+    auto rng = std::default_random_engine {rd()};
+    std::shuffle(std::begin(allChars),std::end(allChars),rng);
+
+    std::vector<char>::const_iterator iterator = allChars.begin();
+
+    std::vector<std::vector<char>>characters = {};
+    for(int i=0;i<sizeX;i++)
+    {
+        characters.push_back({});
+        for(int j = 0;j<sizeY;j++)
+        {
+            characters.at(i).push_back(*iterator);
+            iterator++;
+        }
+    }
+    return characters;
 }
 

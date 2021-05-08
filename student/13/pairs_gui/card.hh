@@ -23,7 +23,7 @@ public:
     char getMark();
 
 signals:
-    void clickSignal(int x,int y,char merkki);
+    void clickSignal(int x,int y);
 
 public slots:
     void clickThing();
