@@ -5,12 +5,19 @@
 
 #include <QMainWindow>
 #include <QTimer>
+#include <QLabel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 using GameBoard = std::vector<std::vector<Card*>>;
+
+struct Player {
+    std::string playerName;
+    int points;
+    QLabel* pointLabel;
+};
 
 class MainWindow : public QMainWindow
 {
@@ -29,6 +36,10 @@ private:
     Ui::MainWindow* ui;
 
     std::vector<Card*> cardsOpened_;
+
+    std::vector<Player*> players_;
+
+    std::vector<Player*>::iterator playerInTurn_;
 
     GameBoard cards_;
 
