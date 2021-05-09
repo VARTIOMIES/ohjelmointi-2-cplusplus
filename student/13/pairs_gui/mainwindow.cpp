@@ -1,40 +1,38 @@
 #include "mainwindow.hh"
 #include "ui_mainwindow.h"
 #include "card.hh"
+#include "settingswindow.hh"
 
 #include <QLayout>
 #include <QPushButton>
 #include <QGraphicsView>
+#include <QSlider>
 #include <algorithm>
 #include <random>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow),
-      cardsOpened_(0),
-      playerInTurn_(nullptr),
-      gameBoardWidget(new QWidget(this)),
-      playersWidget(new QWidget(this)),
-      endScreenWidget(new QWidget(this))
+    , ui(new Ui::MainWindow)
+    , cardsOpened_(0)
+    , playerInTurn_(nullptr)
+    , gameBoardWidget(new QWidget(this))
+    , playersWidget(new QWidget(this))
+    , endScreenWidget(new QWidget(this))
 {
 
     ui->setupUi(this);
 
-    int number = 6;
+    // Vie omaan ikkunaan
 
-    // Calculate the border lengths of the gameboard
-    std::pair<int,int> size = closestFactors(number);
-    // Creating gameboard and putting buttons in a grid
-    cards_ = createGameBoard(size.first,size.second);
+    SettingsWindow* settingsWindow = new SettingsWindow(this);
 
-    int playerAmount = 3;
-    // Create players and add them to ui
-    askAndCreatePlayersAndLabels(playerAmount);
+    connect(settingsWindow, &SettingsWindow::settingsDone,
+            this, &MainWindow::startGame);
+    settingsWindow->show();
 
+    // Ask for pair amount and playeramount
 
-    playerInTurn_ = players_.begin();
-    Player* player = *playerInTurn_;
-    player->nameLabel->setStyleSheet("font-weight: bold");
+    // ask for player names
 }
 
 MainWindow::~MainWindow()
@@ -43,10 +41,30 @@ MainWindow::~MainWindow()
     delete gameBoardWidget;
     delete playersWidget;
     delete endScreenWidget;
+    delete settingsWidget;
     for (auto player : players_)
     {
         delete player;
     }
+
+}
+
+
+void MainWindow::startGame(int pairAmount, int playerAmount)
+{
+    int numberOfCards = pairAmount*2;
+    // Calculate the border lengths of the gameboard
+    std::pair<int,int> size = closestFactors(numberOfCards);
+    // Creating gameboard and putting buttons in a grid
+    cards_ = createGameBoard(size.first,size.second);
+
+    // Create players and add them to ui
+    askAndCreatePlayersAndLabels(playerAmount);
+
+    playerInTurn_ = players_.begin();
+    Player* player = *playerInTurn_;
+    // Set the first starting player to bolded text
+    player->nameLabel->setStyleSheet("font-weight: bold");
 
 }
 
@@ -273,7 +291,9 @@ void MainWindow::setupEndScreen()
     QLabel* winTitle = new QLabel(endScreenWidget);
     QLabel* winnertextLabel = new QLabel(endScreenWidget);
     QLabel* winnerNameLabel = new QLabel(endScreenWidget);
+    QPushButton* playagainButton = new QPushButton("Play Again",endScreenWidget);
     QPushButton* quitButton = new QPushButton("Quit",endScreenWidget);
+    //connect();
     connect(quitButton,&QPushButton::clicked,this,&MainWindow::quitGame);
 
 

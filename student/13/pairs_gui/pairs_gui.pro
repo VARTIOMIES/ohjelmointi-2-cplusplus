@@ -18,14 +18,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     card.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    settingswindow.cpp
 
 HEADERS += \
     card.hh \
-    mainwindow.hh
+    mainwindow.hh \
+    settingswindow.hh
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    settingswindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

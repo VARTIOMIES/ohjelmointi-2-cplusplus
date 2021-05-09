@@ -29,6 +29,7 @@ public:
     ~MainWindow();
 
 public slots:
+    void startGame(int pairAmount,int playerAmount);
     void buttonPressed();
     void cardPressed(int x, int y);
     void processTwoCards();
@@ -68,6 +69,8 @@ private:
     QWidget* playersWidget;
 
     QWidget* endScreenWidget;
+
+    QWidget* settingsWidget;
 
     void setupEndScreen();
 
