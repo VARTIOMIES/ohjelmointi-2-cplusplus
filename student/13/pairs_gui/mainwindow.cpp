@@ -20,14 +20,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->setupUi(this);
 
-    int number = 4;
+    int number = 6;
 
     // Calculate the border lengths of the gameboard
     std::pair<int,int> size = closestFactors(number);
     // Creating gameboard and putting buttons in a grid
     cards_ = createGameBoard(size.first,size.second);
 
-    int playerAmount = 2;
+    int playerAmount = 3;
     // Create players and add them to ui
     askAndCreatePlayersAndLabels(playerAmount);
 
@@ -43,6 +43,11 @@ MainWindow::~MainWindow()
     delete gameBoardWidget;
     delete playersWidget;
     delete endScreenWidget;
+    for (auto player : players_)
+    {
+        delete player;
+    }
+
 }
 
 void MainWindow::buttonPressed()
@@ -103,6 +108,11 @@ void MainWindow::processTwoCards()
     {
         endGame();
     }
+}
+
+void MainWindow::quitGame()
+{
+    this->close();
 }
 
 void MainWindow::changePlayer()
@@ -263,14 +273,22 @@ void MainWindow::setupEndScreen()
     QLabel* winTitle = new QLabel(endScreenWidget);
     QLabel* winnertextLabel = new QLabel(endScreenWidget);
     QLabel* winnerNameLabel = new QLabel(endScreenWidget);
+    QPushButton* quitButton = new QPushButton("Quit",endScreenWidget);
+    connect(quitButton,&QPushButton::clicked,this,&MainWindow::quitGame);
+
+
     winTitle->setText("Game ended!");
+    winTitle->setStyleSheet("font-size:100px");
     winnertextLabel->setText("Winner:");
     std::string text = findLeader()->playerName;
     QString text1 = QString::fromStdString(text);
     winnerNameLabel->setText(text1);
-    endScreenGrid->addWidget(winTitle,0,0,3,6);
-    endScreenGrid->addWidget(winnertextLabel,3,1,2,1);
-    endScreenGrid->addWidget(winnerNameLabel,3,4,2,1);
+
+
+    endScreenGrid->addWidget(winTitle,0,1,3,5);
+    endScreenGrid->addWidget(winnertextLabel,3,2,2,1);
+    endScreenGrid->addWidget(winnerNameLabel,3,3,2,1);
+    endScreenGrid->addWidget(quitButton,5,1,1,1);
 }
 
 Player* MainWindow::findLeader()

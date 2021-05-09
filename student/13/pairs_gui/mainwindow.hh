@@ -32,6 +32,7 @@ public slots:
     void buttonPressed();
     void cardPressed(int x, int y);
     void processTwoCards();
+    void quitGame();
 
 private:
     Ui::MainWindow* ui;
