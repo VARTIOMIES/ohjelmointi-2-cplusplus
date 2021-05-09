@@ -44,6 +44,11 @@ private:
 
     void changePlayer();
 
+    void endGame();
+
+    // Checks if the GameBoard is empty. Returns true if every cardslot is empty
+    bool isGameBoardEmpty();
+
     GameBoard cards_;
 
     // Creates a GameBoard filled with cards. Makes a grid size of sizeX * sizeY
@@ -56,5 +61,15 @@ private:
 
     // Algorithm to randomize the order of cards
     std::vector<std::vector<char>> randomizeMarks(int sizeX,int sizeY);
+
+    QWidget* gameBoardWidget;
+    
+    QWidget* playersWidget;
+
+    QWidget* endScreenWidget;
+
+    void setupEndScreen();
+
+    Player* findLeader();
 };
 #endif // MAINWINDOW_HH

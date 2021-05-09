@@ -6,7 +6,7 @@ Card::Card(const int x, const int y, const char merkki):
     mark_(merkki)
 {
     connect(this,&Card::clicked,this,&Card::clickThing);
-    setText(QString("HALO"));
+    setText(QString("Onnin \n MUISTI- \n PELI"));
     visibility_ = CLOSE;
 }
 
@@ -19,7 +19,7 @@ void Card::turnCard()
 {
     if (visibility_ == OPEN)
     {
-        setText(QString("HALO"));
+        setText(QString("Onnin \n MUISTI- \n PELI"));
         visibility_ = CLOSE;
     }
     else if (visibility_ == CLOSE)
@@ -39,6 +39,11 @@ void Card::eraseCard()
 bool Card::isOpen()
 {
     return visibility_ == OPEN;
+}
+
+bool Card::isEmpty()
+{
+    return visibility_ == EMPTY;
 }
 
 char Card::getMark()

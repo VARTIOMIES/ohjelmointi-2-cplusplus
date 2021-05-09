@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "card.hh"
 
+#include <QLayout>
 #include <QPushButton>
 #include <QGraphicsView>
 #include <algorithm>
@@ -11,20 +12,22 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow),
       cardsOpened_(0),
-      playerInTurn_(nullptr)
+      playerInTurn_(nullptr),
+      gameBoardWidget(new QWidget(this)),
+      playersWidget(new QWidget(this)),
+      endScreenWidget(new QWidget(this))
 {
 
     ui->setupUi(this);
 
-    int number = 24;
+    int number = 4;
 
     // Calculate the border lengths of the gameboard
     std::pair<int,int> size = closestFactors(number);
-
     // Creating gameboard and putting buttons in a grid
     cards_ = createGameBoard(size.first,size.second);
 
-    int playerAmount = 4;
+    int playerAmount = 2;
     // Create players and add them to ui
     askAndCreatePlayersAndLabels(playerAmount);
 
@@ -37,6 +40,9 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete gameBoardWidget;
+    delete playersWidget;
+    delete endScreenWidget;
 }
 
 void MainWindow::buttonPressed()
@@ -91,11 +97,12 @@ void MainWindow::processTwoCards()
         changePlayer();
     }
 
-
-
     cardsOpened_.clear();
 
-
+    if (isGameBoardEmpty())
+    {
+        endGame();
+    }
 }
 
 void MainWindow::changePlayer()
@@ -111,11 +118,38 @@ void MainWindow::changePlayer()
     nextPlayer->nameLabel->setStyleSheet("font-weight: bold");
 }
 
+void MainWindow::endGame()
+{
+    gameBoardWidget->setHidden(true);
+    playersWidget->setHidden(true);
+    setupEndScreen();
+    ui->verticalLayout->addWidget(endScreenWidget);
+
+}
+
+bool MainWindow::isGameBoardEmpty()
+{
+    for (auto cardRow : cards_)
+    {
+        for (auto card : cardRow)
+        {
+            if (not card->isEmpty())
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 GameBoard MainWindow::createGameBoard(int sizeX, int sizeY)
 {
     GameBoard cards = {};
-    ui->gridLayout->setHorizontalSpacing(1);
-    ui->gridLayout->setVerticalSpacing(1);
+
+    QGridLayout* gameBoardLayout = new QGridLayout(gameBoardWidget);
+
+    gameBoardLayout->setHorizontalSpacing(1);
+    gameBoardLayout->setVerticalSpacing(1);
 
     std::vector<std::vector<char>> marks = randomizeMarks(sizeX,sizeY);
     for(int i=0;i<sizeX;i++)
@@ -131,9 +165,10 @@ GameBoard MainWindow::createGameBoard(int sizeX, int sizeY)
             connect(newCard, &Card::clickSignal, this, &MainWindow::cardPressed);
             newCard->setFixedSize(60,60);
 
-            ui->gridLayout->addWidget(newCard,i,j);
+            gameBoardLayout->addWidget(newCard,i,j);
         }
     }
+    ui->verticalLayout->addWidget(gameBoardWidget);
     return cards;
 }
 
@@ -163,6 +198,7 @@ std::pair<int, int> MainWindow::closestFactors(int number)
 
 void MainWindow::askAndCreatePlayersAndLabels(const int playerAmount)
 {
+    QHBoxLayout* playerLayout = new QHBoxLayout(playersWidget);
     for (int i = 0;i<playerAmount;i++)
     {
         // Kysy nimeä
@@ -173,8 +209,8 @@ void MainWindow::askAndCreatePlayersAndLabels(const int playerAmount)
         players_.push_back(newPlayer);
 
         // Piirrä pelaajaikkunat
-        QLabel* newPlayerNameLabel = new QLabel(this);
-        QLabel* newPlayerPointsLabel = new QLabel(this);
+        QLabel* newPlayerNameLabel = new QLabel(playersWidget);
+        QLabel* newPlayerPointsLabel = new QLabel(playersWidget);
         newPlayer->pointLabel = newPlayerPointsLabel;
         newPlayer->nameLabel = newPlayerNameLabel;
 
@@ -185,10 +221,11 @@ void MainWindow::askAndCreatePlayersAndLabels(const int playerAmount)
         }
         newPlayerNameLabel->setText(text);
         newPlayerPointsLabel->setNum(newPlayer->points);
+        playerLayout->addWidget(newPlayerNameLabel);
+        playerLayout->addWidget(newPlayerPointsLabel);
 
-        ui->horizontalLayout->addWidget(newPlayerNameLabel);
-        ui->horizontalLayout->addWidget(newPlayerPointsLabel);
     }
+    ui->verticalLayout->addWidget(playersWidget);
 }
 
 
@@ -220,3 +257,34 @@ std::vector<std::vector<char> > MainWindow::randomizeMarks(int sizeX, int sizeY)
     return characters;
 }
 
+void MainWindow::setupEndScreen()
+{
+    QGridLayout* endScreenGrid = new QGridLayout(endScreenWidget);
+    QLabel* winTitle = new QLabel(endScreenWidget);
+    QLabel* winnertextLabel = new QLabel(endScreenWidget);
+    QLabel* winnerNameLabel = new QLabel(endScreenWidget);
+    winTitle->setText("Game ended!");
+    winnertextLabel->setText("Winner:");
+    std::string text = findLeader()->playerName;
+    QString text1 = QString::fromStdString(text);
+    winnerNameLabel->setText(text1);
+    endScreenGrid->addWidget(winTitle,0,0,3,6);
+    endScreenGrid->addWidget(winnertextLabel,3,1,2,1);
+    endScreenGrid->addWidget(winnerNameLabel,3,4,2,1);
+}
+
+Player* MainWindow::findLeader()
+{
+    Player* leadingPlayer = nullptr;
+    int max_points = 0;
+
+    for (auto player : players_)
+    {
+        if (player->points > max_points)
+        {
+            leadingPlayer = player;
+            max_points = player->points;
+        }
+    }
+    return leadingPlayer;
+}

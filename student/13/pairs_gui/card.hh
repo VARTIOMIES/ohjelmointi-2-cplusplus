@@ -4,7 +4,6 @@
 #include <QPushButton>
 
 enum VisibiltyType {OPEN,CLOSE,EMPTY};
-const std::string BACKSIDE_TEXT = "";
 
 class Card : public QPushButton
 {
@@ -19,6 +18,8 @@ public:
     void eraseCard();
 
     bool isOpen();
+
+    bool isEmpty();
 
     char getMark();
 
