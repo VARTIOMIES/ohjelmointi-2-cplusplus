@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QGraphicsView>
 #include <QSlider>
+#include <QLabel>
 
 namespace Ui {
 class SettingsWindow;
@@ -23,12 +24,18 @@ signals:
 
 private slots:
     void settingsButtonPressed();
+    void playerAmountValueChanged();
+    void pairAmountValueChanged();
 private:
     Ui::SettingsWindow *ui;
     QVBoxLayout* settingsLayout;
     QSlider* pairAmountSlider;
     QSlider* playerAmountSlider;
     QPushButton* settingsReadyButton;
+    QLabel* pairAmountLabel;
+    QLabel* playerAmountLabel;
+    QLabel* pairAmountInfoLabel;
+    QLabel* playerAmountInfoLabel;
 
 };
 

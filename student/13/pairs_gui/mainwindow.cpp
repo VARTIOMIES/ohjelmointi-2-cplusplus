@@ -24,11 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Vie omaan ikkunaan
 
-    SettingsWindow* settingsWindow = new SettingsWindow(this);
-
-    connect(settingsWindow, &SettingsWindow::settingsDone,
-            this, &MainWindow::startGame);
-    settingsWindow->show();
+    askSettings();
 
     // Ask for pair amount and playeramount
 
@@ -37,15 +33,17 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+
     delete ui;
     delete gameBoardWidget;
     delete playersWidget;
     delete endScreenWidget;
-    delete settingsWidget;
+    //delete settingsWidget;
     for (auto player : players_)
     {
         delete player;
     }
+
 
 }
 
@@ -151,9 +149,39 @@ void MainWindow::endGame()
     gameBoardWidget->setHidden(true);
     playersWidget->setHidden(true);
     setupEndScreen();
+    endScreenWidget->setVisible(true);
     ui->verticalLayout->addWidget(endScreenWidget);
 
 }
+
+void MainWindow::askSettings()
+{
+    SettingsWindow* settingsWindow = new SettingsWindow(this);
+
+    connect(settingsWindow, &SettingsWindow::settingsDone,
+            this, &MainWindow::startGame);
+    settingsWindow->show();
+}
+
+void MainWindow::newGame()
+{
+
+    MainWindow* w = new MainWindow();
+
+    w->show();
+    close();
+}
+
+void MainWindow::resetGame()
+{
+    players_ = {};
+    cards_ = {{}};
+    playerInTurn_=players_.begin();
+    delete gameBoardWidget;
+    delete playersWidget;
+    askSettings();
+}
+
 
 bool MainWindow::isGameBoardEmpty()
 {
@@ -293,7 +321,7 @@ void MainWindow::setupEndScreen()
     QLabel* winnerNameLabel = new QLabel(endScreenWidget);
     QPushButton* playagainButton = new QPushButton("Play Again",endScreenWidget);
     QPushButton* quitButton = new QPushButton("Quit",endScreenWidget);
-    //connect();
+    connect(playagainButton,&QPushButton::clicked,this,&MainWindow::newGame);
     connect(quitButton,&QPushButton::clicked,this,&MainWindow::quitGame);
 
 
@@ -309,6 +337,7 @@ void MainWindow::setupEndScreen()
     endScreenGrid->addWidget(winnertextLabel,3,2,2,1);
     endScreenGrid->addWidget(winnerNameLabel,3,3,2,1);
     endScreenGrid->addWidget(quitButton,5,1,1,1);
+    endScreenGrid->addWidget(playagainButton,5,2,1,1);
 }
 
 Player* MainWindow::findLeader()

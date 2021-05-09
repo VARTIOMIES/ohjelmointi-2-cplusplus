@@ -48,6 +48,11 @@ private:
 
     void endGame();
 
+    void askSettings();
+
+    void newGame();
+    void resetGame(); // Älä käytä
+
     // Checks if the GameBoard is empty. Returns true if every cardslot is empty
     bool isGameBoardEmpty();
 
@@ -69,8 +74,6 @@ private:
     QWidget* playersWidget;
 
     QWidget* endScreenWidget;
-
-    QWidget* settingsWidget;
 
     void setupEndScreen();
 
