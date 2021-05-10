@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QGraphicsView>
 #include <QSlider>
+#include <QLCDNumber>
 #include <algorithm>
 #include <random>
 
@@ -17,18 +18,18 @@ MainWindow::MainWindow(QWidget *parent)
     , playerInTurn_(nullptr)
     , gameBoardWidget(new QWidget(this))
     , playersWidget(new QWidget(this))
+    , timeWidget(new QWidget(this))
     , endScreenWidget(new QWidget(this))
+    , timer_(new QTimer(this))
+    , timerDisplay({nullptr,nullptr})
 {
 
     ui->setupUi(this);
 
-    // Vie omaan ikkunaan
+    timer_->setInterval(1000);
+    connect(timer_,&QTimer::timeout,this,&MainWindow::oneSecondPassed);
 
     askSettings();
-
-    // Ask for pair amount and playeramount
-
-    // ask for player names
 }
 
 MainWindow::~MainWindow()
@@ -65,12 +66,9 @@ void MainWindow::startGame(int pairAmount, int playerAmount,
     // Set the first starting player to bolded text
     player->nameLabel->setStyleSheet("font-weight: bold");
 
-}
+    createTimer();
+    timer_->start();
 
-void MainWindow::buttonPressed()
-{
-
-    //ui->gridLayout->update();
 }
 
 void MainWindow::cardPressed(int x, int y)
@@ -127,9 +125,21 @@ void MainWindow::processTwoCards()
     }
 }
 
+void MainWindow::oneSecondPassed()
+{
+    seconds_++;
+    if (seconds_ == 60)
+    {
+        seconds_=0;
+        minutes_++;
+    }
+    timerDisplay.first->display(minutes_);
+    timerDisplay.second->display(seconds_);
+}
+
 void MainWindow::quitGame()
 {
-    this->close();
+    close();
 }
 
 void MainWindow::changePlayer()
@@ -147,8 +157,10 @@ void MainWindow::changePlayer()
 
 void MainWindow::endGame()
 {
+    timer_->stop();
     gameBoardWidget->setHidden(true);
     playersWidget->setHidden(true);
+    timeWidget->setHidden(true);
     setupEndScreen();
     endScreenWidget->setVisible(true);
     ui->verticalLayout->addWidget(endScreenWidget);
@@ -173,15 +185,7 @@ void MainWindow::newGame()
     close();
 }
 
-void MainWindow::resetGame()
-{
-    players_ = {};
-    cards_ = {{}};
-    playerInTurn_=players_.begin();
-    delete gameBoardWidget;
-    delete playersWidget;
-    askSettings();
-}
+
 
 
 bool MainWindow::isGameBoardEmpty()
@@ -197,6 +201,21 @@ bool MainWindow::isGameBoardEmpty()
         }
     }
     return true;
+}
+
+void MainWindow::createTimer()
+{
+    QHBoxLayout* timerLayout = new QHBoxLayout(timeWidget);
+    QLCDNumber* minuteLCDNumber = new QLCDNumber(timeWidget);
+    QLCDNumber* secondLCDNumber = new QLCDNumber(timeWidget);
+    minuteLCDNumber->display(minutes_);
+    secondLCDNumber->display(seconds_);
+    timerLayout->addWidget(minuteLCDNumber);
+    timerLayout->addWidget(secondLCDNumber);
+    timerDisplay.first = minuteLCDNumber;
+    timerDisplay.second = secondLCDNumber;
+
+    ui->verticalLayout->addWidget(timeWidget);
 }
 
 GameBoard MainWindow::createGameBoard(int sizeX, int sizeY)
@@ -218,7 +237,6 @@ GameBoard MainWindow::createGameBoard(int sizeX, int sizeY)
             cards.at(i).push_back(newCard);
 
 
-            connect(newCard, &Card::clicked, this, &MainWindow::buttonPressed);
             connect(newCard, &Card::clickSignal, this, &MainWindow::cardPressed);
             newCard->setFixedSize(60,60);
 

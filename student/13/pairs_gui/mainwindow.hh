@@ -6,6 +6,7 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <QLabel>
+#include <QLCDNumber>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -30,10 +31,12 @@ public:
 
 public slots:
     void startGame(int pairAmount,int playerAmount,std::vector<std::string> names);
-    void buttonPressed();
     void cardPressed(int x, int y);
-    void processTwoCards();
     void quitGame();
+
+private slots:
+    void processTwoCards();
+    void oneSecondPassed();
 
 private:
     Ui::MainWindow* ui;
@@ -51,10 +54,11 @@ private:
     void askSettings();
 
     void newGame();
-    void resetGame(); // Älä käytä
 
     // Checks if the GameBoard is empty. Returns true if every cardslot is empty
     bool isGameBoardEmpty();
+
+    void createTimer();
 
     GameBoard cards_;
 
@@ -74,10 +78,20 @@ private:
     
     QWidget* playersWidget;
 
+    QWidget* timeWidget;
+
     QWidget* endScreenWidget;
 
     void setupEndScreen();
 
     Player* findLeader();
+
+    QTimer* timer_;
+
+    std::pair<QLCDNumber*,QLCDNumber*> timerDisplay;
+
+    // Jos tarvii
+    int minutes_;
+    int seconds_;
 };
 #endif // MAINWINDOW_HH
