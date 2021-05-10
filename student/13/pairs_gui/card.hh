@@ -34,6 +34,7 @@ private:
     std::pair<int,int> location_;
     char mark_;
     VisibiltyType visibility_;
+    QPalette* pal_;
 };
 
 #endif // CARD_HH

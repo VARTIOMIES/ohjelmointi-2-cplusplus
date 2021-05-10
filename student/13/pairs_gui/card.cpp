@@ -3,11 +3,18 @@
 
 Card::Card(const int x, const int y, const char merkki):
     location_({x,y}),
-    mark_(merkki)
+    mark_(merkki),
+    pal_(new QPalette())
 {
     connect(this,&Card::clicked,this,&Card::clickThing);
     setText(QString("Onnin \n MUISTI- \n PELI"));
     visibility_ = CLOSE;
+    setAutoFillBackground(true);
+    //QPalette pal = palette();
+    pal_->setColor(QPalette::Button,QColor(Qt::red));
+
+    setPalette(*pal_);
+
 }
 
 Card::~Card()
@@ -21,12 +28,15 @@ void Card::turnCard()
     {
         setText(QString("Onnin \n MUISTI- \n PELI"));
         visibility_ = CLOSE;
+        pal_->setColor(QPalette::Button,QColor(Qt::red));
     }
     else if (visibility_ == CLOSE)
     {
         setText((QString(mark_)));
         visibility_ = OPEN;
+        pal_->setColor(QPalette::Button,QColor(Qt::white));
     }
+    setPalette(*pal_);
 }
 
 void Card::eraseCard()
@@ -34,6 +44,8 @@ void Card::eraseCard()
     visibility_ = EMPTY;
     setText(QString(""));
     setDisabled(true);
+    pal_->setColor(QPalette::Button,QColor(Qt::gray));
+    setPalette(*pal_);
 }
 
 bool Card::isOpen()
