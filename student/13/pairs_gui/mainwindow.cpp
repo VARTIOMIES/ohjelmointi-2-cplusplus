@@ -1,15 +1,16 @@
+/*
+ * Program author
+ * Name: Onni Merilä
+ * Student number: H299725
+ * UserID: bvonme
+ * E-Mail: onni.merila@tuni.fi
+ *
+ * */
 #include "mainwindow.hh"
 #include "ui_mainwindow.h"
 #include "card.hh"
 #include "settingswindow.hh"
 
-#include <QLayout>
-#include <QPushButton>
-#include <QGraphicsView>
-#include <QSlider>
-#include <QLCDNumber>
-#include <algorithm>
-#include <random>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -27,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
 
     ui->setupUi(this);
+    gameBoardWidget->setFixedSize(300,400);
 
     timer_->setInterval(1000);
     connect(timer_,&QTimer::timeout,this,&MainWindow::oneSecondPassed);
@@ -37,17 +39,18 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
 
-    delete ui;
-    delete gameBoardWidget;
-    delete playersWidget;
-    delete endScreenWidget;
-    //delete settingsWidget;
     for (auto player : players_)
     {
         delete player;
     }
-
-
+    for (auto cardRow : cards_)
+    {
+        for (auto card : cardRow)
+        {
+            delete card;
+        }
+    }
+    delete ui;
 }
 
 
@@ -97,12 +100,28 @@ void MainWindow::cardPressed(int x, int y)
 
 void MainWindow::processTwoCards()
 {
+    // Checks that exactly 2 cards are opened to avoid errors
+    if (cardsOpened_.size() != 2)
+    {
+        return;
+    }
     if (cardsOpened_.at(0)->getMark() == cardsOpened_.at(1)->getMark())
     {
-        //Give points to the player in turn
+        // Give points to the player in turn
         Player* player = *playerInTurn_;
         player->points++;
         player->pointLabel->setNum(player->points);
+
+        // Add card to players "stack" and update label
+        player->cardStack.push_back(cardsOpened_.at(0)->getMark());
+        QString temp = "Cards:";
+        for (auto cardId : player->cardStack)
+        {
+            temp += " ";
+            temp += QString(cardId);
+        }
+        player->cardsLabel->setText(temp);
+        //
 
         // Erase both cards from the gameboard
         for (auto card : cardsOpened_)
@@ -228,6 +247,7 @@ GameBoard MainWindow::createGameBoard(int sizeX, int sizeY)
 
     gameBoardLayout->setHorizontalSpacing(1);
     gameBoardLayout->setVerticalSpacing(1);
+    QPixmap* cardIcon = new QPixmap(QString(":/icons/apple.png"));
 
     std::vector<std::vector<char>> marks = randomizeMarks(sizeX,sizeY);
     for(int i=0;i<sizeX;i++)
@@ -235,12 +255,12 @@ GameBoard MainWindow::createGameBoard(int sizeX, int sizeY)
         cards.push_back({});
         for (int j=0;j<sizeY;j++)
         {
-            Card* newCard = new Card(i,j,marks.at(i).at(j));
+            Card* newCard = new Card(i,j,marks.at(i).at(j),cardIcon);
             cards.at(i).push_back(newCard);
 
 
             connect(newCard, &Card::clickSignal, this, &MainWindow::cardPressed);
-            newCard->setFixedSize(60,60);
+            newCard->setFixedSize(60,80);
 
             gameBoardLayout->addWidget(newCard,i,j);
         }
@@ -286,23 +306,28 @@ void MainWindow::createPlayersAndLabels(const int playerAmount,
         newPlayer->points = 0;
         players_.push_back(newPlayer);
 
-        // Piirrä pelaajaikkunat
+        // All infolabels pre player
         QLabel* newPlayerNameLabel = new QLabel(playersWidget);
         QLabel* newPlayerPointsLabel = new QLabel(playersWidget);
+        QLabel* newPlayerCardsLabel = new QLabel(playersWidget);
+
+        // Adding pointers to player struct to have access to the labels later
         newPlayer->pointLabel = newPlayerPointsLabel;
         newPlayer->nameLabel = newPlayerNameLabel;
+        newPlayer->cardsLabel = newPlayerCardsLabel;
 
-        QString text = "";
-        for (auto character : newPlayer->playerName)
-        {
-            text.append(character);
-        }
-        newPlayerNameLabel->setText(text);
+        // Setting default values
+        newPlayerNameLabel->setText(QString::fromStdString(newPlayer->playerName));
         newPlayerPointsLabel->setNum(newPlayer->points);
+        newPlayerCardsLabel->setText("Cards:");
+
+        // Adding widgets to their places
         playerLayout->addWidget(newPlayerNameLabel);
+        playerLayout->addWidget(newPlayerCardsLabel);
         playerLayout->addWidget(newPlayerPointsLabel);
 
     }
+    // Adding widget to ui
     ui->verticalLayout->addWidget(playersWidget);
 }
 
@@ -349,10 +374,27 @@ void MainWindow::setupEndScreen()
 
     winTitle->setText("Game ended!");
     winTitle->setStyleSheet("font-size:100px");
-    winnertextLabel->setText("Winner:");
-    std::string text = findLeader()->playerName;
-    QString text1 = QString::fromStdString(text);
-    winnerNameLabel->setText(text1);
+    if (not isTie())
+    {
+        winnertextLabel->setText("Winner:");
+        winnerNameLabel->setText(QString::fromStdString(findLeader()->playerName));
+    }
+    else
+    {
+        winnertextLabel->setText("Tie between:");
+        QString winnerNames = "";
+        int mostPoints = findLeader()->points;
+        for (auto player : players_)
+        {
+            if (player->points == mostPoints)
+            {
+                winnerNames += QString::fromStdString(player->playerName);
+                winnerNames += " ";
+            }
+        }
+
+        winnerNameLabel->setText(winnerNames);
+    }
 
     QLabel* statsLabel = new QLabel("Stats:",endScreenWidget);
     QLabel* timePassed = new QLabel(endScreenWidget);
@@ -390,6 +432,21 @@ Player* MainWindow::findLeader()
             leadingPlayer = player;
             max_points = player->points;
         }
+
     }
     return leadingPlayer;
+}
+
+bool MainWindow::isTie()
+{
+    Player* leadingPlayer = findLeader();
+
+    for (auto player : players_)
+    {
+        if (player != leadingPlayer and player->points == leadingPlayer->points)
+        {
+            return true;
+        }
+    }
+    return false;
 }

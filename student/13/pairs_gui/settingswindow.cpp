@@ -1,3 +1,12 @@
+/*
+ * Program author
+ * Name: Onni Merilä
+ * Student number: H299725
+ * UserID: bvonme
+ * E-Mail: onni.merila@tuni.fi
+ *
+ * */
+
 #include "settingswindow.hh"
 #include "ui_settingswindow.h"
 
@@ -17,8 +26,6 @@ SettingsWindow::SettingsWindow(QWidget *parent)
     , pairAmountInfoLabel(new QLabel("Number of pairs:"))
     , playerAmountInfoLabel(new QLabel("Number of players"))
     , playerNameLineEdits_({})
-    //, playerNames_({})
-    //, playerAmount(0)
 
 {
     ui->setupUi(this);
@@ -29,17 +36,17 @@ SettingsWindow::SettingsWindow(QWidget *parent)
     // Fixing settings of all the widgets
     pairAmountSlider->setTickInterval(1);
     pairAmountSlider->setMinimum(2);
-    pairAmountSlider->setMaximum(40);
-
+    pairAmountSlider->setMaximum(18);
+    //
     pairAmountLabel->setNum(pairAmountSlider->value());
     //
     playerAmountSlider->setTickInterval(1);
     playerAmountSlider->setMinimum(1);
-    playerAmountSlider->setMaximum(8);
-
+    playerAmountSlider->setMaximum(6);
+    //
     playerAmountLabel->setNum(playerAmountSlider->value());
 
-    // Adding the subwidgets to the main widgets layout
+    // Adding the subwidgets to the mainwidget's sublayout
     settingsLayout->addWidget(pairAmountInfoLabel);
     settingsLayout->addWidget(pairAmountLabel);
     settingsLayout->addWidget(pairAmountSlider);
@@ -48,18 +55,20 @@ SettingsWindow::SettingsWindow(QWidget *parent)
     settingsLayout->addWidget(playerAmountSlider);
     settingsLayout->addWidget(settingsReadyButton);
 
+    // Adding informative label
     QLabel* playerNameInfoLabel = new QLabel("Players:",this);
     wholeLayout->addWidget(playerNameInfoLabel,1,5,1,1);
 
+    // Adding the first LineEdit to have one lineEdit ready
     QLineEdit* newLineEdit = new QLineEdit(this);
-
+    // Fixing settings of the first lineEdit
     QString preGeneratedName = "Player ";
     preGeneratedName.append(QString::number(1));
-
     newLineEdit->setText(preGeneratedName);
+
+    // Adding these to the other sublayout
     playerNameLayout->addWidget(newLineEdit);
     playerNameLineEdits_.push_back(newLineEdit);
-
 
 
     // Connection from the pushbutton to slot

@@ -1,0 +1,32 @@
+This file includes information about the implementation of the pairs_gui project
+and gamerules for the game.
+
+Instructions to play the game:
+    When game starts, select wanted amount of cards to play with and wanted
+amount of players. If you want, you can change players names. When ready, press
+"Start" Settings view will og away and game starts.
+    Click cards that are in the upper area of the window. Your mission is to
+find 2 cards with a same character. When you do so, you'll get a point and can
+continue. If there are more players that 2, if you open 2 cards, that are not a
+pair, your turn ends and next player's turn begins.
+    After all cards have been found, endScreen pops up and shows the winner
+of the game, and time elapsed. If you want to continue playing, you can press
+"Play Again" button to start a new game. Else you can quit the game by pressing
+"Quit" button
+
+About the implementation:
+    Most of the game logic is in class MainWindow. Card is implemented as class
+inherited from QPushButton to add extra features for a QPushButton. Settings
+window is not an actual separate window, but it has been named assuch. I tried
+different ways to have many widgets in the game (differenece between
+settings window and endScreenWidget) Players are implemented as struct as they
+don't need any special methods.
+
+
+Included extra features:
+    1. (10p)
+    2. (5p)
+    4. (5p)
+    5. (10p)
+    6. (10p)
+    8. (10p)

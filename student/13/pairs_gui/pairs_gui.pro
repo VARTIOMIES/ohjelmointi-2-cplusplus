@@ -17,19 +17,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     card.cpp \
-    endscreenwidget.cpp \
     main.cpp \
     mainwindow.cpp \
     settingswindow.cpp
 
 HEADERS += \
     card.hh \
-    endscreenwidget.hh \
     mainwindow.hh \
     settingswindow.hh
 
 FORMS += \
-    endscreenwidget.ui \
     mainwindow.ui \
     settingswindow.ui
 
@@ -40,4 +37,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     resources.qrc
+
+DISTFILES += \
+    instructions.txt
 

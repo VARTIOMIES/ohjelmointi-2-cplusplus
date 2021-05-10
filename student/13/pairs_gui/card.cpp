@@ -1,26 +1,29 @@
+/*
+ * Program author
+ * Name: Onni Merilä
+ * Student number: H299725
+ * UserID: bvonme
+ * E-Mail: onni.merila@tuni.fi
+ *
+ * */
 #include "card.hh"
 
 
-Card::Card(const int x, const int y, const char merkki):
+Card::Card(const int x, const int y, const char merkki,const QPixmap* image):
     location_({x,y}),
     mark_(merkki),
     pal_(new QPalette()),
-    backImage(QPixmap(QString(":/icons/apple.png")))
+    backImage(image)
 {
-    backImage.scaled(this->size());
-    setIcon(backImage);
+    backImage->scaled(this->size());
+    setIcon(*backImage);
     visibility_ = CLOSE;
 
-    connect(this,&Card::clicked,this,&Card::clickThing);
-    //setText(QString("Onnin \n MUISTI- \n PELI"));
+    connect(this,&Card::clicked,this,&Card::customClicked);
 
     setAutoFillBackground(true);
     pal_->setColor(QPalette::Button,QColor(Qt::red));
     setPalette(*pal_);
-
-
-
-
 
 }
 
@@ -36,7 +39,7 @@ void Card::turnCard()
         setText(QString(""));
         visibility_ = CLOSE;
         pal_->setColor(QPalette::Button,QColor(Qt::red));
-        setIcon(backImage);
+        setIcon(*backImage);
 
     }
     else if (visibility_ == CLOSE)
@@ -59,23 +62,22 @@ void Card::eraseCard()
     setIcon(QIcon());
 }
 
-bool Card::isOpen()
+bool Card::isOpen() const
 {
     return visibility_ == OPEN;
 }
 
-bool Card::isEmpty()
+bool Card::isEmpty() const
 {
     return visibility_ == EMPTY;
 }
 
-char Card::getMark()
+char Card::getMark() const
 {
     return mark_;
 }
 
-void Card::clickThing()
+void Card::customClicked()
 {
-    //turnCard();
     emit clickSignal(location_.first,location_.second);
 }

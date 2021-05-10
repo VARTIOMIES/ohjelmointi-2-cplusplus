@@ -1,3 +1,11 @@
+/*
+ * Program author
+ * Name: Onni Merilä
+ * Student number: H299725
+ * UserID: bvonme
+ * E-Mail: onni.merila@tuni.fi
+ *
+ * */
 #include "mainwindow.hh"
 
 #include <QApplication>
