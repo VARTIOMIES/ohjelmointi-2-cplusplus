@@ -4,16 +4,23 @@
 Card::Card(const int x, const int y, const char merkki):
     location_({x,y}),
     mark_(merkki),
-    pal_(new QPalette())
+    pal_(new QPalette()),
+    backImage(QPixmap(QString(":/icons/apple.png")))
 {
-    connect(this,&Card::clicked,this,&Card::clickThing);
-    setText(QString("Onnin \n MUISTI- \n PELI"));
+    backImage.scaled(this->size());
+    setIcon(backImage);
     visibility_ = CLOSE;
-    setAutoFillBackground(true);
-    //QPalette pal = palette();
-    pal_->setColor(QPalette::Button,QColor(Qt::red));
 
+    connect(this,&Card::clicked,this,&Card::clickThing);
+    //setText(QString("Onnin \n MUISTI- \n PELI"));
+
+    setAutoFillBackground(true);
+    pal_->setColor(QPalette::Button,QColor(Qt::red));
     setPalette(*pal_);
+
+
+
+
 
 }
 
@@ -26,15 +33,18 @@ void Card::turnCard()
 {
     if (visibility_ == OPEN)
     {
-        setText(QString("Onnin \n MUISTI- \n PELI"));
+        setText(QString(""));
         visibility_ = CLOSE;
         pal_->setColor(QPalette::Button,QColor(Qt::red));
+        setIcon(backImage);
+
     }
     else if (visibility_ == CLOSE)
     {
         setText((QString(mark_)));
         visibility_ = OPEN;
         pal_->setColor(QPalette::Button,QColor(Qt::white));
+        setIcon(QIcon());
     }
     setPalette(*pal_);
 }
@@ -46,6 +56,7 @@ void Card::eraseCard()
     setDisabled(true);
     pal_->setColor(QPalette::Button,QColor(Qt::gray));
     setPalette(*pal_);
+    setIcon(QIcon());
 }
 
 bool Card::isOpen()

@@ -35,6 +35,7 @@ private:
     char mark_;
     VisibiltyType visibility_;
     QPalette* pal_;
+    QPixmap backImage;
 };
 
 #endif // CARD_HH

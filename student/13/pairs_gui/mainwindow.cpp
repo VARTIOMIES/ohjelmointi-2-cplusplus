@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
     , endScreenWidget(new QWidget(this))
     , timer_(new QTimer(this))
     , timerDisplay({nullptr,nullptr})
+    , minutes_(0)
+    , seconds_(0)
 {
 
     ui->setupUi(this);
@@ -352,12 +354,28 @@ void MainWindow::setupEndScreen()
     QString text1 = QString::fromStdString(text);
     winnerNameLabel->setText(text1);
 
+    QLabel* statsLabel = new QLabel("Stats:",endScreenWidget);
+    QLabel* timePassed = new QLabel(endScreenWidget);
+    QString temp = "Time passed: ";
+    temp+=QString::number(minutes_);
+    temp+=" minutes, ";
+    temp+=QString::number(seconds_);
+    temp+=" seconds.";
+    timePassed->setText(temp);
 
-    endScreenGrid->addWidget(winTitle,0,1,3,5);
+    QVBoxLayout* gameStatsLayout = new QVBoxLayout();
+    gameStatsLayout->setAlignment(Qt::AlignLeft);
+    gameStatsLayout->setSpacing(0);
+    gameStatsLayout->addWidget(statsLabel);
+    gameStatsLayout->addWidget(timePassed);
+
+    endScreenGrid->addLayout(gameStatsLayout,3,5,3,3);
+    endScreenGrid->addWidget(winTitle,0,1,3,8);
     endScreenGrid->addWidget(winnertextLabel,3,2,2,1);
     endScreenGrid->addWidget(winnerNameLabel,3,3,2,1);
     endScreenGrid->addWidget(quitButton,5,1,1,1);
     endScreenGrid->addWidget(playagainButton,5,2,1,1);
+
 }
 
 Player* MainWindow::findLeader()

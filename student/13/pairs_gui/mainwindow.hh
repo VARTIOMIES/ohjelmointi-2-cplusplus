@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <QLabel>
 #include <QLCDNumber>
+#include <QFormLayout>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

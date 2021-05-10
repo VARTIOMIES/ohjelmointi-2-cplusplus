@@ -17,16 +17,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     card.cpp \
+    endscreenwidget.cpp \
     main.cpp \
     mainwindow.cpp \
     settingswindow.cpp
 
 HEADERS += \
     card.hh \
+    endscreenwidget.hh \
     mainwindow.hh \
     settingswindow.hh
 
 FORMS += \
+    endscreenwidget.ui \
     mainwindow.ui \
     settingswindow.ui
 
@@ -34,3 +37,7 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    resources.qrc
+
