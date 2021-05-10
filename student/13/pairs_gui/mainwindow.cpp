@@ -48,7 +48,8 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::startGame(int pairAmount, int playerAmount)
+void MainWindow::startGame(int pairAmount, int playerAmount,
+                           std::vector<std::string> names)
 {
     int numberOfCards = pairAmount*2;
     // Calculate the border lengths of the gameboard
@@ -57,7 +58,7 @@ void MainWindow::startGame(int pairAmount, int playerAmount)
     cards_ = createGameBoard(size.first,size.second);
 
     // Create players and add them to ui
-    askAndCreatePlayersAndLabels(playerAmount);
+    createPlayersAndLabels(playerAmount, names);
 
     playerInTurn_ = players_.begin();
     Player* player = *playerInTurn_;
@@ -252,13 +253,14 @@ std::pair<int, int> MainWindow::closestFactors(int number)
     return {factor1,factor2};
 }
 
-void MainWindow::askAndCreatePlayersAndLabels(const int playerAmount)
+void MainWindow::createPlayersAndLabels(const int playerAmount,
+                                        std::vector<std::string> names)
 {
     QHBoxLayout* playerLayout = new QHBoxLayout(playersWidget);
     for (int i = 0;i<playerAmount;i++)
     {
         // Kysy nimeä
-        QString name = "Pelaajax";
+        QString name = QString::fromStdString(names.at(i));
         Player* newPlayer = new Player();
         newPlayer->playerName = name.toStdString();
         newPlayer->points = 0;

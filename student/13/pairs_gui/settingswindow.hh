@@ -7,6 +7,7 @@
 #include <QGraphicsView>
 #include <QSlider>
 #include <QLabel>
+#include <QLineEdit>
 
 namespace Ui {
 class SettingsWindow;
@@ -20,15 +21,18 @@ public:
     explicit SettingsWindow(QWidget *parent = nullptr);
     ~SettingsWindow();
 signals:
-    void settingsDone(int pairAmount, int playerAmount);
+    void settingsDone(int pairAmount, int playerAmount, std::vector<std::string> playerNames);
 
 private slots:
     void settingsButtonPressed();
     void playerAmountValueChanged();
     void pairAmountValueChanged();
+    //void()
 private:
     Ui::SettingsWindow *ui;
+    QGridLayout* wholeLayout;
     QVBoxLayout* settingsLayout;
+    QVBoxLayout* playerNameLayout;
     QSlider* pairAmountSlider;
     QSlider* playerAmountSlider;
     QPushButton* settingsReadyButton;
@@ -36,6 +40,11 @@ private:
     QLabel* playerAmountLabel;
     QLabel* pairAmountInfoLabel;
     QLabel* playerAmountInfoLabel;
+    std::vector<QLineEdit*> playerNameLineEdits_;
+
+    //std::vector<std::string> playerNames_;
+
+    //int playerAmount;
 
 };
 

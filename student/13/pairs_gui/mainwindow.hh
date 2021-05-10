@@ -29,7 +29,7 @@ public:
     ~MainWindow();
 
 public slots:
-    void startGame(int pairAmount,int playerAmount);
+    void startGame(int pairAmount,int playerAmount,std::vector<std::string> names);
     void buttonPressed();
     void cardPressed(int x, int y);
     void processTwoCards();
@@ -64,7 +64,8 @@ private:
     // Calculates closest factors of the given number
     std::pair<int,int> closestFactors(int number);
 
-    void askAndCreatePlayersAndLabels(const int playerAmount);
+    void createPlayersAndLabels(const int playerAmount,
+                                std::vector<std::string> names);
 
     // Algorithm to randomize the order of cards
     std::vector<std::vector<char>> randomizeMarks(int sizeX,int sizeY);
